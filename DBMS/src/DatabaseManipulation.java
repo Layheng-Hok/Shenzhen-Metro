@@ -87,4 +87,49 @@ public class DatabaseManipulation {
             e.printStackTrace();
         }
     }
+
+    public void addOneRoutePricing(RideImport.RoutePricing routePricing) {
+        String sql = "INSERT INTO route_pricing (start_station, end_station, price) " +
+                "VALUES (?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, routePricing.getStartStation());
+            preparedStatement.setString(2, routePricing.getEndStation());
+            preparedStatement.setInt(3, routePricing.getPrice());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneRideByIdNum(RideImport.RideByIdNum rideByIdNum) {
+        String sql = "INSERT INTO ride_by_id_num (user_number, start_time, end_time, pricing_id) " +
+                "VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, rideByIdNum.getUserNum());
+            preparedStatement.setTimestamp(2, rideByIdNum.getStartTime());
+            preparedStatement.setTimestamp(3, rideByIdNum.getEndTime());
+            preparedStatement.setInt(4, rideByIdNum.getPricingId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneRideByCardNum(RideImport.RideByCardNum rideByCardNum) {
+        String sql = "INSERT INTO ride_by_card_num (user_number, start_time, end_time, pricing_id) " +
+                "VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, rideByCardNum.getUserNum());
+            preparedStatement.setTimestamp(2, rideByCardNum.getStartTime());
+            preparedStatement.setTimestamp(3, rideByCardNum.getEndTime());
+            preparedStatement.setInt(4, rideByCardNum.getPricingId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

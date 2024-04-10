@@ -6,5 +6,7 @@ public class Main {
         passengerImport.importData();
         StationImport stationImport = new StationImport();
         stationImport.importData();
+        RideImport rideImport = new RideImport();
+        rideImport.importData();
     }
 }

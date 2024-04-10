@@ -54,6 +54,16 @@ public class StationImport implements DataImport {
         public void setIntro(String intro) {
             this.intro = intro;
         }
+
+        @Override
+        public String toString() {
+            return "Station{" +
+                    "englishName='" + englishName + '\'' +
+                    ", chineseName='" + chineseName + '\'' +
+                    ", district='" + district + '\'' +
+                    ", intro='" + intro + '\'' +
+                    '}';
+        }
     }
 
     @Override
