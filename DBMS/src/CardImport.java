@@ -35,7 +35,7 @@ public class CardImport implements DataImport {
             return createTime;
         }
 
-        public void setCreateTome(Timestamp createTime) {
+        public void setCreateTime(Timestamp createTime) {
             this.createTime = createTime;
         }
 

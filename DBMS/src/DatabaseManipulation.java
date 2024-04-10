@@ -45,14 +45,28 @@ public class DatabaseManipulation {
     public void addOneCard(CardImport.Card card) {
         String sql = "INSERT INTO card (code, money, create_time) " +
                 "VALUES (?, ?, ?)";
-
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, card.getCode());
             preparedStatement.setDouble(2, card.getMoney());
             preparedStatement.setTimestamp(3, card.getCreateTime());
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void addOnePassenger(PassengerImport.Passenger passenger) {
+        String sql = "INSERT INTO passenger (id_number, name, phone_number, gender, district) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, passenger.getIdNumber());
+            preparedStatement.setString(2, passenger.getName());
+            preparedStatement.setLong(3, passenger.getPhoneNumber());
+            preparedStatement.setString(4, Character.toString(passenger.getGender()));
+            preparedStatement.setString(5, passenger.getDistrict());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
