@@ -55,8 +55,8 @@ public class CardImport implements DataImport {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Card c : cards)
-                dm.addOneCard(c);
+            for (Card card : cards)
+                dm.addOneCard(card);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

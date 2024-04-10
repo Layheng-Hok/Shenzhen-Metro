@@ -76,8 +76,8 @@ public class PassengerImport implements DataImport {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Passenger p : passengers)
-                dm.addOnePassenger(p);
+            for (Passenger passenger : passengers)
+                dm.addOnePassenger(passenger);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

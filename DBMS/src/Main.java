@@ -4,5 +4,7 @@ public class Main {
         cardImport.importData();
         PassengerImport passengerImport = new PassengerImport();
         passengerImport.importData();
+        StationImport stationImport = new StationImport();
+        stationImport.importData();
     }
 }

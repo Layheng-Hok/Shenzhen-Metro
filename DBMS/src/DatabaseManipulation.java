@@ -71,4 +71,20 @@ public class DatabaseManipulation {
             e.printStackTrace();
         }
     }
+
+    public void addOneStation(StationImport.Station station) {
+        String sql = "INSERT INTO station (english_name, chinese_name, district, intro) " +
+                "VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, station.getEnglishName());
+            preparedStatement.setString(2, station.getChineseName());
+            preparedStatement.setString(3, station.getDistrict());
+            preparedStatement.setString(4, station.getIntro());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
