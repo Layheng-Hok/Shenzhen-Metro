@@ -100,13 +100,60 @@ public class StationImport implements DataImport {
         }
     }
 
+    public static class BusExitInfo {
+        private String stationName;
+        private String exit;
+        private long busInfoId;
+
+        public BusExitInfo(String stationName, String exit, long busInfoId) {
+            this.stationName = stationName;
+            this.exit = exit;
+            this.busInfoId = busInfoId;
+        }
+
+        public String getStationName() {
+            return stationName;
+        }
+
+        public void setStationName(String stationName) {
+            this.stationName = stationName;
+        }
+
+        public String getExit() {
+            return exit;
+        }
+
+        public void setExit(String exit) {
+            this.exit = exit;
+        }
+
+        public long getBusInfoId() {
+            return busInfoId;
+        }
+
+        public void setBusInfoId(long busInfoId) {
+            this.busInfoId = busInfoId;
+        }
+
+        @Override
+        public String toString() {
+            return "BusExitInfo{" +
+                    "stationName='" + stationName + '\'' +
+                    ", exit='" + exit + '\'' +
+                    ", busInfoId=" + busInfoId +
+                    '}';
+        }
+    }
+
     @Override
     public void importData() {
         List<Station> stations = new ArrayList<>();
         List<BusInfo> busInfos = new ArrayList<>();
+        List<BusExitInfo> busExitInfos = new ArrayList<>();
         try {
             String jsonStrings = Files.readString(Path.of("resources/stations.json"));
             JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
+            long busInfoId = 0;
             for (String englishName : stationsJson.keySet()) {
                 JSONObject stationJson = stationsJson.getJSONObject(englishName);
                 String chineseName = stationJson.getString("chinese_name");
@@ -118,7 +165,7 @@ public class StationImport implements DataImport {
                 JSONArray busInfoArray = JSONArray.parseArray(stationJson.getString("bus_info"));
                 for (Object busInfoObject : busInfoArray) {
                     JSONObject busInfoJson = (JSONObject) busInfoObject;
-                    // System.out.println("\tchukou: " + busInfoJson.getString("chukou"));
+                    String exit = busInfoJson.getString("chukou");
                     JSONArray busOutInfoArray = busInfoJson.getJSONArray("busOutInfo");
                     for (Object busOutObject : busOutInfoArray) {
                         JSONObject busOutInfo = (JSONObject) busOutObject;
@@ -133,8 +180,10 @@ public class StationImport implements DataImport {
                         if (busLines.length == 1)
                             busLines = busOutInfo.getString("busInfo").split(" ");
                         for (String busLine : busLines)
-                            if (!busLine.isEmpty())
+                            if (!busLine.isEmpty()) {
                                 busInfos.add(new BusInfo(busLine, busName));
+                                busExitInfos.add(new BusExitInfo(englishName, exit, ++busInfoId));
+                            }
                     }
                 }
             }
@@ -148,6 +197,8 @@ public class StationImport implements DataImport {
                 dm.addOneStation(station);
             for (BusInfo busInfo : busInfos)
                 dm.addOneBusInfo(busInfo);
+            for (BusExitInfo busExitInfo : busExitInfos)
+                dm.addOneBusExitInfo(busExitInfo);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

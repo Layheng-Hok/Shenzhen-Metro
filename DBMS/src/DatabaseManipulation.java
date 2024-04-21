@@ -98,7 +98,21 @@ public class DatabaseManipulation {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println(busInfo.getBusLine());
+        }
+    }
+
+
+    public void addOneBusExitInfo(StationImport.BusExitInfo busExitInfo) {
+        String sql = "INSERT INTO bus_exit_info (station_name, exit, bus_info_id) " +
+                "VALUES (?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, busExitInfo.getStationName());
+            preparedStatement.setString(2, busExitInfo.getExit());
+            preparedStatement.setLong(3, busExitInfo.getBusInfoId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
