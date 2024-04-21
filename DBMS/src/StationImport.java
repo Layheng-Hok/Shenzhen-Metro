@@ -1,6 +1,6 @@
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
-import org.xml.sax.ext.DeclHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,19 +66,77 @@ public class StationImport implements DataImport {
         }
     }
 
+    public static class BusInfo {
+        private String busLine;
+        private String busName;
+
+        public BusInfo(String busLine, String busName) {
+            this.busLine = busLine;
+            this.busName = busName;
+        }
+
+        public String getBusName() {
+            return busName;
+        }
+
+        public void setBusName(String busName) {
+            this.busName = busName;
+        }
+
+        public String getBusLine() {
+            return busLine;
+        }
+
+        public void setBusLine(String busLine) {
+            this.busLine = busLine;
+        }
+
+        @Override
+        public String toString() {
+            return "BusInfo{" +
+                    "busLine='" + busLine + '\'' +
+                    ", busName='" + busName + '\'' +
+                    '}';
+        }
+    }
+
     @Override
     public void importData() {
         List<Station> stations = new ArrayList<>();
+        List<BusInfo> busInfos = new ArrayList<>();
         try {
             String jsonStrings = Files.readString(Path.of("resources/stations.json"));
-            JSONObject jsonObject = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
-            for (String englishName : jsonObject.keySet()) {
-                JSONObject stationJson = jsonObject.getJSONObject(englishName);
+            JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
+            for (String englishName : stationsJson.keySet()) {
+                JSONObject stationJson = stationsJson.getJSONObject(englishName);
                 String chineseName = stationJson.getString("chinese_name");
                 String district = stationJson.getString("district");
                 String intro = stationJson.getString("intro");
                 Station station = new Station(englishName, chineseName, district, intro);
                 stations.add(station);
+
+                JSONArray busInfoArray = JSONArray.parseArray(stationJson.getString("bus_info"));
+                for (Object busInfoObject : busInfoArray) {
+                    JSONObject busInfoJson = (JSONObject) busInfoObject;
+                    // System.out.println("\tchukou: " + busInfoJson.getString("chukou"));
+                    JSONArray busOutInfoArray = busInfoJson.getJSONArray("busOutInfo");
+                    for (Object busOutObject : busOutInfoArray) {
+                        JSONObject busOutInfo = (JSONObject) busOutObject;
+                        String busName = busOutInfo.getString("busName");
+                        String[] busLines = busOutInfo.getString("busInfo").split("、");
+                        if (busLines.length == 1)
+                            busLines = busOutInfo.getString("busInfo").split(",");
+                        if (busLines.length == 1)
+                            busLines = busOutInfo.getString("busInfo").split("，");
+                        if (busLines.length == 1)
+                            busLines = busOutInfo.getString("busInfo").split(".");
+                        if (busLines.length == 1)
+                            busLines = busOutInfo.getString("busInfo").split(" ");
+                        for (String busLine : busLines)
+                            if (!busLine.isEmpty())
+                                busInfos.add(new BusInfo(busLine, busName));
+                    }
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -87,8 +145,10 @@ public class StationImport implements DataImport {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
             for (Station station : stations)
-                 dm.addOneStation(station);
-                dm.closeDatasource();
+                dm.addOneStation(station);
+            for (BusInfo busInfo : busInfos)
+                dm.addOneBusInfo(busInfo);
+            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

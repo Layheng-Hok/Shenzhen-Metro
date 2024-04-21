@@ -47,7 +47,7 @@ public class DatabaseManipulation {
                 "VALUES (?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, card.getCode());
+            preparedStatement.setString(1, card.getCode());
             preparedStatement.setDouble(2, card.getMoney());
             preparedStatement.setTimestamp(3, card.getCreateTime());
             preparedStatement.executeUpdate();
@@ -85,6 +85,20 @@ public class DatabaseManipulation {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addOneBusInfo(StationImport.BusInfo busInfo) {
+        String sql = "INSERT INTO bus_info (bus_line, bus_name) " +
+                "VALUES (?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, busInfo.getBusLine());
+            preparedStatement.setString(2, busInfo.getBusName());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(busInfo.getBusLine());
         }
     }
 

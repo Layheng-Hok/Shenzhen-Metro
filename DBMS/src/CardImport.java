@@ -5,21 +5,21 @@ import java.util.List;
 
 public class CardImport implements DataImport {
     public static class Card {
-        private int code;
+        private String code;
         private double money;
         private Timestamp createTime;
 
-        public Card(int code, double money, Timestamp createTime) {
+        public Card(String code, double money, Timestamp createTime) {
             this.code = code;
             this.money = money;
             this.createTime = createTime;
         }
 
-        public int getCode() {
+        public String getCode() {
             return code;
         }
 
-        public void setCode(int code) {
+        public void setCode(String code) {
             this.code = code;
         }
 
