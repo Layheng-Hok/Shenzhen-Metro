@@ -42,36 +42,6 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addOneCard(CardImport.Card card) {
-        String sql = "INSERT INTO card (code, money, create_time) " +
-                "VALUES (?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, card.getCode());
-            preparedStatement.setDouble(2, card.getMoney());
-            preparedStatement.setTimestamp(3, card.getCreateTime());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addOnePassenger(PassengerImport.Passenger passenger) {
-        String sql = "INSERT INTO passenger (id_num, name, phone_num, gender, district) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, passenger.getIdNumber());
-            preparedStatement.setString(2, passenger.getName());
-            preparedStatement.setLong(3, passenger.getPhoneNumber());
-            preparedStatement.setString(4, Character.toString(passenger.getGender()));
-            preparedStatement.setString(5, passenger.getDistrict());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void addOneStation(StationImport.Station station) {
         String sql = "INSERT INTO station (english_name, chinese_name, district, intro) " +
                 "VALUES (?, ?, ?, ?)";
@@ -136,6 +106,69 @@ public class DatabaseManipulation {
             preparedStatement.setString(1, landmarkExitInfo.getStationName());
             preparedStatement.setString(2, landmarkExitInfo.getExit());
             preparedStatement.setLong(3, landmarkExitInfo.getLandmarkId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneLine(LineImport.Line line) {
+        String sql = "INSERT INTO line (line_name, start_time, end_time, intro, mileage, color, first_opening, url) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, line.getLineName());
+            preparedStatement.setTime(2, line.getStartTime());
+            preparedStatement.setTime(3, line.getEndTime());
+            preparedStatement.setString(4, line.getIntro());
+            preparedStatement.setDouble(5, line.getMileage());
+            preparedStatement.setString(6, line.getColor());
+            preparedStatement.setDate(7, line.getFirstOpening());
+            preparedStatement.setString(8, line.getUrl());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneLineDetail(LineImport.LineDetail lineDetail) {
+        String sql = "INSERT INTO line_detail (line_name, station_name, station_order) " +
+                "VALUES (?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, lineDetail.getLineName());
+            preparedStatement.setString(2, lineDetail.getStationName());
+            preparedStatement.setInt(3, lineDetail.getStationOrder());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneCard(CardImport.Card card) {
+        String sql = "INSERT INTO card (code, money, create_time) " +
+                "VALUES (?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, card.getCode());
+            preparedStatement.setDouble(2, card.getMoney());
+            preparedStatement.setTimestamp(3, card.getCreateTime());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOnePassenger(PassengerImport.Passenger passenger) {
+        String sql = "INSERT INTO passenger (id_num, name, phone_num, gender, district) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, passenger.getIdNumber());
+            preparedStatement.setString(2, passenger.getName());
+            preparedStatement.setLong(3, passenger.getPhoneNumber());
+            preparedStatement.setString(4, Character.toString(passenger.getGender()));
+            preparedStatement.setString(5, passenger.getDistrict());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
