@@ -129,94 +129,70 @@ public class RideImport implements DataImport {
     }
 
     public static class RideByIdNum {
-        private String userNum;
-        private Timestamp startTime;
-        private Timestamp endTime;
-        private int pricingId;
+        private long rideId;
+        private int priceId;
 
-        public RideByIdNum(String userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
-            this.userNum = userNum;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.pricingId = pricingId;
+        public RideByIdNum(long rideId, int priceId) {
+            this.rideId = rideId;
+            this.priceId = priceId;
         }
 
-        public String getUserNum() {
-            return userNum;
+        public long getRideId() {
+            return rideId;
         }
 
-        public void setUserNum(String userNum) {
-            this.userNum = userNum;
+        public void setRideId(long rideId) {
+            this.rideId = rideId;
         }
 
-        public Timestamp getStartTime() {
-            return startTime;
+        public int getPriceId() {
+            return priceId;
         }
 
-        public void setStartTime(Timestamp startTime) {
-            this.startTime = startTime;
+        public void setPriceId(int priceId) {
+            this.priceId = priceId;
         }
 
-        public Timestamp getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(Timestamp endTime) {
-            this.endTime = endTime;
-        }
-
-        public int getPricingId() {
-            return pricingId;
-        }
-
-        public void setPricingId(int pricingId) {
-            this.pricingId = pricingId;
+        @Override
+        public String toString() {
+            return "RideByIdNum{" +
+                    "rideId=" + rideId +
+                    ", priceId=" + priceId +
+                    '}';
         }
     }
 
     public static class RideByCardNum {
-        private int userNum;
-        private Timestamp startTime;
-        private Timestamp endTime;
-        private int pricingId;
+        private long rideId;
+        private int priceId;
 
-        public RideByCardNum(int userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
-            this.userNum = userNum;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.pricingId = pricingId;
+        public RideByCardNum(long rideId, int priceId) {
+            this.rideId = rideId;
+            this.priceId = priceId;
         }
 
-        public int getUserNum() {
-            return userNum;
+        public long getRideId() {
+            return rideId;
         }
 
-        public void setUserNum(int userNum) {
-            this.userNum = userNum;
+        public void setRideId(long rideId) {
+            this.rideId = rideId;
         }
 
-        public Timestamp getStartTime() {
-            return startTime;
+        public int getPriceId() {
+            return priceId;
         }
 
-        public void setStartTime(Timestamp startTime) {
-            this.startTime = startTime;
+        public void setPriceId(int priceId) {
+            this.priceId = priceId;
         }
 
-        public Timestamp getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(Timestamp endTime) {
-            this.endTime = endTime;
-        }
-
-        public int getPricingId() {
-            return pricingId;
-        }
-
-        public void setPricingId(int pricingId) {
-            this.pricingId = pricingId;
+        @Override
+        public String toString() {
+            return "RideByCardNum{" +
+                    "rideId=" + rideId +
+                    ", priceId=" + priceId +
+                    '}';
         }
     }
 
@@ -228,35 +204,28 @@ public class RideImport implements DataImport {
         List<RideByIdNum> ridesByIdNum = new ArrayList<>();
         List<RideByCardNum> ridesByCardNum = new ArrayList<>();
 
-        int i = 1;
-        for (Ride ride : rides) {
+        int routeId = 0;
+        for (int i = 0; i < rides.size(); i++) {
+            Ride ride = rides.get(i);
             RoutePricing routePricing = new RoutePricing(ride.startStation, ride.endStation, ride.price);
-            StringBuilder route = new StringBuilder();
-            route.append(ride.startStation).append(" -> ").append(ride.endStation);
-            if (!routeIdMap.containsKey(route.toString())) {
+            String route = ride.startStation + " -> " + ride.endStation;
+            if (!routeIdMap.containsKey(route)) {
                 routePricings.add(routePricing);
-                routeIdMap.put(route.toString(), i++);
+                routeIdMap.put(route, ++routeId);
             }
 
-            if (String.valueOf(ride.user).length() == 9) {
-                RideByCardNum rideByCardNum = new RideByCardNum(Integer.parseInt(ride.user), ride.startTime, ride.endTime, 0);
-                StringBuilder rideRoute = new StringBuilder();
-                rideRoute.append(ride.startStation).append(" -> ").append(ride.endStation);
-                rideByCardNum.setPricingId(routeIdMap.get(rideRoute.toString()));
-                ridesByCardNum.add(rideByCardNum);
-            } else {
-                RideByIdNum rideByIdNum = new RideByIdNum(ride.user, ride.startTime, ride.endTime, 0);
-                StringBuilder rideRoute = new StringBuilder();
-                rideRoute.append(ride.startStation).append(" -> ").append(ride.endStation);
-                rideByIdNum.setPricingId(routeIdMap.get(rideRoute.toString()));
-                ridesByIdNum.add(rideByIdNum);
-            }
+            if (String.valueOf(ride.user).length() == 9)
+                ridesByCardNum.add(new RideByCardNum(i + 1, routeIdMap.get(ride.startStation + " -> " + ride.endStation)));
+            else
+                ridesByIdNum.add(new RideByIdNum(i + 1, routeIdMap.get(ride.startStation + " -> " + ride.endStation)));
         }
 
 
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
+            for (Ride ride : rides)
+                dm.addOneRide(ride);
             for (RoutePricing routePricing : routePricings)
                 dm.addOneRoutePricing(routePricing);
             for (RideByIdNum rideByIdNum : ridesByIdNum)

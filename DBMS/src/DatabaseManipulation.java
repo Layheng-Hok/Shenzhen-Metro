@@ -57,7 +57,7 @@ public class DatabaseManipulation {
     }
 
     public void addOnePassenger(PassengerImport.Passenger passenger) {
-        String sql = "INSERT INTO passenger (id_number, name, phone_number, gender, district) " +
+        String sql = "INSERT INTO passenger (id_num, name, phone_num, gender, district) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -116,6 +116,32 @@ public class DatabaseManipulation {
         }
     }
 
+    public void addOneLandmarkInfo(StationImport.LandmarkInfo landmarkInfo) {
+        String sql = "INSERT INTO landmark_info (landmark) " +
+                "VALUES (?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, landmarkInfo.getLandmark());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneLandmarkExitInfo(StationImport.LandmarkExitInfo landmarkExitInfo) {
+        String sql = "INSERT INTO landmark_exit_info (station_name, exit, landmark_id) " +
+                "VALUES (?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, landmarkExitInfo.getStationName());
+            preparedStatement.setString(2, landmarkExitInfo.getExit());
+            preparedStatement.setLong(3, landmarkExitInfo.getLandmarkId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addOneRoutePricing(RideImport.RoutePricing routePricing) {
         String sql = "INSERT INTO route_pricing (start_station, end_station, price) " +
                 "VALUES (?, ?, ?)";
@@ -131,15 +157,27 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addOneRideByIdNum(RideImport.RideByIdNum rideByIdNum) {
-        String sql = "INSERT INTO ride_by_id_num (user_number, start_time, end_time, pricing_id) " +
-                "VALUES (?, ?, ?, ?)";
+    public void addOneRide(RideImport.Ride ride) {
+        String sql = "INSERT INTO ride (user_num, start_time, end_time) " +
+                "VALUES (?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, rideByIdNum.getUserNum());
-            preparedStatement.setTimestamp(2, rideByIdNum.getStartTime());
-            preparedStatement.setTimestamp(3, rideByIdNum.getEndTime());
-            preparedStatement.setInt(4, rideByIdNum.getPricingId());
+            preparedStatement.setString(1, ride.getUser());
+            preparedStatement.setTimestamp(2, ride.getStartTime());
+            preparedStatement.setTimestamp(3, ride.getEndTime());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addOneRideByIdNum(RideImport.RideByIdNum rideByIdNum) {
+        String sql = "INSERT INTO ride_by_id_num (ride_id, price_id) " +
+                "VALUES (?, ?)";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setLong(1, rideByIdNum.getRideId());
+            preparedStatement.setInt(2, rideByIdNum.getPriceId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -147,14 +185,12 @@ public class DatabaseManipulation {
     }
 
     public void addOneRideByCardNum(RideImport.RideByCardNum rideByCardNum) {
-        String sql = "INSERT INTO ride_by_card_num (user_number, start_time, end_time, pricing_id) " +
-                "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ride_by_card_num (ride_id, price_id) " +
+                "VALUES (?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, rideByCardNum.getUserNum());
-            preparedStatement.setTimestamp(2, rideByCardNum.getStartTime());
-            preparedStatement.setTimestamp(3, rideByCardNum.getEndTime());
-            preparedStatement.setInt(4, rideByCardNum.getPricingId());
+            preparedStatement.setLong(1, rideByCardNum.getRideId());
+            preparedStatement.setInt(2, rideByCardNum.getPriceId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

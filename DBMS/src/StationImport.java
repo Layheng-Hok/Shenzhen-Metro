@@ -145,15 +145,88 @@ public class StationImport implements DataImport {
         }
     }
 
+    public static class LandmarkInfo {
+        private String landmark;
+
+        public LandmarkInfo(String landmark) {
+            this.landmark = landmark;
+        }
+
+        public String getLandmark() {
+            return landmark;
+        }
+
+        public void setLandmark(String landmark) {
+            this.landmark = landmark;
+        }
+
+        @Override
+        public String toString() {
+            return "LandmarkInfo{" +
+                    "landmark='" + landmark + '\'' +
+                    '}';
+        }
+    }
+
+    public static class LandmarkExitInfo {
+        private String stationName;
+        private String exit;
+        private long landmarkId;
+
+        public LandmarkExitInfo(String stationName, String exit, long landmarkId) {
+            this.stationName = stationName;
+            this.exit = exit;
+            this.landmarkId = landmarkId;
+        }
+
+        public String getStationName() {
+            return stationName;
+        }
+
+        public void setStationName(String stationName) {
+            this.stationName = stationName;
+        }
+
+        public String getExit() {
+            return exit;
+        }
+
+        public void setExit(String exit) {
+            this.exit = exit;
+        }
+
+        public long getLandmarkId() {
+            return landmarkId;
+        }
+
+        public void setLandmarkId(long landmarkId) {
+            this.landmarkId = landmarkId;
+        }
+
+        @Override
+        public String toString() {
+            return "LandmarkExitInfo{" +
+                    "stationName='" + stationName + '\'' +
+                    ", exit='" + exit + '\'' +
+                    ", landmarkId=" + landmarkId +
+                    '}';
+        }
+    }
+
     @Override
     public void importData() {
         List<Station> stations = new ArrayList<>();
         List<BusInfo> busInfos = new ArrayList<>();
         List<BusExitInfo> busExitInfos = new ArrayList<>();
+        List<LandmarkInfo> landmarkInfos = new ArrayList<>();
+        List<LandmarkExitInfo> landmarkExitInfos = new ArrayList<>();
+
         try {
             String jsonStrings = Files.readString(Path.of("resources/stations.json"));
             JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
             long busInfoId = 0;
+            long landmarkId = 0;
+
             for (String englishName : stationsJson.keySet()) {
                 JSONObject stationJson = stationsJson.getJSONObject(englishName);
                 String chineseName = stationJson.getString("chinese_name");
@@ -170,20 +243,48 @@ public class StationImport implements DataImport {
                     for (Object busOutObject : busOutInfoArray) {
                         JSONObject busOutInfo = (JSONObject) busOutObject;
                         String busName = busOutInfo.getString("busName");
-                        String[] busLines = busOutInfo.getString("busInfo").split("、");
+                        String busLinesInStr = busOutInfo.getString("busInfo");
+                        String[] busLines = busLinesInStr.split("、");
                         if (busLines.length == 1)
-                            busLines = busOutInfo.getString("busInfo").split(",");
+                            busLines = busLinesInStr.split(",");
                         if (busLines.length == 1)
-                            busLines = busOutInfo.getString("busInfo").split("，");
+                            busLines = busLinesInStr.split("，");
                         if (busLines.length == 1)
-                            busLines = busOutInfo.getString("busInfo").split(".");
+                            busLines = busLinesInStr.split(".");
                         if (busLines.length == 1)
-                            busLines = busOutInfo.getString("busInfo").split(" ");
-                        for (String busLine : busLines)
+                            busLines = busLinesInStr.split(" ");
+                        if (busLines.length == 1)
+                            busLines = busLinesInStr.split(" ");
+                        for (String busLine : busLines) {
                             if (!busLine.isEmpty()) {
                                 busInfos.add(new BusInfo(busLine, busName));
                                 busExitInfos.add(new BusExitInfo(englishName, exit, ++busInfoId));
                             }
+                        }
+                    }
+                }
+
+                JSONArray landmarkInfoArray = JSONArray.parseArray(stationJson.getString("out_info"));
+                for (Object landmarkInfoObject : landmarkInfoArray) {
+                    JSONObject landmarkInfoJson = (JSONObject) landmarkInfoObject;
+                    String exit = landmarkInfoJson.getString("outt");
+                    String landmarksInStr = landmarkInfoJson.getString("textt");
+                    String[] landmarks = landmarksInStr.split("、");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split(",");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split("，");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split(".");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split(" ");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split(" ");
+                    for (String landmark : landmarks) {
+                        if (!landmark.isEmpty()) {
+                            landmarkInfos.add(new LandmarkInfo(landmark));
+                            landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, ++landmarkId));
+                        }
                     }
                 }
             }
@@ -199,6 +300,10 @@ public class StationImport implements DataImport {
                 dm.addOneBusInfo(busInfo);
             for (BusExitInfo busExitInfo : busExitInfos)
                 dm.addOneBusExitInfo(busExitInfo);
+            for (LandmarkInfo landmarkInfo : landmarkInfos)
+                dm.addOneLandmarkInfo(landmarkInfo);
+            for (LandmarkExitInfo landmarkExitInfo : landmarkExitInfos)
+                dm.addOneLandmarkExitInfo(landmarkExitInfo);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
