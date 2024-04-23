@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StationImport implements DataImport {
+    private static List<Station> stations = new ArrayList<>();
+    private static List<BusInfo> busInfos = new ArrayList<>();
+    private static List<BusExitInfo> busExitInfos = new ArrayList<>();
+    private static List<LandmarkInfo> landmarkInfos = new ArrayList<>();
+    private static List<LandmarkExitInfo> landmarkExitInfos = new ArrayList<>();
+
     public static class Station {
         private String englishName;
         private String chineseName;
@@ -214,13 +220,7 @@ public class StationImport implements DataImport {
     }
 
     @Override
-    public void importData(byte method) {
-        List<Station> stations = new ArrayList<>();
-        List<BusInfo> busInfos = new ArrayList<>();
-        List<BusExitInfo> busExitInfos = new ArrayList<>();
-        List<LandmarkInfo> landmarkInfos = new ArrayList<>();
-        List<LandmarkExitInfo> landmarkExitInfos = new ArrayList<>();
-
+    public void readData() {
         try {
             String jsonStrings = Files.readString(Path.of("resources/stations.json"));
             JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
@@ -291,6 +291,10 @@ public class StationImport implements DataImport {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void writeData(byte method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
@@ -312,11 +316,11 @@ public class StationImport implements DataImport {
                 dm.addAllLandmarkInfos(landmarkInfos);
                 dm.addAllLandmarkExitInfos(landmarkExitInfos);
             } else if (method == 3) {
-                dm.generateStationsSqlScript(stations);
-                dm.generateBusInfosSqlScript(busInfos);
-                dm.generateBusExitInfosSqlScript(busExitInfos);
-                dm.generateLandmarkInfosSqlScript(landmarkInfos);
-                dm.generateLandmarkExitInfosSqlScript(landmarkExitInfos);
+                dm.generateStationSqlScript(stations);
+                dm.generateBusInfoSqlScript(busInfos);
+                dm.generateBusExitInfoSqlScript(busExitInfos);
+                dm.generateLandmarkInfoSqlScript(landmarkInfos);
+                dm.generateLandmarkExitInfoSqlScript(landmarkExitInfos);
             }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {

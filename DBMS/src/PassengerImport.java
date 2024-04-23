@@ -3,6 +3,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class PassengerImport implements DataImport {
+    private static List<Passenger> passengers;
+
     public static class Passenger {
         private String idNumber;
         private String name;
@@ -71,8 +73,12 @@ public class PassengerImport implements DataImport {
     }
 
     @Override
-    public void importData(byte method) {
-        List<Passenger> passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
+    public void readData() {
+       passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
+    }
+
+    @Override
+    public void writeData(byte method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
@@ -81,6 +87,8 @@ public class PassengerImport implements DataImport {
                     dm.addOnePassenger(passenger);
             else if (method == 2)
                 dm.addAllPassengers(passengers);
+            else if (method == 3)
+                dm.generatePassengerSqlScript(passengers);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class CardImport implements DataImport {
+    private static List<Card> cards;
+
     public static class Card {
         private String code;
         private double money;
@@ -50,16 +52,22 @@ public class CardImport implements DataImport {
     }
 
     @Override
-    public void importData(byte method) {
-        List<Card> cards = Util.readJsonArray(Path.of("resources/cards.json"), Card.class);
+    public void readData() {
+        cards = Util.readJsonArray(Path.of("resources/cards.json"), Card.class);
+    }
+
+    @Override
+    public void writeData(byte method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
             if (method == 1)
                 for (Card card : cards)
                     dm.addOneCard(card);
-             else if (method == 2)
-                 dm.addAllCards(cards);
+            else if (method == 2)
+                dm.addAllCards(cards);
+            else if (method == 3)
+                dm.generateCardSqlScript(cards);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

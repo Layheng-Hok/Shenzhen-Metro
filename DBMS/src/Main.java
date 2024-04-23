@@ -4,14 +4,14 @@ public class Main {
     public static void main(String[] args) {
         byte method = new Scanner(System.in).nextByte();
         StationImport stationImport = new StationImport();
-        stationImport.importData(method);
+        stationImport.writeData(method);
         LineImport lineImport = new LineImport();
-        lineImport.importData(method);
+        lineImport.writeData(method);
         CardImport cardImport = new CardImport();
-        cardImport.importData(method);
+        cardImport.writeData(method);
         PassengerImport passengerImport = new PassengerImport();
-        passengerImport.importData(method);
+        passengerImport.writeData(method);
         RideImport rideImport = new RideImport();
-        rideImport.importData(method);
+        rideImport.writeData(method);
     }
 }

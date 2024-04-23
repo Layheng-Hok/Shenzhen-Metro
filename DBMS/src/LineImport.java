@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineImport implements DataImport {
+    private static List<Line> lines = new ArrayList<>();
+    private static List<LineDetail> lineDetails = new ArrayList<>();
+
     public static class Line {
         private String lineName;
         private Time startTime;
@@ -160,10 +163,7 @@ public class LineImport implements DataImport {
     }
 
     @Override
-    public void importData(byte method) {
-        List<Line> lines = new ArrayList<>();
-        List<LineDetail> lineDetails = new ArrayList<>();
-
+    public void readData() {
         try {
             String jsonStrings = Files.readString(Path.of("resources/lines.json"));
             JSONObject linesJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
@@ -196,6 +196,10 @@ public class LineImport implements DataImport {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public void writeData(byte method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
@@ -207,6 +211,9 @@ public class LineImport implements DataImport {
             } else if (method == 2) {
                 dm.addAllLines(lines);
                 dm.addAllLineDetails(lineDetails);
+            } else if (method == 3) {
+                dm.generateLineSqlScript(lines);
+                dm.generateLineDetailSqlScript(lineDetails);
             }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {

@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RideImport implements DataImport {
+    private static List<RoutePricing> routePricings = new ArrayList<>();
+    private static List<RideByIdNum> ridesByIdNum = new ArrayList<>();
+    private static List<RideByCardNum> ridesByCardNum = new ArrayList<>();
+
+
     public static class Ride {
         private String user;
         private String startStation;
@@ -221,12 +226,9 @@ public class RideImport implements DataImport {
     }
 
     @Override
-    public void importData(byte method) {
+    public void readData() {
         List<Ride> rides = Util.readJsonArray(Path.of("resources/ride.json"), Ride.class);
-        List<RoutePricing> routePricings = new ArrayList<>();
         HashMap<String, Integer> routeIdMap = new HashMap<>();
-        List<RideByIdNum> ridesByIdNum = new ArrayList<>();
-        List<RideByCardNum> ridesByCardNum = new ArrayList<>();
 
         int routeId = 0;
         for (Ride ride : rides) {
@@ -242,7 +244,10 @@ public class RideImport implements DataImport {
                 ridesByIdNum.add(new RideByIdNum(ride.getUser(), ride.getStartTime(), ride.getStartTime(), routeIdMap.get(ride.startStation + " -> " + ride.endStation)));
         }
 
+    }
 
+    @Override
+    public void writeData(byte method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
@@ -257,6 +262,10 @@ public class RideImport implements DataImport {
                 dm.addAllRoutePricings(routePricings);
                 dm.addAllRidesByIdNum(ridesByIdNum);
                 dm.addAllRidesByCardNum(ridesByCardNum);
+            } else if (method == 3) {
+                dm.generateRoutePricingSqlScript(routePricings);
+                dm.generateRideByIdNumSqlScript(ridesByIdNum);
+                dm.generateRideByCardNumSqlScript(ridesByCardNum);
             }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
