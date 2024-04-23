@@ -71,13 +71,16 @@ public class PassengerImport implements DataImport {
     }
 
     @Override
-    public void importData() {
+    public void importData(byte method) {
         List<Passenger> passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Passenger passenger : passengers)
-                dm.addOnePassenger(passenger);
+            if (method == 1)
+                for (Passenger passenger : passengers)
+                    dm.addOnePassenger(passenger);
+            else if (method == 2)
+                dm.addAllPassengers(passengers);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

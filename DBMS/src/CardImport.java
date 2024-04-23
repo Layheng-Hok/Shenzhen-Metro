@@ -50,13 +50,16 @@ public class CardImport implements DataImport {
     }
 
     @Override
-    public void importData() {
+    public void importData(byte method) {
         List<Card> cards = Util.readJsonArray(Path.of("resources/cards.json"), Card.class);
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Card card : cards)
-                dm.addOneCard(card);
+            if (method == 1)
+                for (Card card : cards)
+                    dm.addOneCard(card);
+             else if (method == 2)
+                 dm.addAllCards(cards);
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

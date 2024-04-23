@@ -221,7 +221,7 @@ public class RideImport implements DataImport {
     }
 
     @Override
-    public void importData() {
+    public void importData(byte method) {
         List<Ride> rides = Util.readJsonArray(Path.of("resources/ride.json"), Ride.class);
         List<RoutePricing> routePricings = new ArrayList<>();
         HashMap<String, Integer> routeIdMap = new HashMap<>();
@@ -246,12 +246,18 @@ public class RideImport implements DataImport {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (RoutePricing routePricing : routePricings)
-                dm.addOneRoutePricing(routePricing);
-            for (RideByIdNum rideByIdNum : ridesByIdNum)
-                dm.addOneRideByIdNum(rideByIdNum);
-            for (RideByCardNum rideByCardNum : ridesByCardNum)
-                dm.addOneRideByCardNum(rideByCardNum);
+            if (method == 1) {
+                for (RoutePricing routePricing : routePricings)
+                    dm.addOneRoutePricing(routePricing);
+                for (RideByIdNum rideByIdNum : ridesByIdNum)
+                    dm.addOneRideByIdNum(rideByIdNum);
+                for (RideByCardNum rideByCardNum : ridesByCardNum)
+                    dm.addOneRideByCardNum(rideByCardNum);
+            } else if (method == 2) {
+                dm.addAllRoutePricings(routePricings);
+                dm.addAllRidesByIdNum(ridesByIdNum);
+                dm.addAllRidesByCardNum(ridesByCardNum);
+            }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

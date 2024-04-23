@@ -1,3 +1,3 @@
 public interface DataImport {
-    void importData();
+    void importData(byte method);
 }

@@ -214,7 +214,7 @@ public class StationImport implements DataImport {
     }
 
     @Override
-    public void importData() {
+    public void importData(byte method) {
         List<Station> stations = new ArrayList<>();
         List<BusInfo> busInfos = new ArrayList<>();
         List<BusExitInfo> busExitInfos = new ArrayList<>();
@@ -294,16 +294,24 @@ public class StationImport implements DataImport {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Station station : stations)
-                dm.addOneStation(station);
-            for (BusInfo busInfo : busInfos)
-                dm.addOneBusInfo(busInfo);
-            for (BusExitInfo busExitInfo : busExitInfos)
-                dm.addOneBusExitInfo(busExitInfo);
-            for (LandmarkInfo landmarkInfo : landmarkInfos)
-                dm.addOneLandmarkInfo(landmarkInfo);
-            for (LandmarkExitInfo landmarkExitInfo : landmarkExitInfos)
-                dm.addOneLandmarkExitInfo(landmarkExitInfo);
+            if (method == 1) {
+                for (Station station : stations)
+                    dm.addOneStation(station);
+                for (BusInfo busInfo : busInfos)
+                    dm.addOneBusInfo(busInfo);
+                for (BusExitInfo busExitInfo : busExitInfos)
+                    dm.addOneBusExitInfo(busExitInfo);
+                for (LandmarkInfo landmarkInfo : landmarkInfos)
+                    dm.addOneLandmarkInfo(landmarkInfo);
+                for (LandmarkExitInfo landmarkExitInfo : landmarkExitInfos)
+                    dm.addOneLandmarkExitInfo(landmarkExitInfo);
+            } else if (method == 2) {
+                dm.addAllStations(stations);
+                dm.addAllBusInfos(busInfos);
+                dm.addAllBusExitInfos(busExitInfos);
+                dm.addAllLandmarkInfos(landmarkInfos);
+                dm.addAllLandmarkExitInfos(landmarkExitInfos);
+            }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

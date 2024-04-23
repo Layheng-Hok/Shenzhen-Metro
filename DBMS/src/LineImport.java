@@ -160,7 +160,7 @@ public class LineImport implements DataImport {
     }
 
     @Override
-    public void importData() {
+    public void importData(byte method) {
         List<Line> lines = new ArrayList<>();
         List<LineDetail> lineDetails = new ArrayList<>();
 
@@ -199,10 +199,15 @@ public class LineImport implements DataImport {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
-            for (Line line : lines)
-                dm.addOneLine(line);
-            for (LineDetail lineDetail : lineDetails)
-                dm.addOneLineDetail(lineDetail);
+            if (method == 1) {
+                for (Line line : lines)
+                    dm.addOneLine(line);
+                for (LineDetail lineDetail : lineDetails)
+                    dm.addOneLineDetail(lineDetail);
+            } else if (method == 2) {
+                dm.addAllLines(lines);
+                dm.addAllLineDetails(lineDetails);
+            }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
