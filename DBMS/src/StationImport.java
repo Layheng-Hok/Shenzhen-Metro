@@ -311,6 +311,12 @@ public class StationImport implements DataImport {
                 dm.addAllBusExitInfos(busExitInfos);
                 dm.addAllLandmarkInfos(landmarkInfos);
                 dm.addAllLandmarkExitInfos(landmarkExitInfos);
+            } else if (method == 3) {
+                dm.generateStationsSqlScript(stations);
+                dm.generateBusInfosSqlScript(busInfos);
+                dm.generateBusExitInfosSqlScript(busExitInfos);
+                dm.generateLandmarkInfosSqlScript(landmarkInfos);
+                dm.generateLandmarkExitInfosSqlScript(landmarkExitInfos);
             }
             dm.closeDatasource();
         } catch (IllegalArgumentException e) {

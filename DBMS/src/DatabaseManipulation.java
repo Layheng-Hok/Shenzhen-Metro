@@ -1,10 +1,12 @@
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 
 public class DatabaseManipulation {
     private Connection con = null;
-
     private String host = "localhost";
     private String dbname = "cs307_project1";
     private String user = "layhenghok";
@@ -256,7 +258,6 @@ public class DatabaseManipulation {
         }
     }
 
-
     public void addAllBusExitInfos(List<StationImport.BusExitInfo> busExitInfos) {
         String sql = "INSERT INTO bus_exit_info (station_name, exit, bus_info_id) " +
                 "VALUES (?, ?, ?)";
@@ -435,4 +436,94 @@ public class DatabaseManipulation {
 
         }
     }
+
+    public void generateStationsSqlScript(List<StationImport.Station> stations) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("sql/a_station_import_script.sql"))) {
+            String sql = "INSERT INTO station (english_name, chinese_name, district, intro) " +
+                    "VALUES (?, ?, ?, ?)";
+            StringBuilder sb = new StringBuilder("BEGIN;\n");
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (StationImport.Station station : stations) {
+                preparedStatement.setString(1, station.getEnglishName());
+                preparedStatement.setString(2, station.getChineseName());
+                preparedStatement.setString(3, station.getDistrict());
+                preparedStatement.setString(4, station.getIntro());
+                sb.append(preparedStatement).append("\n");
+            }
+            bw.write(sb.append("END;\n").toString());
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateBusInfosSqlScript(List<StationImport.BusInfo> busInfos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("sql/b_bus_info_import_script.sql"))) {
+            String sql = "INSERT INTO bus_info (bus_line, bus_name) " +
+                    "VALUES (?, ?)";
+            StringBuilder sb = new StringBuilder("BEGIN;\n");
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (StationImport.BusInfo busInfo : busInfos) {
+                preparedStatement.setString(1, busInfo.getBusLine());
+                preparedStatement.setString(2, busInfo.getBusName());
+                sb.append(preparedStatement).append("\n");
+            }
+            bw.write(sb.append("END;\n").toString());
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateBusExitInfosSqlScript(List<StationImport.BusExitInfo> busExitInfos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("sql/c_bus_exit_info_import_script.sql", true))) {
+            String sql = "INSERT INTO bus_exit_info (station_name, exit, bus_info_id) " +
+                    "VALUES (?, ?, ?)";
+            StringBuilder sb = new StringBuilder("BEGIN;\n");
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (StationImport.BusExitInfo busExitInfo : busExitInfos) {
+                preparedStatement.setString(1, busExitInfo.getStationName());
+                preparedStatement.setString(2, busExitInfo.getExit());
+                preparedStatement.setLong(3, busExitInfo.getBusInfoId());
+                sb.append(preparedStatement).append("\n");
+            }
+            bw.write(sb.append("END;\n").toString());
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateLandmarkInfosSqlScript(List<StationImport.LandmarkInfo> landmarkInfos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("sql/d_landmark_info_script.sql", true))) {
+            String sql = "INSERT INTO landmark_info (landmark) " +
+                    "VALUES (?)";
+            StringBuilder sb = new StringBuilder("BEGIN;\n");
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (StationImport.LandmarkInfo landmarkInfo : landmarkInfos) {
+                preparedStatement.setString(1, landmarkInfo.getLandmark());
+                sb.append(preparedStatement).append("\n");
+            }
+            bw.write(sb.append("END;\n").toString());
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void generateLandmarkExitInfosSqlScript(List<StationImport.LandmarkExitInfo> landmarkExitInfos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("sql/e_landmark_exit_info_script.sql", true))) {
+            String sql = "INSERT INTO landmark_exit_info (station_name, exit, landmark_id) " +
+                    "VALUES (?, ?, ?)";
+            StringBuilder sb = new StringBuilder("BEGIN;\n");
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (StationImport.LandmarkExitInfo landmarkExitInfo : landmarkExitInfos) {
+                preparedStatement.setString(1, landmarkExitInfo.getStationName());
+                preparedStatement.setString(2, landmarkExitInfo.getExit());
+                preparedStatement.setLong(3, landmarkExitInfo.getLandmarkId());
+                sb.append(preparedStatement).append("\n");
+            }
+            bw.write(sb.append("END;\n").toString());
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
