@@ -226,12 +226,14 @@ public class RideImport implements DataImport {
     }
 
     @Override
-    public void readData() {
+    public void readData(int volume) {
         List<Ride> rides = Util.readJsonArray(Path.of("resources/ride.json"), Ride.class);
         HashMap<String, Integer> routeIdMap = new HashMap<>();
-
+        volume = (int) (0.01 * volume * 100000);
         int routeId = 0;
-        for (Ride ride : rides) {
+
+        for (int i = 0; i < volume; i++) {
+            Ride ride = rides.get(i);
             RoutePricing routePricing = new RoutePricing(ride.startStation, ride.endStation, ride.price);
             String route = ride.startStation + " -> " + ride.endStation;
             if (!routeIdMap.containsKey(route)) {
@@ -247,7 +249,7 @@ public class RideImport implements DataImport {
     }
 
     @Override
-    public void writeData(byte method) {
+    public void writeData(int method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();

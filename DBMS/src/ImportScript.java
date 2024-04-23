@@ -2,13 +2,17 @@ import java.util.Scanner;
 
 public class ImportScript {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Choose your import method (an int input):\n" +
                 "[1] import one by one\n" +
                 "[2] import by batch\n" +
                 "[3] generate a sql script\n" +
                 "-> ");
-
-        byte method = new Scanner(System.in).nextByte();
+        int method = scanner.nextInt();
+        System.out.println();
+        System.out.print("Specify your import volume (an int input, 0%-100%, standard: 20, 50, 100):\n" +
+                "-> ");
+        int volume = scanner.nextInt();
 
         StationImport stationImport = new StationImport();
         LineImport lineImport = new LineImport();
@@ -16,11 +20,11 @@ public class ImportScript {
         PassengerImport passengerImport = new PassengerImport();
         RideImport rideImport = new RideImport();
 
-        stationImport.readData();
-        lineImport.readData();
-        cardImport.readData();
-        passengerImport.readData();
-        rideImport.readData();
+        stationImport.readData(100);
+        lineImport.readData(100);
+        cardImport.readData(100);
+        passengerImport.readData(100);
+        rideImport.readData(volume);
 
         stationImport.writeData(method);
         lineImport.writeData(method);

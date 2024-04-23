@@ -73,12 +73,12 @@ public class PassengerImport implements DataImport {
     }
 
     @Override
-    public void readData() {
+    public void readData(int volume) {
        passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
     }
 
     @Override
-    public void writeData(byte method) {
+    public void writeData(int method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();

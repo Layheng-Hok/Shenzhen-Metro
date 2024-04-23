@@ -1,4 +1,4 @@
 public interface DataImport {
-    void readData();
-    void writeData(byte method);
+    void readData(int volume);
+    void writeData(int method);
 }

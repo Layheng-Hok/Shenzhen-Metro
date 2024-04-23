@@ -163,7 +163,7 @@ public class LineImport implements DataImport {
     }
 
     @Override
-    public void readData() {
+    public void readData(int volume) {
         try {
             String jsonStrings = Files.readString(Path.of("resources/lines.json"));
             JSONObject linesJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
@@ -199,7 +199,7 @@ public class LineImport implements DataImport {
     }
 
     @Override
-    public void writeData(byte method) {
+    public void writeData(int method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();

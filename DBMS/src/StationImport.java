@@ -220,7 +220,7 @@ public class StationImport implements DataImport {
     }
 
     @Override
-    public void readData() {
+    public void readData(int volume) {
         try {
             String jsonStrings = Files.readString(Path.of("resources/stations.json"));
             JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
@@ -294,7 +294,7 @@ public class StationImport implements DataImport {
     }
 
     @Override
-    public void writeData(byte method) {
+    public void writeData(int method) {
         try {
             DatabaseManipulation dm = new DatabaseManipulation();
             dm.openDatasource();
