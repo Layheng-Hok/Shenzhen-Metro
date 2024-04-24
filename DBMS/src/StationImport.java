@@ -294,10 +294,8 @@ public class StationImport implements DataImport {
     }
 
     @Override
-    public void writeData(int method) {
+    public void writeData(int method, DatabaseManipulation dm) {
         try {
-            DatabaseManipulation dm = new DatabaseManipulation();
-            dm.openDatasource();
             if (method == 1) {
                 for (Station station : stations)
                     dm.addOneStation(station);
@@ -322,7 +320,6 @@ public class StationImport implements DataImport {
                 dm.generateLandmarkInfoSqlScript(landmarkInfos);
                 dm.generateLandmarkExitInfoSqlScript(landmarkExitInfos);
             }
-            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

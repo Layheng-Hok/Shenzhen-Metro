@@ -1,4 +1,4 @@
 public interface DataImport {
     void readData(int volume);
-    void writeData(int method);
+    void writeData(int method, DatabaseManipulation dm);
 }

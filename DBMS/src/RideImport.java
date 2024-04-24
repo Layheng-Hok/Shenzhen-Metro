@@ -249,10 +249,8 @@ public class RideImport implements DataImport {
     }
 
     @Override
-    public void writeData(int method) {
+    public void writeData(int method, DatabaseManipulation dm) {
         try {
-            DatabaseManipulation dm = new DatabaseManipulation();
-            dm.openDatasource();
             if (method == 1) {
                 for (RoutePricing routePricing : routePricings)
                     dm.addOneRoutePricing(routePricing);
@@ -269,7 +267,6 @@ public class RideImport implements DataImport {
                 dm.generateRideByIdNumSqlScript(ridesByIdNum);
                 dm.generateRideByCardNumSqlScript(ridesByCardNum);
             }
-            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

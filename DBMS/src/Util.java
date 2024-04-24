@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Util {
-    private static final List<Character> seperators = new ArrayList<>(Arrays.asList(',', '，', '、', ' ',' '));
+    private static final List<Character> seperators = new ArrayList<>(Arrays.asList('/', '\\', '|', ',', '，', '、', ' ', ' '));
 
     public static <T> List<T> readJsonArray(Path path, Class<T> clz) {
         try {

@@ -57,10 +57,8 @@ public class CardImport implements DataImport {
     }
 
     @Override
-    public void writeData(int method) {
+    public void writeData(int method, DatabaseManipulation dm) {
         try {
-            DatabaseManipulation dm = new DatabaseManipulation();
-            dm.openDatasource();
             if (method == 1)
                 for (Card card : cards)
                     dm.addOneCard(card);
@@ -68,7 +66,6 @@ public class CardImport implements DataImport {
                 dm.addAllCards(cards);
             else if (method == 3)
                 dm.generateCardSqlScript(cards);
-            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

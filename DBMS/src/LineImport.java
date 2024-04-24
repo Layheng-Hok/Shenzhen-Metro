@@ -199,10 +199,8 @@ public class LineImport implements DataImport {
     }
 
     @Override
-    public void writeData(int method) {
+    public void writeData(int method, DatabaseManipulation dm) {
         try {
-            DatabaseManipulation dm = new DatabaseManipulation();
-            dm.openDatasource();
             if (method == 1) {
                 for (Line line : lines)
                     dm.addOneLine(line);
@@ -215,7 +213,6 @@ public class LineImport implements DataImport {
                 dm.generateLineSqlScript(lines);
                 dm.generateLineDetailSqlScript(lineDetails);
             }
-            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }

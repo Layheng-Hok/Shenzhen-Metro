@@ -3,6 +3,12 @@ import java.util.Scanner;
 public class ImportScript {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Choose your database server (an int input):\n" +
+                "[1] PostgreSQL\n" +
+                "[2] MySQL\n" +
+                "-> ");
+        int database = scanner.nextInt();
+        System.out.println();
         System.out.print("Choose your import method (an int input):\n" +
                 "[1] import one by one\n" +
                 "[2] import by batch\n" +
@@ -10,9 +16,12 @@ public class ImportScript {
                 "-> ");
         int method = scanner.nextInt();
         System.out.println();
-        System.out.print("Specify your import volume (an int input, 0%-100%, standard: 20, 50, 100):\n" +
+        System.out.print("Specify your import volume (an int input, range: 0%-100%, standard: 20, 50, 100):\n" +
                 "-> ");
         int volume = scanner.nextInt();
+
+        DatabaseManipulation dm = new DatabaseManipulation(database);
+        dm.openDatasource();
 
         StationImport stationImport = new StationImport();
         LineImport lineImport = new LineImport();
@@ -26,10 +35,12 @@ public class ImportScript {
         passengerImport.readData(100);
         rideImport.readData(volume);
 
-        stationImport.writeData(method);
-        lineImport.writeData(method);
-        cardImport.writeData(method);
-        passengerImport.writeData(method);
-        rideImport.writeData(method);
+        stationImport.writeData(method, dm);
+        lineImport.writeData(method, dm);
+        cardImport.writeData(method, dm);
+        passengerImport.writeData(method, dm);
+        rideImport.writeData(method, dm);
+
+        dm.closeDatasource();
     }
 }

@@ -74,14 +74,12 @@ public class PassengerImport implements DataImport {
 
     @Override
     public void readData(int volume) {
-       passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
+        passengers = Util.readJsonArray(Path.of("resources/passenger.json"), Passenger.class);
     }
 
     @Override
-    public void writeData(int method) {
+    public void writeData(int method, DatabaseManipulation dm) {
         try {
-            DatabaseManipulation dm = new DatabaseManipulation();
-            dm.openDatasource();
             if (method == 1)
                 for (Passenger passenger : passengers)
                     dm.addOnePassenger(passenger);
@@ -89,7 +87,6 @@ public class PassengerImport implements DataImport {
                 dm.addAllPassengers(passengers);
             else if (method == 3)
                 dm.generatePassengerSqlScript(passengers);
-            dm.closeDatasource();
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
