@@ -238,9 +238,24 @@ public class StationImport implements DataImport {
                 JSONArray busInfoArray = JSONArray.parseArray(stationJson.getString("bus_info"));
                 for (Object busInfoObject : busInfoArray) {
                     JSONObject busInfoJson = (JSONObject) busInfoObject;
-                    String exit = busInfoJson.getString("chukou");
-                    if (englishName.equals("Airport East"))
-                        System.out.println(exit);
+                    String exitsInStr = busInfoJson.getString("chukou");
+                    String[] exits = exitsInStr.split("/");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("、");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(",");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("，");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(";");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("；");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(" ");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(" ");
+                    if (exits.length == 1)
+                        exits = new String[]{exitsInStr};
                     JSONArray busOutInfoArray = busInfoJson.getJSONArray("busOutInfo");
                     for (Object busOutObject : busOutInfoArray) {
                         JSONObject busOutInfo = (JSONObject) busOutObject;
@@ -256,17 +271,19 @@ public class StationImport implements DataImport {
                         if (busLines.length == 1)
                             busLines = busLinesInStr.split("；");
                         if (busLines.length == 1)
-                            busLines = busLinesInStr.split(".");
-                        if (busLines.length == 1)
                             busLines = busLinesInStr.split(" ");
                         if (busLines.length == 1)
                             busLines = busLinesInStr.split(" ");
                         if (busLines.length == 1)
                             busLines = new String[]{busLinesInStr};
-                        for (String busLine : busLines) {
-                            if (!busLine.isEmpty()) {
-                                busInfos.add(new BusInfo(busLine, busName));
-                                busExitInfos.add(new BusExitInfo(englishName, exit, ++busInfoId));
+                        for (String exit : exits) {
+                            if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
+                                for (String busLine : busLines) {
+                                    if (!busLine.isEmpty() && !Util.containOnlySeparators(exit)) {
+                                        busInfos.add(new BusInfo(busLine, busName));
+                                        busExitInfos.add(new BusExitInfo(englishName, exit, ++busInfoId));
+                                    }
+                                }
                             }
                         }
                     }
@@ -275,7 +292,24 @@ public class StationImport implements DataImport {
                 JSONArray landmarkInfoArray = JSONArray.parseArray(stationJson.getString("out_info"));
                 for (Object landmarkInfoObject : landmarkInfoArray) {
                     JSONObject landmarkInfoJson = (JSONObject) landmarkInfoObject;
-                    String exit = landmarkInfoJson.getString("outt");
+                    String exitsInStr = landmarkInfoJson.getString("outt");
+                    String[] exits = exitsInStr.split("/");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("、");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(",");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("，");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(";");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split("；");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(" ");
+                    if (exits.length == 1)
+                        exits = exitsInStr.split(" ");
+                    if (exits.length == 1)
+                        exits = new String[]{exitsInStr};
                     String landmarksInStr = landmarkInfoJson.getString("textt");
                     String[] landmarks = landmarksInStr.split("、");
                     if (landmarks.length == 1)
@@ -287,17 +321,21 @@ public class StationImport implements DataImport {
                     if (landmarks.length == 1)
                         landmarks = landmarksInStr.split("；");
                     if (landmarks.length == 1)
-                        landmarks = landmarksInStr.split(".");
-                    if (landmarks.length == 1)
                         landmarks = landmarksInStr.split(" ");
                     if (landmarks.length == 1)
                         landmarks = landmarksInStr.split(" ");
                     if (landmarks.length == 1)
                         landmarks = new String[]{landmarksInStr};
-                    for (String landmark : landmarks) {
-                        if (!landmark.isEmpty()) {
-                            landmarkInfos.add(new LandmarkInfo(landmark));
-                            landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, ++landmarkId));
+                    for (String exit : exits) {
+                        if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
+                            if (Util.containSeparator(exit))
+                                System.out.println(exit);
+                            for (String landmark : landmarks) {
+                                if (!landmark.isEmpty() && !Util.containOnlySeparators(landmark)) {
+                                    landmarkInfos.add(new LandmarkInfo(landmark));
+                                    landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, ++landmarkId));
+                                }
+                            }
                         }
                     }
                 }

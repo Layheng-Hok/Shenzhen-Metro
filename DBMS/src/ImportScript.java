@@ -35,6 +35,7 @@ public class ImportScript {
         passengerImport.readData(100);
         rideImport.readData(volume);
 
+
         stationImport.writeData(method, dm);
         lineImport.writeData(method, dm);
         cardImport.writeData(method, dm);

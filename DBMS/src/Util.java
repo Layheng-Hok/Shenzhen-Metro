@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Util {
-    private static final List<Character> seperators = new ArrayList<>(Arrays.asList('/', '\\', '|', ',', '，', '、', ' ', ' '));
+    private static final List<Character> separators = new ArrayList<>(Arrays.asList('/', '\\', '-', '|', ',', '，', '、', ';', '；', ' ', ' ','.','。'));
 
     public static <T> List<T> readJsonArray(Path path, Class<T> clz) {
         try {
@@ -19,7 +19,21 @@ public class Util {
         }
     }
 
-    public static boolean isSeperator(char c) {
-        return seperators.contains(c);
+    public static boolean isSeparator(char c) {
+        return separators.contains(c);
+    }
+
+    public static boolean containSeparator(String str) {
+        for (char c : str.toCharArray())
+            if (isSeparator(c))
+                return true;
+        return false;
+    }
+
+    public static boolean containOnlySeparators(String str) {
+        for (char c : str.toCharArray())
+            if (!isSeparator(c))
+                return false;
+        return true;
     }
 }
