@@ -239,6 +239,8 @@ public class StationImport implements DataImport {
                 for (Object busInfoObject : busInfoArray) {
                     JSONObject busInfoJson = (JSONObject) busInfoObject;
                     String exit = busInfoJson.getString("chukou");
+                    if (englishName.equals("Airport East"))
+                        System.out.println(exit);
                     JSONArray busOutInfoArray = busInfoJson.getJSONArray("busOutInfo");
                     for (Object busOutObject : busOutInfoArray) {
                         JSONObject busOutInfo = (JSONObject) busOutObject;
@@ -250,11 +252,17 @@ public class StationImport implements DataImport {
                         if (busLines.length == 1)
                             busLines = busLinesInStr.split("，");
                         if (busLines.length == 1)
+                            busLines = busLinesInStr.split(";");
+                        if (busLines.length == 1)
+                            busLines = busLinesInStr.split("；");
+                        if (busLines.length == 1)
                             busLines = busLinesInStr.split(".");
                         if (busLines.length == 1)
                             busLines = busLinesInStr.split(" ");
                         if (busLines.length == 1)
                             busLines = busLinesInStr.split(" ");
+                        if (busLines.length == 1)
+                            busLines = new String[]{busLinesInStr};
                         for (String busLine : busLines) {
                             if (!busLine.isEmpty()) {
                                 busInfos.add(new BusInfo(busLine, busName));
@@ -275,11 +283,17 @@ public class StationImport implements DataImport {
                     if (landmarks.length == 1)
                         landmarks = landmarksInStr.split("，");
                     if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split(";");
+                    if (landmarks.length == 1)
+                        landmarks = landmarksInStr.split("；");
+                    if (landmarks.length == 1)
                         landmarks = landmarksInStr.split(".");
                     if (landmarks.length == 1)
                         landmarks = landmarksInStr.split(" ");
                     if (landmarks.length == 1)
                         landmarks = landmarksInStr.split(" ");
+                    if (landmarks.length == 1)
+                        landmarks = new String[]{landmarksInStr};
                     for (String landmark : landmarks) {
                         if (!landmark.isEmpty()) {
                             landmarkInfos.add(new LandmarkInfo(landmark));
