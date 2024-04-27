@@ -37,7 +37,7 @@ public class ImportScript {
         rideImport.readData(volume);
         long endTime = System.currentTimeMillis();
         System.out.println();
-        System.out.println("Read time: " + (endTime - startTime) + "ms");
+        System.out.println("Read time: " + (endTime - startTime) + " ms");
 
         startTime = System.currentTimeMillis();
         stationImport.writeData(method, dm);

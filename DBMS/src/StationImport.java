@@ -253,8 +253,6 @@ public class StationImport implements DataImport {
                     if (exits.length == 1)
                         exits = exitsInStr.split(" ");
                     if (exits.length == 1)
-                        exits = exitsInStr.split(" ");
-                    if (exits.length == 1)
                         exits = new String[]{exitsInStr};
                     JSONArray busOutInfoArray = busInfoJson.getJSONArray("busOutInfo");
                     for (Object busOutObject : busOutInfoArray) {
@@ -307,8 +305,6 @@ public class StationImport implements DataImport {
                     if (exits.length == 1)
                         exits = exitsInStr.split(" ");
                     if (exits.length == 1)
-                        exits = exitsInStr.split(" ");
-                    if (exits.length == 1)
                         exits = new String[]{exitsInStr};
                     String landmarksInStr = landmarkInfoJson.getString("textt");
                     String[] landmarks = landmarksInStr.split("、");
@@ -328,8 +324,6 @@ public class StationImport implements DataImport {
                         landmarks = new String[]{landmarksInStr};
                     for (String exit : exits) {
                         if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
-                            if (Util.containSeparator(exit))
-                                System.out.println(exit);
                             for (String landmark : landmarks) {
                                 if (!landmark.isEmpty() && !Util.containOnlySeparators(landmark)) {
                                     landmarkInfos.add(new LandmarkInfo(landmark));
