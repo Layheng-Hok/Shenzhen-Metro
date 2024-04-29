@@ -292,7 +292,7 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addAllBusExitInfos(List<StationImport.BusExitInfo> busExitInfos) {
+    public void addAllBusExitInfos(Util.UniqueOrderedSet<StationImport.BusExitInfo> busExitInfos) {
         String sql = "INSERT INTO bus_exit_info (station_name, exit_gate, bus_info_id) " +
                 "VALUES (?, ?, ?)";
         try {
@@ -326,7 +326,7 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addAllLandmarkExitInfos(List<StationImport.LandmarkExitInfo> landmarkExitInfos) {
+    public void addAllLandmarkExitInfos(Util.UniqueOrderedSet<StationImport.LandmarkExitInfo> landmarkExitInfos) {
         String sql = "INSERT INTO landmark_exit_info (station_name, exit_gate, landmark_id) " +
                 "VALUES (?, ?, ?)";
         try {
@@ -545,7 +545,7 @@ public class DatabaseManipulation {
         }
     }
 
-    public void generateBusExitInfoSqlScript(List<StationImport.BusExitInfo> busExitInfos) {
+    public void generateBusExitInfoSqlScript(Util.UniqueOrderedSet<StationImport.BusExitInfo> busExitInfos) {
         String fileName = null;
         if (database == 1)
             fileName = "sql/pgsql_import_script.sql";
@@ -607,7 +607,7 @@ public class DatabaseManipulation {
         }
     }
 
-    public void generateLandmarkExitInfoSqlScript(List<StationImport.LandmarkExitInfo> landmarkExitInfos) {
+    public void generateLandmarkExitInfoSqlScript(Util.UniqueOrderedSet<StationImport.LandmarkExitInfo> landmarkExitInfos) {
         String fileName = null;
         if (database == 1)
             fileName = "sql/pgsql_import_script.sql";

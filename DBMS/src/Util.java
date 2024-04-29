@@ -3,9 +3,7 @@ import com.alibaba.fastjson.JSON;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Util {
     private static final List<Character> separators = new ArrayList<>(Arrays.asList('/', '\\', '-', '|', ',', '，', '、', ';', '；', ' ', ' ','.','。'));
@@ -36,4 +34,26 @@ public class Util {
                 return false;
         return true;
     }
+
+    public static class UniqueOrderedSet<E> implements Iterable<E> {
+        private Set<E> set;
+        private List<E> list;
+
+        public UniqueOrderedSet() {
+            set = new HashSet<>();
+            list = new ArrayList<>();
+        }
+
+        public void add(E element) {
+            if (set.add(element)) {
+                list.add(element);
+            }
+        }
+
+        @Override
+        public Iterator<E> iterator() {
+            return list.iterator();
+        }
+    }
+
 }

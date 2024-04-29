@@ -5,15 +5,16 @@ import com.alibaba.fastjson.parser.Feature;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class StationImport implements DataImport {
     private static List<Station> stations = new ArrayList<>();
     private static List<BusInfo> busInfos = new ArrayList<>();
-    private static List<BusExitInfo> busExitInfos = new ArrayList<>();
+    private static HashMap<String, Long> busInfosMap = new HashMap<>();
+    private static Util.UniqueOrderedSet<BusExitInfo> busExitInfos = new Util.UniqueOrderedSet<>();
     private static List<LandmarkInfo> landmarkInfos = new ArrayList<>();
-    private static List<LandmarkExitInfo> landmarkExitInfos = new ArrayList<>();
+    private static HashMap<String, Long> landmarkInfosMap = new HashMap<>();
+    private static Util.UniqueOrderedSet<LandmarkExitInfo> landmarkExitInfos = new Util.UniqueOrderedSet<>();
 
     public static class Station {
         private String englishName;
@@ -149,6 +150,19 @@ public class StationImport implements DataImport {
                     ", busInfoId=" + busInfoId +
                     '}';
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BusExitInfo that = (BusExitInfo) o;
+            return busInfoId == that.busInfoId && Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stationName, exit, busInfoId);
+        }
     }
 
     public static class LandmarkInfo {
@@ -217,6 +231,19 @@ public class StationImport implements DataImport {
                     ", landmarkId=" + landmarkId +
                     '}';
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            LandmarkExitInfo that = (LandmarkExitInfo) o;
+            return landmarkId == that.landmarkId && Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stationName, exit, landmarkId);
+        }
     }
 
     @Override
@@ -277,9 +304,13 @@ public class StationImport implements DataImport {
                         for (String exit : exits) {
                             if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
                                 for (String busLine : busLines) {
+                                    String busNameAndLine = busName + " " + busLine;
                                     if (!busLine.isEmpty() && !Util.containOnlySeparators(exit)) {
-                                        busInfos.add(new BusInfo(busLine, busName));
-                                        busExitInfos.add(new BusExitInfo(englishName, exit, ++busInfoId));
+                                        if (!busInfosMap.containsKey(busNameAndLine)) {
+                                            busInfosMap.put(busNameAndLine, ++busInfoId);
+                                            busInfos.add(new BusInfo(busLine, busName));
+                                        }
+                                        busExitInfos.add(new BusExitInfo(englishName, exit, busInfosMap.get(busNameAndLine)));
                                     }
                                 }
                             }
@@ -326,8 +357,11 @@ public class StationImport implements DataImport {
                         if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
                             for (String landmark : landmarks) {
                                 if (!landmark.isEmpty() && !Util.containOnlySeparators(landmark)) {
-                                    landmarkInfos.add(new LandmarkInfo(landmark));
-                                    landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, ++landmarkId));
+                                    if (!landmarkInfosMap.containsKey(landmark)){
+                                        landmarkInfosMap.put(landmark, ++landmarkId);
+                                        landmarkInfos.add(new LandmarkInfo(landmark));
+                                    }
+                                    landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, landmarkInfosMap.get(landmark)));
                                 }
                             }
                         }
@@ -341,6 +375,8 @@ public class StationImport implements DataImport {
 
     @Override
     public void writeData(int method, DatabaseManipulation dm) {
+        for (BusExitInfo busExitInfo : busExitInfos)
+            System.out.println(busExitInfo);
         try {
             if (method == 1) {
                 for (Station station : stations)
