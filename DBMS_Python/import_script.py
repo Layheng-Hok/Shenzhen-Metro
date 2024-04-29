@@ -1,5 +1,6 @@
 import json
 import time
+from collections import OrderedDict
 from datetime import datetime
 
 import psycopg2
@@ -37,6 +38,14 @@ class BusExitInfo:
         self.exit = exit
         self.bus_info_id = bus_info_id
 
+    def __eq__(self, other):
+        if not isinstance(other, BusExitInfo):
+            return False
+        return (self.station_name, self.exit, self.bus_info_id) == (other.station_name, other.exit, other.bus_info_id)
+
+    def __hash__(self):
+        return hash((self.station_name, self.exit, self.bus_info_id))
+
     def __str__(self):
         return f"BusExitInfo{{station_name={self.station_name}, exit={self.exit}, bus_info_id={self.bus_info_id}}}"
 
@@ -55,15 +64,27 @@ class LandmarkExitInfo:
         self.exit = exit
         self.landmark_id = landmark_id
 
+    def __eq__(self, other):
+        if not isinstance(other, LandmarkExitInfo):
+            return False
+        return (self.station_name, self.exit, self.landmark_id) == (other.station_name, other.exit, other.landmark_id)
+
+    def __hash__(self):
+        return hash((self.station_name, self.exit, self.landmark_id))
+
     def __str__(self):
         return f"LandmarkExitInfo{{station_name={self.station_name}, exit={self.exit}, landmark_id={self.landmark_id}}}"
 
 
 stations = []
 bus_infos = []
+bus_infos_map = {}
 bus_exit_infos = []
+bus_exit_infos_set = set()
 landmark_infos = []
+landmark_infos_map = {}
 landmark_exit_infos = []
+landmark_exit_infos_set = set()
 
 with open('resources/stations.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
@@ -99,7 +120,7 @@ with open('resources/stations.json', 'r', encoding='utf-8') as file:
                 exits = [exits_in_str]
 
             for exit in exits:
-                if exit.strip():
+                if exit:
                     bus_out_info_array = bus_info_object.get('busOutInfo', [])
                     for bus_out_info in bus_out_info_array:
                         bus_lines_in_str = bus_out_info['busInfo']
@@ -119,10 +140,17 @@ with open('resources/stations.json', 'r', encoding='utf-8') as file:
                         if len(bus_lines) == 1:
                             bus_lines = [bus_lines_in_str]
                         for bus_line in bus_lines:
-                            if bus_line.strip():
-                                bus_info_id += 1
-                                bus_infos.append(BusInfo(bus_line, bus_out_info['busName']))
-                                bus_exit_infos.append(BusExitInfo(english_name, exit.strip(), bus_info_id))
+                            if bus_line:
+                                bus_name_and_line = bus_out_info['busName'] + " " + bus_line
+                                if bus_name_and_line not in bus_infos_map:
+                                    bus_info_id += 1
+                                    bus_infos_map[bus_name_and_line] = bus_info_id
+                                    bus_infos.append(BusInfo(bus_line, bus_out_info['busName']))
+                                bus_exit_info = BusExitInfo(english_name, exit,
+                                                            bus_infos_map[bus_name_and_line])
+                                if bus_exit_info not in bus_exit_infos_set:
+                                    bus_exit_infos_set.add(bus_exit_info)
+                                    bus_exit_infos.append(bus_exit_info)
 
         landmark_info_array = station_data.get('out_info', [])
         for landmark_info_object in landmark_info_array:
@@ -143,7 +171,7 @@ with open('resources/stations.json', 'r', encoding='utf-8') as file:
             if len(exits) == 1:
                 exits = [exits_in_str]
             for exit in exits:
-                if exit.strip():
+                if exit:
                     landmarks_in_str = landmark_info_object['textt']
                     landmarks = landmarks_in_str.split("、")
                     if len(landmarks) == 1:
@@ -162,10 +190,16 @@ with open('resources/stations.json', 'r', encoding='utf-8') as file:
                         landmarks = [landmarks_in_str]
 
                     for landmark in landmarks:
-                        if landmark.strip():
-                            landmark_id += 1
-                            landmark_infos.append(LandmarkInfo(landmark))
-                            landmark_exit_infos.append(LandmarkExitInfo(english_name, exit.strip(), landmark_id))
+                        if landmark:
+                            if landmark not in landmark_infos_map:
+                                landmark_id += 1
+                                landmark_infos_map[landmark] = landmark_id
+                                landmark_infos.append(LandmarkInfo(landmark))
+                            landmark_exit_info = LandmarkExitInfo(english_name, exit,
+                                                                  landmark_infos_map[landmark])
+                            if landmark_exit_info not in landmark_exit_infos_set:
+                                landmark_exit_infos_set.add(landmark_exit_info)
+                                landmark_exit_infos.append(landmark_exit_info)
 
 
 class Line:

@@ -375,8 +375,6 @@ public class StationImport implements DataImport {
 
     @Override
     public void writeData(int method, DatabaseManipulation dm) {
-        for (BusExitInfo busExitInfo : busExitInfos)
-            System.out.println(busExitInfo);
         try {
             if (method == 1) {
                 for (Station station : stations)
