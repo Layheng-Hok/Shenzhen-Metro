@@ -1,6 +1,5 @@
 import json
 import time
-from collections import OrderedDict
 from datetime import datetime
 
 import psycopg2
