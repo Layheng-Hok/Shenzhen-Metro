@@ -29,7 +29,7 @@ public class DatabaseManipulation {
         } else if (database == 2) {
             className = "com.mysql.cj.jdbc.Driver";
             host = "localhost";
-            db = "cs307_project1";
+            db = "cs307_project2";
             user = "root";
             pwd = "";
             port = "3306";

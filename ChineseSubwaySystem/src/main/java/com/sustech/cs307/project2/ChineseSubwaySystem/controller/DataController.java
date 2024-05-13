@@ -1,8 +1,10 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Line;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.LineDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.model.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineRepository;
+import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineDetailRepository;
+import com.sustech.cs307.project2.ChineseSubwaySystem.repository.StationRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,12 @@ import java.util.List;
 public class DataController {
     @Autowired
     private LineRepository lineRepository;
+
+    @Autowired
+    private LineDetailRepository lineDetailRepository;
+
+    @Autowired
+    private StationRepository stationRepository;
 
     @GetMapping({"/lines"})
     public String showLineListPage(Model model) {
@@ -153,5 +161,117 @@ public class DataController {
         List<Line> lines = lineRepository.findAll();
         model.addAttribute("lines", lines);
         return "lines/index";
+    }
+
+    @GetMapping("/lineDetails")
+    public String showLineDetailListPage(Model model) {
+        List<LineDetail> lineDetails = lineDetailRepository.findAll();
+        model.addAttribute("lineDetails", lineDetails);
+        return "lineDetails/index";
+    }
+
+    @GetMapping("lineDetails/remove")
+    @Transactional
+    public String removeStationFromLineDetail(@RequestParam int id, Model model) {
+            LineDetail lineDetail = lineDetailRepository.findById(id).orElse(null);
+            if (lineDetail != null) {
+                String lineName = lineDetail.getLineName();
+                int stationOrder = lineDetail.getStationOrder();
+                lineDetailRepository.delete(lineDetail);
+                lineDetailRepository.updateStationOrderAfterDeletion(lineName, stationOrder);  // Update station order
+                model.addAttribute("successMessage", "Station removed successfully!");
+            } else
+                model.addAttribute("errorMessage", "Station not found!");
+
+        List<LineDetail> lineDetails = lineDetailRepository.findAll();
+        model.addAttribute("lineDetails", lineDetails);
+        return "lineDetails/index";
+    }
+
+    @GetMapping("/stations")
+    public String showStationListPage(Model model) {
+        List<Station> stations = stationRepository.findAll();
+        model.addAttribute("stations", stations);
+        return "stations/index";
+    }
+
+    @GetMapping("stations/create")
+    public String showStationCreatePage(Model model) {
+        StationDto stationDto = new StationDto();
+        model.addAttribute("stationDto", stationDto);
+        return "stations/create_station";
+    }
+
+    @PostMapping("stations/create")
+    public String createStation(@Valid @ModelAttribute StationDto stationDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "stations/create_station";
+        }
+        Station station = new Station();
+        station.setEnglishName(stationDto.getEnglishName());
+        station.setChineseName(stationDto.getChineseName());
+        station.setDistrict(stationDto.getDistrict());
+        station.setIntro(stationDto.getIntro());
+        stationRepository.save(station);
+        return "redirect:/stations";
+    }
+
+    @GetMapping("stations/update")
+    public String showStationUpdatePage(Model model, @RequestParam String englishName) {
+        try {
+            Station station = stationRepository.findById(englishName).get();
+            model.addAttribute("station", station);
+
+            StationDto stationDto = new StationDto();
+            stationDto.setEnglishName(station.getEnglishName());
+            stationDto.setChineseName(station.getChineseName());
+            stationDto.setDistrict(station.getDistrict());
+            stationDto.setIntro(station.getIntro());
+
+            model.addAttribute("stationDto", stationDto);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            return "redirect:/stations";
+        }
+        return "stations/update_station";
+    }
+
+    @PostMapping("stations/update")
+    public String updateStation(Model model, @RequestParam String englishName, @Valid @ModelAttribute StationDto stationDto, BindingResult bindingResult) {
+        try {
+            System.out.println(englishName);
+            Station station = stationRepository.findById(englishName).get();
+            System.out.println(station);
+            model.addAttribute("station", station);
+
+            if (bindingResult.hasErrors()) {
+                return "stations/update_station";
+            }
+
+            station.setChineseName(stationDto.getChineseName());
+            station.setDistrict(stationDto.getDistrict());
+            station.setIntro(stationDto.getIntro());
+            stationRepository.save(station);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        return "redirect:/stations";
+    }
+
+    @GetMapping("stations/remove")
+    public String removeStation(@RequestParam String englishName, Model model) {
+        try {
+            Station station = stationRepository.findById(englishName).orElse(null);
+            if (station != null)
+                stationRepository.delete(station);
+            else
+                model.addAttribute("errorMessage", "Station not found or cannot be removed due to foreign key constraint!");
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            model.addAttribute("errorMessage", "Station cannot be removed due to foreign key constraint!");
+        }
+        List<Station> stations = stationRepository.findAll();
+        model.addAttribute("stations", stations);
+        return "stations/index";
     }
 }
