@@ -29,7 +29,7 @@ public class RideImport implements DataImport {
             this.price = price;
             this.startTime = startTime;
             this.endTime = endTime;
-            this.rideClass = "economy";
+            this.rideClass = "Economy";
         }
 
         public String getUser() {
@@ -167,7 +167,7 @@ public class RideImport implements DataImport {
             this.userNum = userNum;
             this.startTime = startTime;
             this.endTime = endTime;
-            this.rideClass = "economy";
+            this.rideClass = "Economy";
             this.pricingId = pricingId;
         }
 
@@ -234,7 +234,7 @@ public class RideImport implements DataImport {
             this.userNum = userNum;
             this.startTime = startTime;
             this.endTime = endTime;
-            this.rideClass = "economy";
+            this.rideClass = "Economy";
             this.pricingId = pricingId;
         }
 
