@@ -12,10 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
+@SessionAttributes({"totalStationsToAdd", "stationsAdded"})
 public class DataController {
     @Autowired
     private LineRepository lineRepository;
@@ -151,6 +155,7 @@ public class DataController {
             Line line = lineRepository.findById(id).orElse(null);
             if (line != null) {
                 lineRepository.delete(line);
+                model.addAttribute("successMessage", "Line removed successfully!");
             } else {
                 model.addAttribute("errorMessage", "Line not found or cannot be removed due to foreign key constraint!");
             }
@@ -165,27 +170,91 @@ public class DataController {
 
     @GetMapping("/lineDetails")
     public String showLineDetailListPage(Model model) {
-        List<LineDetail> lineDetails = lineDetailRepository.findAll();
+        List<LineDetail> lineDetails = lineDetailRepository.findAllOrderedByLineNumberAndStationOrder();
         model.addAttribute("lineDetails", lineDetails);
         return "lineDetails/index";
+    }
+
+    @ModelAttribute("totalStationsToAdd")
+    public Integer totalStationsToAdd() {
+        return 0;
+    }
+
+    @ModelAttribute("stationsAdded")
+    public Integer stationsAdded() {
+        return 0;
+    }
+
+    @GetMapping("lineDetails/create")
+    public String showLineDetailCreatePage(@RequestParam(required = false) Integer numStations, Model model,
+                                           @SessionAttribute("totalStationsToAdd") Integer totalStationsToAdd,
+                                           @SessionAttribute("stationsAdded") Integer stationsAdded) {
+        if (numStations != null) {
+            model.addAttribute("totalStationsToAdd", numStations);
+            model.addAttribute("stationsAdded", 0);
+        } else {
+            model.addAttribute("totalStationsToAdd", totalStationsToAdd);
+            model.addAttribute("stationsAdded", stationsAdded);
+        }
+
+        LineDetailDto lineDetailDto = new LineDetailDto();
+        model.addAttribute("lineDetailDto", lineDetailDto);
+        return "lineDetails/create_lineDetail";
+    }
+
+    @PostMapping("lineDetails/create")
+    @Transactional
+    public String createLineDetail(@Valid @ModelAttribute LineDetailDto lineDetailDto, BindingResult bindingResult,
+                                   @ModelAttribute("totalStationsToAdd") Integer totalStationsToAdd,
+                                   @ModelAttribute("stationsAdded") Integer stationsAdded,
+                                   Model model, SessionStatus sessionStatus) {
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/create_lineDetail";
+        }
+
+        String lineName = lineDetailDto.getLineName();
+        String stationName = lineDetailDto.getStationName();
+        int stationOrder = lineDetailDto.getStationOrder();
+
+        Optional<LineDetail> existingStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
+        if (existingStation.isPresent()) {
+            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "This station already exists for the specified line."));
+            return "lineDetails/create_lineDetail";
+        }
+        lineDetailRepository.updateStationOrderBeforeCreate(lineName, stationOrder);
+
+        LineDetail lineDetail = new LineDetail();
+        lineDetail.setLineName(lineDetailDto.getLineName());
+        lineDetail.setStationName(lineDetailDto.getStationName());
+        lineDetail.setStationOrder(lineDetailDto.getStationOrder());
+        lineDetailRepository.save(lineDetail);
+
+        stationsAdded++;
+        model.addAttribute("stationsAdded", stationsAdded);
+
+        if (stationsAdded >= totalStationsToAdd) {
+            sessionStatus.setComplete();
+            return "redirect:/lineDetails";
+        }
+        return "redirect:/lineDetails/create";
     }
 
     @GetMapping("lineDetails/remove")
     @Transactional
     public String removeStationFromLineDetail(@RequestParam int id, Model model) {
-            LineDetail lineDetail = lineDetailRepository.findById(id).orElse(null);
-            if (lineDetail != null) {
-                String lineName = lineDetail.getLineName();
-                int stationOrder = lineDetail.getStationOrder();
-                lineDetailRepository.delete(lineDetail);
-                lineDetailRepository.updateStationOrderAfterDeletion(lineName, stationOrder);  // Update station order
-                model.addAttribute("successMessage", "Station removed successfully!");
-            } else
-                model.addAttribute("errorMessage", "Station not found!");
+        LineDetail lineDetail = lineDetailRepository.findById(id).orElse(null);
+        if (lineDetail != null) {
+            String lineName = lineDetail.getLineName();
+            int stationOrder = lineDetail.getStationOrder();
+            lineDetailRepository.delete(lineDetail);
+            lineDetailRepository.updateStationOrderAfterDeletion(lineName, stationOrder);  // Update station order
+            model.addAttribute("successMessage", "Station removed successfully!");
+        } else
+            model.addAttribute("errorMessage", "Station not found!");
 
         List<LineDetail> lineDetails = lineDetailRepository.findAll();
         model.addAttribute("lineDetails", lineDetails);
-        return "lineDetails/index";
+        return "redirect:/lineDetails";
     }
 
     @GetMapping("/stations")

@@ -17,6 +17,9 @@
     </script>
 
     <h1 class="text-center my-4">Lines</h1>
+    <div th:if="${successMessage != null}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}"></p>
+    </div>
 
     <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i>Back</a>
 
