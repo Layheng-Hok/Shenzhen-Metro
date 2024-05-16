@@ -81,9 +81,7 @@ public class DataController {
     @PostMapping("stations/update")
     public String updateStation(Model model, @RequestParam String englishName, @Valid @ModelAttribute StationDto stationDto, BindingResult bindingResult) {
         try {
-            System.out.println(englishName);
             Station station = stationRepository.findById(englishName).get();
-            System.out.println(station);
             model.addAttribute("station", station);
 
             if (bindingResult.hasErrors()) {
@@ -296,9 +294,6 @@ public class DataController {
                                    @ModelAttribute("totalStationsToAdd") Integer totalStationsToAdd,
                                    @ModelAttribute("stationsAdded") Integer stationsAdded,
                                    Model model, SessionStatus sessionStatus) {
-        if (bindingResult.hasErrors()) {
-            return "lineDetails/create_lineDetail";
-        }
 
         String lineName = lineDetailDto.getLineName();
         String stationName = lineDetailDto.getStationName();
@@ -306,15 +301,27 @@ public class DataController {
 
         Optional<LineDetail> existingStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
         if (existingStation.isPresent()) {
-            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "This station already exists for the specified line."));
+            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "This station already exists for the specified line."));
+        }
+
+        if (lineRepository.findByLineName(lineName) == null) {
+            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
+        }
+
+        if (stationRepository.findByEnglishName(stationName) == null) {
+            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found."));
+        }
+
+
+        if (bindingResult.hasErrors()) {
             return "lineDetails/create_lineDetail";
         }
-        lineDetailRepository.updateStationBeforeCreate(lineName, stationOrder);
 
         LineDetail lineDetail = new LineDetail();
         lineDetail.setLineName(lineDetailDto.getLineName());
         lineDetail.setStationName(lineDetailDto.getStationName());
         lineDetail.setStationOrder(lineDetailDto.getStationOrder());
+        lineDetailRepository.updateStationBeforeCreate(lineName, stationOrder);
         lineDetailRepository.save(lineDetail);
 
         stationsAdded++;
@@ -324,6 +331,7 @@ public class DataController {
             sessionStatus.setComplete();
             return "redirect:/lineDetails";
         }
+
         return "redirect:/lineDetails/create";
     }
 
@@ -347,22 +355,23 @@ public class DataController {
         boolean lineExists = lineDetailRepository.existsByLineName(lineName);
         if (!lineExists) {
             bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
-            return "lineDetails/search_lineDetail";
         }
 
         Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
         if (currentStation.isEmpty()) {
             bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
+        }
+
+        if (bindingResult.hasErrors()) {
             return "lineDetails/search_lineDetail";
         }
 
         int currentOrder = currentStation.get().getStationOrder();
         int targetOrder = currentOrder + offset;
 
-
         Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
         if (targetStation.isEmpty()) {
-            bindingResult.addError(new FieldError("lineDetailDto", "stationOrder", "No station found at the specified offset."));
+            bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
             return "lineDetails/search_lineDetail";
         }
 
