@@ -23,7 +23,7 @@ import java.util.Optional;
 public class DataController {
     @Autowired
     private StationRepository stationRepository;
-    
+
     @Autowired
     private LineRepository lineRepository;
 
