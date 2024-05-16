@@ -20,5 +20,8 @@ public interface LineDetailRepository extends JpaRepository<LineDetail, Integer>
     @Query(value = "SELECT * FROM line_detail ld ORDER BY CAST(REGEXP_REPLACE(ld.line_name, '\\D+', '') AS UNSIGNED), ld.station_order ASC", nativeQuery = true) //SQL
     List<LineDetail> findAllOrderedByLineNumberAndStationOrder();
 
-    Optional<LineDetail> findByLineNameAndStationName(String lineName, String stationName);
+    Optional<LineDetail> findByLineNameAndStationName(String lineName, String stationName); //Give result
+    Optional<LineDetail> findByLineNameAndStationOrder(String lineName, int stationOrder);
+
+    boolean existsByLineName(String lineName);
 }

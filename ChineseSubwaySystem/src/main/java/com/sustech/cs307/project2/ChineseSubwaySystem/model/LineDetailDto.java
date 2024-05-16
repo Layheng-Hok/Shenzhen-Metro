@@ -15,6 +15,9 @@ public class LineDetailDto {
     @Min(value = 1, message = "Station order must be at least 1.")
     private int stationOrder;
 
+//    @NotNull(message = "Offset is required!")
+//    private int offset;
+
     public String getLineName() {
         return lineName;
     }
@@ -39,4 +42,11 @@ public class LineDetailDto {
         this.stationOrder = stationOrder;
     }
 
+//    public int getOffset() {
+//        return offset;
+//    }
+//
+//    public void setOffset(int offset) {
+//        this.offset = offset;
+//    }
 }

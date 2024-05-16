@@ -11,12 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @SessionAttributes({"totalStationsToAdd", "stationsAdded"})
@@ -239,6 +242,49 @@ public class DataController {
         return "redirect:/lineDetails/create";
     }
 
+    @GetMapping("/lineDetails/search")
+    public String searchStation(Model model) {
+        LineDetailSearchDto lineDetailSearchDto = new LineDetailSearchDto();
+        model.addAttribute("lineDetailSearchDto", lineDetailSearchDto);
+        return "lineDetails/search_lineDetail";
+    }
+
+    @PostMapping("/lineDetails/search")
+    public String searchStation(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/search_lineDetail";
+        }
+
+        String lineName = lineDetailSearchDto.getLineName();
+        String stationName = lineDetailSearchDto.getStationName();
+        int offset = lineDetailSearchDto.getOffset();
+
+        boolean lineExists = lineDetailRepository.existsByLineName(lineName);
+        if (!lineExists) {
+            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
+            return "lineDetails/search_lineDetail";
+        }
+
+        Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
+        if (currentStation.isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
+            return "lineDetails/search_lineDetail";
+        }
+
+        int currentOrder = currentStation.get().getStationOrder();
+        int targetOrder = currentOrder + offset;
+
+
+        Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
+        if (targetStation.isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailDto", "stationOrder", "No station found at the specified offset."));
+            return "lineDetails/search_lineDetail";
+        }
+
+        model.addAttribute("targetStation", targetStation.get());
+        return "lineDetails/search_lineDetail";
+    }
+
     @GetMapping("lineDetails/remove")
     @Transactional
     public String removeStationFromLineDetail(@RequestParam int id, Model model) {
@@ -343,4 +389,8 @@ public class DataController {
         model.addAttribute("stations", stations);
         return "stations/index";
     }
+
+
+
+
 }

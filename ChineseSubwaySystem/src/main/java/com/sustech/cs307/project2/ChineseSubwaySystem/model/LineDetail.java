@@ -25,7 +25,6 @@ public class LineDetail {
     private int stationOrder;
 
     public LineDetail() {
-
     }
 
     public LineDetail(String lineName, String stationName, int stationOrder) {
