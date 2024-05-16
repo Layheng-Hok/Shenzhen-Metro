@@ -10,17 +10,18 @@ import java.util.Optional;
 
 public interface LineDetailRepository extends JpaRepository<LineDetail, Integer> {
     @Modifying
-    @Query("UPDATE LineDetail ld SET ld.stationOrder = ld.stationOrder - 1 WHERE ld.lineName = :lineName AND ld.stationOrder > :stationOrder") //JPQL
-    void updateStationOrderAfterDeletion(String lineName, int stationOrder);
+    @Query(value = "UPDATE LineDetail ld SET ld.stationOrder = ld.stationOrder - 1 WHERE ld.lineName = :lineName AND ld.stationOrder > :stationOrder")
+    void updateStationOrderAfterDelete(String lineName, int stationOrder);
 
     @Modifying
-    @Query("UPDATE LineDetail ld SET ld.stationOrder = ld.stationOrder + 1 WHERE ld.lineName = :lineName AND ld.stationOrder >= :stationOrder")
-    void updateStationOrderBeforeCreate(String lineName, int stationOrder);
+    @Query(value = "UPDATE LineDetail ld SET ld.stationOrder = ld.stationOrder + 1 WHERE ld.lineName = :lineName AND ld.stationOrder >= :stationOrder")
+    void updateStationBeforeCreate(String lineName, int stationOrder);
 
     @Query(value = "SELECT * FROM line_detail ORDER BY LPAD((line_name), 10, 0), station_order", nativeQuery = true)
     List<LineDetail> findAllOrderByLineNumberAndStationOrder();
 
-    Optional<LineDetail> findByLineNameAndStationName(String lineName, String stationName); //Give result
+    Optional<LineDetail> findByLineNameAndStationName(String lineName, String stationName);
+
     Optional<LineDetail> findByLineNameAndStationOrder(String lineName, int stationOrder);
 
     boolean existsByLineName(String lineName);

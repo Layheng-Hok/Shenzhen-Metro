@@ -309,7 +309,7 @@ public class DataController {
             bindingResult.addError(new FieldError("lineDetailDto", "lineName", "This station already exists for the specified line."));
             return "lineDetails/create_lineDetail";
         }
-        lineDetailRepository.updateStationOrderBeforeCreate(lineName, stationOrder);
+        lineDetailRepository.updateStationBeforeCreate(lineName, stationOrder);
 
         LineDetail lineDetail = new LineDetail();
         lineDetail.setLineName(lineDetailDto.getLineName());
@@ -378,7 +378,7 @@ public class DataController {
             String lineName = lineDetail.getLineName();
             int stationOrder = lineDetail.getStationOrder();
             lineDetailRepository.delete(lineDetail);
-            lineDetailRepository.updateStationOrderAfterDeletion(lineName, stationOrder);  // Update station order
+            lineDetailRepository.updateStationOrderAfterDelete(lineName, stationOrder);
             model.addAttribute("successMessage", "Station removed successfully!");
         } else
             model.addAttribute("errorMessage", "Station not found!");
