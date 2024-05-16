@@ -3,10 +3,13 @@ package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 import com.sustech.cs307.project2.ChineseSubwaySystem.model.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineRepository;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineDetailRepository;
+import com.sustech.cs307.project2.ChineseSubwaySystem.repository.RideRepository;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.StationRepository;
+import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +32,13 @@ public class DataController {
 
     @Autowired
     private LineDetailRepository lineDetailRepository;
+
+    @Autowired
+    private RideRepository rideRepository;
+
+    @Autowired
+   private RideService rideService;
+
 
     @GetMapping("/stations")
     public String showStationListPage(Model model) {
@@ -395,5 +405,16 @@ public class DataController {
         List<LineDetail> lineDetails = lineDetailRepository.findAll();
         model.addAttribute("lineDetails", lineDetails);
         return "redirect:/lineDetails";
+    }
+
+    @GetMapping("/rides")
+    public String showRideListPage(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "100") int size,
+                                   Model model) {
+        Page<Ride> ridePage = rideService.getRidesPaginated(page, size);
+        model.addAttribute("ridePage", ridePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        return "rides/index";
     }
 }

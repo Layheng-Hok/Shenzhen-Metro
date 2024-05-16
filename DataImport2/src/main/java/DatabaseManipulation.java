@@ -236,7 +236,7 @@ public class DatabaseManipulation {
             for (RideImport.RideByIdNum rideByIdNum : ridesByIdNum) {
                 preparedStatement.setString(1, rideByIdNum.getUserNum());
                 preparedStatement.setTimestamp(2, rideByIdNum.getStartTime());
-                preparedStatement.setString(3, rideByIdNum.getEndTime());
+                preparedStatement.setTimestamp(3, rideByIdNum.getEndTime());
                 preparedStatement.setString(4, rideByIdNum.getRideClass());
                 preparedStatement.setInt(5, rideByIdNum.getPricingId());
                 preparedStatement.addBatch();
@@ -257,7 +257,7 @@ public class DatabaseManipulation {
             for (RideImport.RideByCardNum rideByCardNum : ridesByCardNum) {
                 preparedStatement.setString(1, rideByCardNum.getUserNum());
                 preparedStatement.setTimestamp(2, rideByCardNum.getStartTime());
-                preparedStatement.setString(3, rideByCardNum.getEndTime());
+                preparedStatement.setTimestamp(3, rideByCardNum.getEndTime());
                 preparedStatement.setString(4, rideByCardNum.getRideClass());
                 preparedStatement.setInt(5, rideByCardNum.getPricingId());
                 preparedStatement.addBatch();
@@ -279,7 +279,7 @@ public class DatabaseManipulation {
                 preparedStatement.setString(1, ride.getUser());
                 preparedStatement.setString(2, ride.getAuthType());
                 preparedStatement.setTimestamp(3, ride.getStartTime());
-                preparedStatement.setString(4, ride.getEndTime());
+                preparedStatement.setTimestamp(4, ride.getEndTime());
                 preparedStatement.setString(5, ride.getStartStation());
                 preparedStatement.setString(6, ride.getEndStation());
                 preparedStatement.setString(7, ride.getRideClass());
@@ -290,7 +290,6 @@ public class DatabaseManipulation {
             preparedStatement.executeBatch();
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
     }
 

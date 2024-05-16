@@ -18,10 +18,10 @@ public class RideImport implements DataImport {
         private String endStation;
         private int price;
         private Timestamp startTime;
-        private String endTime;
+        private Timestamp endTime;
         private String rideClass;
 
-        public Ride(String user, String startStation, String endStation, int price, Timestamp startTime, String endTime) {
+        public Ride(String user, String startStation, String endStation, int price, Timestamp startTime, Timestamp endTime) {
             this.user = user;
             this.authType = String.valueOf(user).length() == 9 ? "Travel card" : "National ID";
             this.startStation = startStation;
@@ -80,11 +80,11 @@ public class RideImport implements DataImport {
             this.startTime = startTime;
         }
 
-        public String getEndTime() {
+        public Timestamp getEndTime() {
             return endTime;
         }
 
-        public void setEndTime(String endTime) {
+        public void setEndTime(Timestamp endTime) {
             this.endTime = endTime;
         }
 
@@ -159,11 +159,11 @@ public class RideImport implements DataImport {
     public static class RideByIdNum {
         private String userNum;
         private Timestamp startTime;
-        private String endTime;
+        private Timestamp endTime;
         private String rideClass;
         private int pricingId;
 
-        public RideByIdNum(String userNum, Timestamp startTime, String endTime, int pricingId) {
+        public RideByIdNum(String userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
             this.userNum = userNum;
             this.startTime = startTime;
             this.endTime = endTime;
@@ -187,11 +187,11 @@ public class RideImport implements DataImport {
             this.startTime = startTime;
         }
 
-        public String getEndTime() {
+        public Timestamp getEndTime() {
             return endTime;
         }
 
-        public void setEndTime(String endTime) {
+        public void setEndTime(Timestamp endTime) {
             this.endTime = endTime;
         }
 
@@ -226,11 +226,11 @@ public class RideImport implements DataImport {
     public static class RideByCardNum {
         private String userNum;
         private Timestamp startTime;
-        private String endTime;
+        private Timestamp endTime;
         private String rideClass;
         private int pricingId;
 
-        public RideByCardNum(String userNum, Timestamp startTime, String endTime, int pricingId) {
+        public RideByCardNum(String userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
             this.userNum = userNum;
             this.startTime = startTime;
             this.endTime = endTime;
@@ -254,11 +254,11 @@ public class RideImport implements DataImport {
             this.startTime = startTime;
         }
 
-        public String getEndTime() {
+        public Timestamp getEndTime() {
             return endTime;
         }
 
-        public void setEndTime(String endTime) {
+        public void setEndTime(Timestamp endTime) {
             this.endTime = endTime;
         }
 
