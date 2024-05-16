@@ -17,8 +17,8 @@ public interface LineDetailRepository extends JpaRepository<LineDetail, Integer>
     @Query("UPDATE LineDetail ld SET ld.stationOrder = ld.stationOrder + 1 WHERE ld.lineName = :lineName AND ld.stationOrder >= :stationOrder")
     void updateStationOrderBeforeCreate(String lineName, int stationOrder);
 
-    @Query(value = "SELECT * FROM line_detail ld ORDER BY CAST(REGEXP_REPLACE(ld.line_name, '\\D+', '') AS UNSIGNED), ld.station_order ASC", nativeQuery = true) //SQL
-    List<LineDetail> findAllOrderedByLineNumberAndStationOrder();
+    @Query(value = "SELECT * FROM line_detail ORDER BY LPAD((line_name), 10, 0), station_order", nativeQuery = true)
+    List<LineDetail> findAllOrderByLineNumberAndStationOrder();
 
     Optional<LineDetail> findByLineNameAndStationName(String lineName, String stationName); //Give result
     Optional<LineDetail> findByLineNameAndStationOrder(String lineName, int stationOrder);

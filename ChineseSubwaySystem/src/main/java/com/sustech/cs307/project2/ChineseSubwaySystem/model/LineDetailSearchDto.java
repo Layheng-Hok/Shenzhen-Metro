@@ -3,7 +3,11 @@ package com.sustech.cs307.project2.ChineseSubwaySystem.model;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.ToString;
 
+@Data
+@ToString
 public class LineDetailSearchDto {
     @NotEmpty(message = "Line name is required!")
     @Size(max = 5, message = "Line name must not exceed 5 characters.")
@@ -15,28 +19,4 @@ public class LineDetailSearchDto {
 
     @NotNull(message = "Offset is required!")
     private int offset;
-
-    public String getLineName() {
-        return lineName;
-    }
-
-    public void setLineName(String lineName) {
-        this.lineName = lineName;
-    }
-
-    public String getStationName() {
-        return stationName;
-    }
-
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
 }

@@ -11,15 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionAttributes({"totalStationsToAdd", "stationsAdded"})
@@ -33,12 +30,13 @@ public class DataController {
     @Autowired
     private StationRepository stationRepository;
 
-    @GetMapping({"/lines"})
+    @GetMapping("/lines")
     public String showLineListPage(Model model) {
-        List<Line> lines = lineRepository.findAll();
+        List<Line> lines = lineRepository.findAllOrderedByName();
         model.addAttribute("lines", lines);
         return "lines/index";
     }
+
 
     @GetMapping("lines/create")
     public String showCreateLinePage(Model model) {
@@ -125,7 +123,7 @@ public class DataController {
                 bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required!"));
             }
 
-            if (lineDto.getColor().length() > 5) {
+            if (lineDto.getColor().length() > 20) {
                 bindingResult.addError(new FieldError("lineDto", "color", "Color is too long!"));
             }
 
@@ -173,7 +171,7 @@ public class DataController {
 
     @GetMapping("/lineDetails")
     public String showLineDetailListPage(Model model) {
-        List<LineDetail> lineDetails = lineDetailRepository.findAllOrderedByLineNumberAndStationOrder();
+        List<LineDetail> lineDetails = lineDetailRepository.findAllOrderByLineNumberAndStationOrder();
         model.addAttribute("lineDetails", lineDetails);
         return "lineDetails/index";
     }
