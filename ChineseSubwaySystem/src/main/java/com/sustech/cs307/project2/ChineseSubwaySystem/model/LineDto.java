@@ -13,7 +13,7 @@ import java.sql.Time;
 @Data
 @ToString
 public class LineDto {
-    @NotEmpty(message = "The name is required!")
+    @NotEmpty(message = "The name is required.")
     private String lineName;
 
     private Time startTime;

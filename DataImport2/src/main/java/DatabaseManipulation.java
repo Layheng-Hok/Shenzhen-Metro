@@ -218,7 +218,7 @@ public class DatabaseManipulation {
             for (PriceImport.RoutePricing routePricing : routePricings) {
                 preparedStatement.setString(1, routePricing.getStartStation());
                 preparedStatement.setString(2, routePricing.getEndStation());
-                preparedStatement.setInt(3, routePricing.getPrice());
+                preparedStatement.setFloat(3, routePricing.getPrice());
                 preparedStatement.addBatch();
                 statementCounts++;
             }
@@ -283,7 +283,7 @@ public class DatabaseManipulation {
                 preparedStatement.setString(5, ride.getStartStation());
                 preparedStatement.setString(6, ride.getEndStation());
                 preparedStatement.setString(7, ride.getRideClass());
-                preparedStatement.setInt(8, ride.getPrice());
+                preparedStatement.setFloat(8, ride.getPrice());
                 preparedStatement.addBatch();
                 statementCounts++;
             }
@@ -310,15 +310,15 @@ public class DatabaseManipulation {
         return chineseEnglishNameMap;
     }
 
-    public HashMap<String, Integer> getRoutePricingMap() {
-        HashMap<String, Integer> routePricingMap = new HashMap<>();
+    public HashMap<String, Float> getRoutePricingMap() {
+        HashMap<String, Float> routePricingMap = new HashMap<>();
         ResultSet resultSet;
         String sql = "select * from route_pricing";
         try {
             Statement statement = con.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                routePricingMap.putIfAbsent(resultSet.getString("start_station") + " -> " + resultSet.getString("end_station"), resultSet.getInt("price"));
+                routePricingMap.putIfAbsent(resultSet.getString("start_station") + " -> " + resultSet.getString("end_station"), resultSet.getFloat("price"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

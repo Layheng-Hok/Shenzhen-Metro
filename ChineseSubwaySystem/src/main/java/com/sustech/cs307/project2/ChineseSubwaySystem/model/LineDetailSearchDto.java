@@ -9,14 +9,14 @@ import lombok.ToString;
 @Data
 @ToString
 public class LineDetailSearchDto {
-    @NotEmpty(message = "Line name is required!")
+    @NotEmpty(message = "Line name is required.")
     @Size(max = 5, message = "Line name must not exceed 5 characters.")
     private String lineName;
 
-    @NotEmpty(message = "Station name is required!")
+    @NotEmpty(message = "Station name is required.")
     @Size(max = 50, message = "Line name must not exceed 50 characters.")
     private String stationName;
 
-    @NotNull(message = "Offset is required!")
+    @NotNull(message = "Offset is required.")
     private int offset;
 }

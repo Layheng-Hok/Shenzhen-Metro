@@ -1,10 +1,7 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
 import com.sustech.cs307.project2.ChineseSubwaySystem.model.*;
-import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineRepository;
-import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineDetailRepository;
-import com.sustech.cs307.project2.ChineseSubwaySystem.repository.RideRepository;
-import com.sustech.cs307.project2.ChineseSubwaySystem.repository.StationRepository;
+import com.sustech.cs307.project2.ChineseSubwaySystem.repository.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +35,13 @@ public class DataController {
     private RideRepository rideRepository;
 
     @Autowired
-   private RideService rideService;
+    private RideService rideService;
 
+    @Autowired
+    CardRepository cardRepository;
+
+    @Autowired
+    PassengerRepository passengerRepository;
 
     @GetMapping("/stations")
     public String showStationListPage(Model model) {
@@ -64,6 +67,7 @@ public class DataController {
         station.setChineseName(stationDto.getChineseName());
         station.setDistrict(stationDto.getDistrict());
         station.setIntro(stationDto.getIntro());
+        station.setStatus(stationDto.getStatus());
         stationRepository.save(station);
         return "redirect:/stations";
     }
@@ -79,6 +83,7 @@ public class DataController {
             stationDto.setChineseName(station.getChineseName());
             stationDto.setDistrict(station.getDistrict());
             stationDto.setIntro(station.getIntro());
+            stationDto.setStatus(station.getStatus());
 
             model.addAttribute("stationDto", stationDto);
         } catch (Exception ex) {
@@ -98,9 +103,9 @@ public class DataController {
                 return "stations/update_station";
             }
 
-            station.setChineseName(stationDto.getChineseName());
             station.setDistrict(stationDto.getDistrict());
             station.setIntro(stationDto.getIntro());
+            station.setStatus(stationDto.getStatus());
             stationRepository.save(station);
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
@@ -115,10 +120,10 @@ public class DataController {
             if (station != null)
                 stationRepository.delete(station);
             else
-                model.addAttribute("errorMessage", "Station not found or cannot be removed due to foreign key constraint!");
+                model.addAttribute("errorMessage", "Station not found or cannot be removed due to foreign key constraint.");
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Station cannot be removed due to foreign key constraint!");
+            model.addAttribute("errorMessage", "Station cannot be removed due to foreign key constraint.");
         }
         List<Station> stations = stationRepository.findAll();
         model.addAttribute("stations", stations);
@@ -143,23 +148,23 @@ public class DataController {
     @PostMapping("lines/create")
     public String createLine(@Valid @ModelAttribute LineDto lineDto, BindingResult bindingResult) {
         if (lineDto.getLineName().length() > 5) {
-            bindingResult.addError(new FieldError("lineDto", "lineName", "Name is too long!"));
+            bindingResult.addError(new FieldError("lineDto", "lineName", "Name is too long."));
         }
 
         if (lineDto.getStartTime() == null) {
-            bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required!"));
+            bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required."));
         }
 
         if (lineDto.getEndTime() == null) {
-            bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required!"));
+            bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required."));
         }
 
         if (lineDto.getColor().length() > 5) {
-            bindingResult.addError(new FieldError("lineDto", "color", "Color is too long!"));
+            bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
         }
 
         if (lineDto.getUrl().length() > 100) {
-            bindingResult.addError(new FieldError("lineDto", "url", "URL is too long!"));
+            bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
         }
 
         if (bindingResult.hasErrors()) {
@@ -211,19 +216,19 @@ public class DataController {
             model.addAttribute("line", line);
 
             if (lineDto.getStartTime() == null) {
-                bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required!"));
+                bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required."));
             }
 
             if (lineDto.getEndTime() == null) {
-                bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required!"));
+                bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required."));
             }
 
             if (lineDto.getColor().length() > 20) {
-                bindingResult.addError(new FieldError("lineDto", "color", "Color is too long!"));
+                bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
             }
 
             if (lineDto.getUrl().length() > 100) {
-                bindingResult.addError(new FieldError("lineDto", "url", "URL is too long!"));
+                bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
             }
 
             if (bindingResult.hasErrors()) {
@@ -251,13 +256,13 @@ public class DataController {
             Line line = lineRepository.findById(id).orElse(null);
             if (line != null) {
                 lineRepository.delete(line);
-                model.addAttribute("successMessage", "Line removed successfully!");
+                model.addAttribute("successMessage", "Line removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Line not found or cannot be removed due to foreign key constraint!");
+                model.addAttribute("errorMessage", "Line not found or cannot be removed due to foreign key constraint.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint!");
+            model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
         }
         List<Line> lines = lineRepository.findAll();
         model.addAttribute("lines", lines);
@@ -318,7 +323,7 @@ public class DataController {
             bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
         }
 
-        if (stationRepository.findByEnglishName(stationName) == null) {
+        if (stationRepository.findById(stationName).isEmpty()) {
             bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found."));
         }
 
@@ -398,9 +403,9 @@ public class DataController {
             int stationOrder = lineDetail.getStationOrder();
             lineDetailRepository.delete(lineDetail);
             lineDetailRepository.updateStationOrderAfterDelete(lineName, stationOrder);
-            model.addAttribute("successMessage", "Station removed successfully!");
+            model.addAttribute("successMessage", "Station removed successfully.");
         } else
-            model.addAttribute("errorMessage", "Station not found!");
+            model.addAttribute("errorMessage", "Station not found.");
 
         List<LineDetail> lineDetails = lineDetailRepository.findAll();
         model.addAttribute("lineDetails", lineDetails);
@@ -416,5 +421,50 @@ public class DataController {
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         return "rides/index";
+    }
+
+    @GetMapping("rides/create")
+    public String showCreateRidePage(Model model) {
+        RideDto rideDto = new RideDto();
+        model.addAttribute("rideDto", rideDto);
+        return "rides/create_ride";
+    }
+
+    @PostMapping("rides/create")
+    public String createRide(@Valid @ModelAttribute RideDto rideDto, BindingResult bindingResult) {
+        String userNum = rideDto.getUserNum();
+        String startStation = rideDto.getStartStation();
+
+        if (userNum.length() != 9 && userNum.length() != 18) {
+            bindingResult.addError(new FieldError("rideDto", "userNum", "Invalid user number."));
+        }
+
+        if (userNum.length() == 9 && cardRepository.findById(userNum).isEmpty()) {
+            bindingResult.addError(new FieldError("rideDto", "userNum", "Card not found."));
+        }
+
+        if (userNum.length() == 18 && passengerRepository.findById(userNum).isEmpty()) {
+            bindingResult.addError(new FieldError("rideDto", "userNum", "National ID not found."));
+        }
+
+        if (stationRepository.findById(startStation).isEmpty()) {
+            bindingResult.addError(new FieldError("rideDto", "startStation", "Station not found."));
+        } else if (!stationRepository.findById(startStation).get().getStatus().equals("Operational")) {
+            bindingResult.addError(new FieldError("rideDto", "startStation", "Station is currently not operational."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "rides/create_ride";
+        }
+
+        Ride ride = new Ride();
+        ride.setUserNum(userNum);
+        ride.setAuthType(userNum.length() == 9 ? "Travel card" : "National ID");
+        ride.setStartStation(startStation);
+        ride.setStartTime(new Timestamp(System.currentTimeMillis()));
+        ride.setRideClass(rideDto.getRideClass());
+        rideRepository.save(ride);
+
+        return "redirect:/rides";
     }
 }

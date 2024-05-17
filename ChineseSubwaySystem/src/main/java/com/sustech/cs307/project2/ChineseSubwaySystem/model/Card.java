@@ -8,25 +8,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
-public class Station {
+public class Card {
     @Id
-    @Column(length = 50)
-    private String englishName;
+    @Column(length = 10)
+    private String code;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String chineseName;
+    @Column(nullable = false)
+    private float money;
 
-    @Column(length = 50)
-    private String district;
-
-    @Column(columnDefinition = "TEXT")
-    private String intro;
-
-    @Column()
-    private String status;
+    @Column(nullable = false)
+    private Timestamp createTime;
 }

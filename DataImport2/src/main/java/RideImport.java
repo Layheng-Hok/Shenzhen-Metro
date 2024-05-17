@@ -16,14 +16,14 @@ public class RideImport implements DataImport {
         private String authType;
         private String startStation;
         private String endStation;
-        private int price;
+        private float price;
         private Timestamp startTime;
         private Timestamp endTime;
         private String rideClass;
 
-        public Ride(String user, String startStation, String endStation, int price, Timestamp startTime, Timestamp endTime) {
+        public Ride(String user, String startStation, String endStation, float price, Timestamp startTime, Timestamp endTime) {
             this.user = user;
-            this.authType = String.valueOf(user).length() == 9 ? "Travel card" : "National ID";
+            this.authType = user.length() == 9 ? "Travel card" : "National ID";
             this.startStation = startStation;
             this.endStation = endStation;
             this.price = price;
@@ -64,11 +64,11 @@ public class RideImport implements DataImport {
             this.endStation = endStation;
         }
 
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
 
@@ -114,9 +114,9 @@ public class RideImport implements DataImport {
     public static class RoutePricing {
         private String startStation;
         private String endStation;
-        private int price;
+        private float price;
 
-        public RoutePricing(String startStation, String endStation, int price) {
+        public RoutePricing(String startStation, String endStation, float price) {
             this.startStation = startStation;
             this.endStation = endStation;
             this.price = price;
@@ -138,11 +138,11 @@ public class RideImport implements DataImport {
             this.endStation = endStation;
         }
 
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
 

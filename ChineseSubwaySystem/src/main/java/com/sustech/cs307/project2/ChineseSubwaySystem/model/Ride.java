@@ -40,5 +40,5 @@ public class Ride {
     private String rideClass;
 
     @Column()
-    private int price;
+    private float price;
 }

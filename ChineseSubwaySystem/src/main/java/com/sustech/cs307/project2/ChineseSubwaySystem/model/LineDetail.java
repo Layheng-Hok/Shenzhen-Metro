@@ -23,10 +23,10 @@ public class LineDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int lineDetailId;
 
-    @Column(nullable = false, length = 5)
+    @Column(length = 5, nullable = false)
     private String lineName;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50, nullable = false)
     private String stationName;
 
     @Column(nullable = false)

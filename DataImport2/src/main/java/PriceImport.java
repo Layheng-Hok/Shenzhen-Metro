@@ -9,14 +9,14 @@ import java.util.List;
 
 public class PriceImport implements DataImport {
     private static List<RoutePricing> routePricings = new ArrayList<>();
-    private static HashMap<String, Integer> routePricingMap = new HashMap<>();
+    private static HashMap<String, Float> routePricingMap = new HashMap<>();
 
     public static class RoutePricing {
         String startStation;
         String endStation;
-        int price;
+        float price;
 
-        public RoutePricing(String startStation, String endStation, int price) {
+        public RoutePricing(String startStation, String endStation, float price) {
             this.startStation = startStation;
             this.endStation = endStation;
             this.price = price;
@@ -38,11 +38,11 @@ public class PriceImport implements DataImport {
             this.endStation = endStation;
         }
 
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
 
@@ -73,7 +73,7 @@ public class PriceImport implements DataImport {
                 for (String[] topStation : topStations) {
                     int rowIndex = Integer.parseInt(leftStation[0]);
                     int colIndex = Integer.parseInt(topStation[0]);
-                    int price = Integer.parseInt(getPrice(sheet, rowIndex, colIndex));
+                    float price = Float.parseFloat(getPrice(sheet, rowIndex, colIndex));
                     String startStation = chineseEnglishStationNameMap.get(leftStation[3]);
                     String endStation = chineseEnglishStationNameMap.get(topStation[3]);
                     if (leftStation[3].equals("深圳北站"))
@@ -83,7 +83,7 @@ public class PriceImport implements DataImport {
                     String route = startStation + " -> " + endStation;
 
                     if (routePricingMap.containsKey(route)) {
-                        int prevPrice = routePricingMap.get(route);
+                        float prevPrice = routePricingMap.get(route);
                         if (price != prevPrice)
                             System.out.println("error");
                     } else {

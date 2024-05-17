@@ -13,20 +13,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Station {
+public class Passenger {
     @Id
-    @Column(length = 50)
-    private String englishName;
+    @Column(length = 20)
+    private String idNum;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String chineseName;
+    @Column(length = 50, nullable = false)
+    private String name;
 
-    @Column(length = 50)
+    @Column
+    private long phoneNum;
+
+    @Column
+    private char gender;
+
+    @Column(length = 20)
     private String district;
-
-    @Column(columnDefinition = "TEXT")
-    private String intro;
-
-    @Column()
-    private String status;
 }

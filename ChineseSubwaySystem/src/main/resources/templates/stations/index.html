@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <script th:if="${errorMessage}">
-        window.onload = function() {
+        window.onload = function () {
             alert("Station cannot be removed due to foreign key constraint!");
         };
     </script>
@@ -29,6 +29,7 @@
             <th>Chinese Name</th>
             <th>District</th>
             <th>Intro</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -43,6 +44,7 @@
                     <p th:text="${station.intro}"></p>
                 </div>
             </td>
+            <td th:text="${station.status}"></td>
 
             <td style="white-space: nowrap">
                 <a class="btn btn-outline-warning btn-sm"
