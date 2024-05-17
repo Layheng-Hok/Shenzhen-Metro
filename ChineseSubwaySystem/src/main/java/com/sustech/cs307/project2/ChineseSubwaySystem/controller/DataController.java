@@ -44,6 +44,9 @@ public class DataController {
     private PassengerRepository passengerRepository;
 
     @Autowired
+    private RoutePricingRepository routePricingRepository;
+
+    @Autowired
     private OngoingRideRepository ongoingRideRepository;
 
     @GetMapping("/stations")
@@ -435,6 +438,10 @@ public class DataController {
 
     @PostMapping("rides/create")
     public String createRide(@Valid @ModelAttribute RideDto rideDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "rides/create_ride";
+        }
+
         String userNum = rideDto.getUserNum();
         String startStation = rideDto.getStartStation();
 
@@ -467,6 +474,65 @@ public class DataController {
         ride.setStartTime(new Timestamp(System.currentTimeMillis()));
         ride.setRideClass(rideDto.getRideClass());
         rideRepository.save(ride);
+
+        return "redirect:/rides";
+    }
+
+    @GetMapping("rides/update")
+    public String showUpdateRidePage(Model model, @RequestParam long id) {
+        try {
+            Ride ride = rideRepository.findById(id).get();
+            model.addAttribute("ride", ride);
+
+            RideDto rideDto = new RideDto();
+            rideDto.setUserNum(ride.getUserNum());
+            rideDto.setAuthType(ride.getAuthType());
+            rideDto.setStartTime(ride.getStartTime());
+            rideDto.setStartStation(ride.getStartStation());
+            rideDto.setRideClass(ride.getRideClass());
+
+            model.addAttribute("rideDto", rideDto);
+
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            return "redirect:/ongoingRides";
+        }
+        return "rides/update_ride";
+    }
+
+    @PostMapping("rides/update")
+    public String updateRide(Model model, @RequestParam long id, @Valid @ModelAttribute RideDto rideDto, BindingResult bindingResult) {
+        try {
+            Ride ride = rideRepository.findById(id).get();
+            model.addAttribute("ride", ride);
+
+            String endStation = rideDto.getEndStation();
+
+            if (rideDto.getEndStation().isEmpty()) {
+                bindingResult.addError(new FieldError("rideDto", "endStation", "End station is required."));
+                return "rides/update_ride";
+            }
+
+            if (stationRepository.findById(endStation).isEmpty()) {
+                bindingResult.addError(new FieldError("rideDto", "endStation", "Station not found."));
+            } else if (!stationRepository.findById(endStation).get().getStatus().equals("Operational")) {
+                bindingResult.addError(new FieldError("rideDto", "endStation", "Station is currently not operational."));
+            }
+
+            if (bindingResult.hasErrors()) {
+                return "rides/update_ride";
+            }
+
+            float defaultPrice = routePricingRepository.findByStartStationAndEndStation(ride.getStartStation(), rideDto.getEndStation()).getPrice();
+
+            ride.setEndTime(new Timestamp(System.currentTimeMillis()));
+            ride.setEndStation(endStation);
+            ride.setPrice(ride.getRideClass().equals("Economy") ? defaultPrice : (float) (defaultPrice + 0.5 * defaultPrice));
+
+            rideRepository.save(ride);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
 
         return "redirect:/rides";
     }
