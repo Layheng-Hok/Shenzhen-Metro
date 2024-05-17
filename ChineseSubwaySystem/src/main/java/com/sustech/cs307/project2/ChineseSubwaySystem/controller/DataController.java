@@ -38,10 +38,13 @@ public class DataController {
     private RideService rideService;
 
     @Autowired
-    CardRepository cardRepository;
+    private CardRepository cardRepository;
 
     @Autowired
-    PassengerRepository passengerRepository;
+    private PassengerRepository passengerRepository;
+
+    @Autowired
+    private OngoingRideRepository ongoingRideRepository;
 
     @GetMapping("/stations")
     public String showStationListPage(Model model) {
@@ -300,7 +303,7 @@ public class DataController {
 
         LineDetailDto lineDetailDto = new LineDetailDto();
         model.addAttribute("lineDetailDto", lineDetailDto);
-        return "lineDetails/create_lineDetail";
+        return "lineDetails/create_line_detail";
     }
 
     @PostMapping("lineDetails/create")
@@ -329,7 +332,7 @@ public class DataController {
 
 
         if (bindingResult.hasErrors()) {
-            return "lineDetails/create_lineDetail";
+            return "lineDetails/create_line_detail";
         }
 
         LineDetail lineDetail = new LineDetail();
@@ -354,13 +357,13 @@ public class DataController {
     public String searchStation(Model model) {
         LineDetailSearchDto lineDetailSearchDto = new LineDetailSearchDto();
         model.addAttribute("lineDetailSearchDto", lineDetailSearchDto);
-        return "lineDetails/search_lineDetail";
+        return "lineDetails/search_line_detail";
     }
 
     @PostMapping("/lineDetails/search")
     public String searchStation(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "lineDetails/search_lineDetail";
+            return "lineDetails/search_line_detail";
         }
 
         String lineName = lineDetailSearchDto.getLineName();
@@ -378,7 +381,7 @@ public class DataController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "lineDetails/search_lineDetail";
+            return "lineDetails/search_line_detail";
         }
 
         int currentOrder = currentStation.get().getStationOrder();
@@ -387,11 +390,11 @@ public class DataController {
         Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
         if (targetStation.isEmpty()) {
             bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
-            return "lineDetails/search_lineDetail";
+            return "lineDetails/search_line_detail";
         }
 
         model.addAttribute("targetStation", targetStation.get());
-        return "lineDetails/search_lineDetail";
+        return "lineDetails/search_line_detail";
     }
 
     @GetMapping("lineDetails/remove")
@@ -466,5 +469,12 @@ public class DataController {
         rideRepository.save(ride);
 
         return "redirect:/rides";
+    }
+
+    @GetMapping("/ongoingRides")
+    public String showOngoingRideListPage(Model model) {
+        List<OngoingRide> ongoingRides = ongoingRideRepository.findAll();
+        model.addAttribute("ongoingRides", ongoingRides);
+        return "ongoingRides/index";
     }
 }
