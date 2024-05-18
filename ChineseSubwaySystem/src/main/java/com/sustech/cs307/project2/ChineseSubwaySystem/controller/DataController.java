@@ -169,6 +169,10 @@ public class DataController {
             bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
         }
 
+        if (lineDto.getFirstOpening() == null) {
+            bindingResult.addError(new FieldError("lineDto", "firstOpening", "The first opening date is required."));
+        }
+
         if (lineDto.getUrl().length() > 100) {
             bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
         }
