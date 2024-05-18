@@ -29,7 +29,7 @@
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
         <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
-            <img th:src="@{assets/img/logo.png}" alt="">
+            <img th:src="@{/assets/img/logo.png}" alt="">
             <h1>SZMC</h1>
         </a>
 
@@ -66,7 +66,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
-                <h2><span>Rides</span></h2>
+                <h2><span>Passenger Details</span></h2>
             </div>
         </div>
     </div>
@@ -74,53 +74,21 @@
 
 <!-- ======= Main ======= -->
 <main id="main">
-    <div class="container">
-        <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-        <a href="/ongoingRides" class="btn btn-outline-success">View Ongoing Rides</h2></a>
+    <div class="container my-4">
+        <a href="/rides" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i></a>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>User Number</th>
-                <th>Auth Type</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Start Station</th>
-                <th>End Station</th>
-                <th>Class</th>
-                <th>Price</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="ride : ${ridePage.content}">
-                <td>
-                    <a class="hover-underline-animation"th:href="@{/users/{userNum}(userNum=${ride.userNum})}" th:text="${ride.userNum}"></a>
-                </td>
-                <td th:text="${ride.authType}"></td>
-                <td th:text="${ride.startTime}"></td>
-                <td th:text="${ride.endTime}"></td>
-                <td th:text="${ride.startStation}"></td>
-                <td th:text="${ride.endStation}"></td>
-                <td th:text="${ride.rideClass}"></td>
-                <td th:text="${ride.price}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-        <nav aria-label="Page Nav">
-            <div class="text-center mt-3"><span
-                    th:text="'Page ' + ${currentPage + 1} + ' of ' + ${ridePage.totalPages}"></span></div>
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${ridePage.hasPrevious()} ? '' : 'disabled'">
-                    <a class="page-link" th:href="@{/rides(page=${currentPage - 1}, size=${pageSize})}" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item" th:classappend="${ridePage.hasNext()} ? '' : 'disabled'">
-                    <a class="page-link" th:href="@{/rides(page=${currentPage + 1}, size=${pageSize})}">Next</a>
-                </li>
-            </ul>
-        </nav>
-
+        <div class="card">
+            <div class="card-header">
+                Passenger
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>National ID:</strong> <span th:text="${passenger.idNum}"></span></p>
+                <p class="card-text"><strong>Name:</strong> <span th:text="${passenger.name}"></span></p>
+                <p class="card-text"><strong>Gender:</strong> <span th:text="${passenger.gender}"></span></p>
+                <p class="card-text"><strong>Phone Number:</strong> <span th:text="${passenger.phoneNum}"></span></p>
+                <p class="card-text"><strong>Origin:</strong> <span th:text="${passenger.district}"></span></p>
+            </div>
+        </div>
     </div>
 </main><!-- End Main -->
 

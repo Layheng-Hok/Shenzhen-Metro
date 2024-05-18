@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,16 +40,16 @@ public class DataController {
     private RideService rideService;
 
     @Autowired
-    private CardRepository cardRepository;
-
-    @Autowired
-    private PassengerRepository passengerRepository;
+    private OngoingRideRepository ongoingRideRepository;
 
     @Autowired
     private RoutePricingRepository routePricingRepository;
 
     @Autowired
-    private OngoingRideRepository ongoingRideRepository;
+    private CardRepository cardRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
     @GetMapping("/stations")
     public String showStationListPage(Model model) {
@@ -555,5 +557,20 @@ public class DataController {
         List<OngoingRide> ongoingRides = ongoingRideRepository.findAll();
         model.addAttribute("ongoingRides", ongoingRides);
         return "ongoingRides/index";
+    }
+
+    @GetMapping("/users/{userNum}")
+    public String getUserDetails(@PathVariable String userNum, Model model) {
+        if (userNum.length() == 9) {
+            Card card = cardRepository.findById(userNum).get();
+            model.addAttribute("card", card);
+            return "users/card";
+        } else if (userNum.length() == 18) {
+            Passenger passenger = passengerRepository.findById(userNum).get();
+            model.addAttribute("passenger", passenger);
+            return "users/passenger";
+        } else {
+            return "error";
+        }
     }
 }
