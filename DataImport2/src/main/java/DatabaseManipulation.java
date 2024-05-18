@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -196,51 +197,9 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addAllRidesByIdNum(List<RideImport.RideByIdNum> ridesByIdNum) {
-        String sql = "INSERT INTO ride_by_id_num (user_num, start_time, end_time, class, pricing_id) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            for (RideImport.RideByIdNum rideByIdNum : ridesByIdNum) {
-                preparedStatement.setString(1, rideByIdNum.getUserNum());
-                preparedStatement.setTimestamp(2, rideByIdNum.getStartTime());
-                preparedStatement.setTimestamp(3, rideByIdNum.getEndTime());
-                preparedStatement.setString(4, rideByIdNum.getRideClass());
-                preparedStatement.setInt(5, rideByIdNum.getPricingId());
-                preparedStatement.addBatch();
-                statementCounts++;
-            }
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-    }
-
-    public void addAllRidesByCardNum(List<RideImport.RideByCardNum> ridesByCardNum) {
-        String sql = "INSERT INTO ride_by_card_num (user_num, start_time, end_time, class, pricing_id) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            for (RideImport.RideByCardNum rideByCardNum : ridesByCardNum) {
-                preparedStatement.setString(1, rideByCardNum.getUserNum());
-                preparedStatement.setTimestamp(2, rideByCardNum.getStartTime());
-                preparedStatement.setTimestamp(3, rideByCardNum.getEndTime());
-                preparedStatement.setString(4, rideByCardNum.getRideClass());
-                preparedStatement.setInt(5, rideByCardNum.getPricingId());
-                preparedStatement.addBatch();
-                statementCounts++;
-            }
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-    }
-
     public void addAllRides(List<RideImport.Ride> rides) {
-        String sql = "INSERT INTO ride (user_num, auth_type, start_time, end_time, start_station, end_station, class, price) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ride (user_num, auth_type, start_time, end_time, duration, start_station, end_station, class, price) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             for (RideImport.Ride ride : rides) {
@@ -248,10 +207,11 @@ public class DatabaseManipulation {
                 preparedStatement.setString(2, ride.getAuthType());
                 preparedStatement.setTimestamp(3, ride.getStartTime());
                 preparedStatement.setTimestamp(4, ride.getEndTime());
-                preparedStatement.setString(5, ride.getStartStation());
-                preparedStatement.setString(6, ride.getEndStation());
-                preparedStatement.setString(7, ride.getRideClass());
-                preparedStatement.setFloat(8, ride.getPrice());
+                preparedStatement.setLong(5, ride.getDuration());
+                preparedStatement.setString(6, ride.getStartStation());
+                preparedStatement.setString(7, ride.getEndStation());
+                preparedStatement.setString(8, ride.getRideClass());
+                preparedStatement.setFloat(9, ride.getPrice());
                 preparedStatement.addBatch();
                 statementCounts++;
             }

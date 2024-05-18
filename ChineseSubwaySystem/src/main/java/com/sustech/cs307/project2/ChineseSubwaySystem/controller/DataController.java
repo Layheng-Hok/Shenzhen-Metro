@@ -7,8 +7,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,6 +63,7 @@ public class DataController {
         return "stations/create_station";
     }
 
+    @Transactional
     @PostMapping("stations/create")
     public String createStation(@Valid @ModelAttribute StationDto stationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -101,6 +100,7 @@ public class DataController {
         return "stations/update_station";
     }
 
+    @Transactional
     @PostMapping("stations/update")
     public String updateStation(Model model, @RequestParam String englishName, @Valid @ModelAttribute StationDto stationDto, BindingResult bindingResult) {
         try {
@@ -121,6 +121,7 @@ public class DataController {
         return "redirect:/stations";
     }
 
+    @Transactional
     @GetMapping("stations/remove")
     public String removeStation(@RequestParam String englishName, Model model) {
         try {
@@ -155,6 +156,7 @@ public class DataController {
         return "lines/create_line";
     }
 
+    @Transactional
     @PostMapping("lines/create")
     public String createLine(@Valid @ModelAttribute LineDto lineDto, BindingResult bindingResult) {
         if (lineDto.getLineName().length() > 5) {
@@ -223,6 +225,7 @@ public class DataController {
         return "lines/update_line";
     }
 
+    @Transactional
     @PostMapping("lines/update")
     public String updateLine(Model model, @RequestParam int id, @Valid @ModelAttribute LineDto lineDto, BindingResult bindingResult) {
         try {
@@ -268,6 +271,7 @@ public class DataController {
         return "redirect:/lines";
     }
 
+    @Transactional
     @GetMapping("lines/remove")
     public String removeLine(@RequestParam int id, Model model) {
         try {
@@ -321,8 +325,8 @@ public class DataController {
         return "lineDetails/create_line_detail";
     }
 
-    @PostMapping("lineDetails/create")
     @Transactional
+    @PostMapping("lineDetails/create")
     public String createLineDetail(@Valid @ModelAttribute LineDetailDto lineDetailDto, BindingResult bindingResult,
                                    @ModelAttribute("totalStationsToAdd") Integer totalStationsToAdd,
                                    @ModelAttribute("stationsAdded") Integer stationsAdded,
@@ -378,6 +382,7 @@ public class DataController {
         return "lineDetails/search_line_detail";
     }
 
+    @Transactional
     @PostMapping("/lineDetails/search")
     public String searchStation(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -415,8 +420,8 @@ public class DataController {
         return "lineDetails/search_line_detail";
     }
 
-    @GetMapping("lineDetails/remove")
     @Transactional
+    @GetMapping("lineDetails/remove")
     public String removeStationFromLineDetail(@RequestParam int id, Model model) {
         LineDetail lineDetail = lineDetailRepository.findById(id).orElse(null);
         if (lineDetail != null) {
@@ -451,6 +456,7 @@ public class DataController {
         return "rides/create_ride";
     }
 
+    @Transactional
     @PostMapping("rides/create")
     public String createRide(@Valid @ModelAttribute RideDto rideDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -515,6 +521,7 @@ public class DataController {
         return "rides/update_ride";
     }
 
+    @Transactional
     @PostMapping("rides/update")
     public String updateRide(Model model, @RequestParam long id, @Valid @ModelAttribute RideDto rideDto, BindingResult bindingResult) {
         try {
@@ -567,6 +574,44 @@ public class DataController {
         }
 
         return "redirect:/rides";
+    }
+
+    @Transactional
+    @PostMapping("/lineDetails/search")
+    public String searchRide(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/search_line_detail";
+        }
+
+        String lineName = lineDetailSearchDto.getLineName();
+        String stationName = lineDetailSearchDto.getStationName();
+        int offset = lineDetailSearchDto.getOffset();
+
+        boolean lineExists = lineDetailRepository.existsByLineName(lineName);
+        if (!lineExists) {
+            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
+        }
+
+        Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
+        if (currentStation.isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/search_line_detail";
+        }
+
+        int currentOrder = currentStation.get().getStationOrder();
+        int targetOrder = currentOrder + offset;
+
+        Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
+        if (targetStation.isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
+            return "lineDetails/search_line_detail";
+        }
+
+        model.addAttribute("targetStation", targetStation.get());
+        return "lineDetails/search_line_detail";
     }
 
     @GetMapping("/ongoingRides")

@@ -1,5 +1,6 @@
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +8,6 @@ import java.util.List;
 public class RideImport implements DataImport {
     private static List<RoutePricing> routePricings = new ArrayList<>();
     private static List<Ride> rides = new ArrayList<>();
-    private static List<RideByIdNum> ridesByIdNum = new ArrayList<>();
-    private static List<RideByCardNum> ridesByCardNum = new ArrayList<>();
-
 
     public static class Ride {
         private String user;
@@ -19,6 +17,7 @@ public class RideImport implements DataImport {
         private float price;
         private Timestamp startTime;
         private Timestamp endTime;
+        private long duration;
         private String rideClass;
 
         public Ride(String user, String startStation, String endStation, float price, Timestamp startTime, Timestamp endTime) {
@@ -29,6 +28,7 @@ public class RideImport implements DataImport {
             this.price = price;
             this.startTime = startTime;
             this.endTime = endTime;
+            this.duration = Duration.between(startTime.toInstant(), endTime.toInstant()).getSeconds();
             this.rideClass = "Economy";
         }
 
@@ -88,6 +88,14 @@ public class RideImport implements DataImport {
             this.endTime = endTime;
         }
 
+        public long getDuration() {
+            return duration;
+        }
+
+        public void setDuration(long duration) {
+            this.duration = duration;
+        }
+
         public String getRideClass() {
             return rideClass;
         }
@@ -105,7 +113,8 @@ public class RideImport implements DataImport {
                     ", endStation='" + endStation + '\'' +
                     ", price=" + price +
                     ", startTime=" + startTime +
-                    ", endTime='" + endTime + '\'' +
+                    ", endTime=" + endTime +
+                    ", duration=" + duration +
                     ", rideClass='" + rideClass + '\'' +
                     '}';
         }
@@ -156,160 +165,15 @@ public class RideImport implements DataImport {
         }
     }
 
-    public static class RideByIdNum {
-        private String userNum;
-        private Timestamp startTime;
-        private Timestamp endTime;
-        private String rideClass;
-        private int pricingId;
-
-        public RideByIdNum(String userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
-            this.userNum = userNum;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.rideClass = "Economy";
-            this.pricingId = pricingId;
-        }
-
-        public String getUserNum() {
-            return userNum;
-        }
-
-        public void setUserNum(String userNum) {
-            this.userNum = userNum;
-        }
-
-        public Timestamp getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(Timestamp startTime) {
-            this.startTime = startTime;
-        }
-
-        public Timestamp getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(Timestamp endTime) {
-            this.endTime = endTime;
-        }
-
-        public String getRideClass() {
-            return rideClass;
-        }
-
-        public void setRideClass(String rideClass) {
-            this.rideClass = rideClass;
-        }
-
-        public int getPricingId() {
-            return pricingId;
-        }
-
-        public void setPricingId(int pricingId) {
-            this.pricingId = pricingId;
-        }
-
-        @Override
-        public String toString() {
-            return "RideByIdNum{" +
-                    "userNum='" + userNum + '\'' +
-                    ", startTime=" + startTime +
-                    ", endTime='" + endTime + '\'' +
-                    ", rideClass='" + rideClass + '\'' +
-                    ", pricingId=" + pricingId +
-                    '}';
-        }
-    }
-
-    public static class RideByCardNum {
-        private String userNum;
-        private Timestamp startTime;
-        private Timestamp endTime;
-        private String rideClass;
-        private int pricingId;
-
-        public RideByCardNum(String userNum, Timestamp startTime, Timestamp endTime, int pricingId) {
-            this.userNum = userNum;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.rideClass = "Economy";
-            this.pricingId = pricingId;
-        }
-
-        public String getUserNum() {
-            return userNum;
-        }
-
-        public void setUserNum(String userNum) {
-            this.userNum = userNum;
-        }
-
-        public Timestamp getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(Timestamp startTime) {
-            this.startTime = startTime;
-        }
-
-        public Timestamp getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(Timestamp endTime) {
-            this.endTime = endTime;
-        }
-
-        public String getRideClass() {
-            return rideClass;
-        }
-
-        public void setRideClass(String rideClass) {
-            this.rideClass = rideClass;
-        }
-
-        public int getPricingId() {
-            return pricingId;
-        }
-
-        public void setPricingId(int pricingId) {
-            this.pricingId = pricingId;
-        }
-
-        @Override
-        public String toString() {
-            return "RideByCardNum{" +
-                    "userNum='" + userNum + '\'' +
-                    ", startTime=" + startTime +
-                    ", endTime='" + endTime + '\'' +
-                    ", rideClass='" + rideClass + '\'' +
-                    ", pricingId=" + pricingId +
-                    '}';
-        }
-    }
-
     @Override
     public void readData(DatabaseManipulation dm) {
         rides = Util.readJsonArray(Path.of("src/main/resources/ride.json"), Ride.class);
-        HashMap<String, Integer> routePricingIdMap = dm.getRoutePricingIdMap();
-
-        for (Ride ride : rides) {
-            if (String.valueOf(ride.user).length() == 9)
-                ridesByCardNum.add(new RideByCardNum(ride.getUser(), ride.getStartTime(), ride.getEndTime(), routePricingIdMap.get(ride.startStation + " -> " + ride.endStation)));
-            else
-                ridesByIdNum.add(new RideByIdNum(ride.getUser(), ride.getStartTime(), ride.getEndTime(), routePricingIdMap.get(ride.startStation + " -> " + ride.endStation)));
-        }
-
     }
 
     @Override
     public void writeData(DatabaseManipulation dm) {
         try {
             dm.addAllRides(rides);
-            dm.addAllRidesByIdNum(ridesByIdNum);
-            dm.addAllRidesByCardNum(ridesByCardNum);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
