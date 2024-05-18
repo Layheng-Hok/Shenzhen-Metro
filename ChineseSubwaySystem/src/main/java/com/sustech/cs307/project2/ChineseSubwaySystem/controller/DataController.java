@@ -123,10 +123,12 @@ public class DataController {
     public String removeStation(@RequestParam String englishName, Model model) {
         try {
             Station station = stationRepository.findById(englishName).orElse(null);
-            if (station != null)
+            if (station != null) {
                 stationRepository.delete(station);
-            else
+                model.addAttribute("successMessage", "Station removed successfully.");
+            } else {
                 model.addAttribute("errorMessage", "Station not found or cannot be removed due to foreign key constraint.");
+            }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
             model.addAttribute("errorMessage", "Station cannot be removed due to foreign key constraint.");
@@ -237,6 +239,10 @@ public class DataController {
                 bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
             }
 
+            if (lineDto.getFirstOpening() == null) {
+                bindingResult.addError(new FieldError("lineDto", "firstOpening", "The first opening date is required."));
+            }
+
             if (lineDto.getUrl().length() > 100) {
                 bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
             }
@@ -319,6 +325,9 @@ public class DataController {
                                    @ModelAttribute("totalStationsToAdd") Integer totalStationsToAdd,
                                    @ModelAttribute("stationsAdded") Integer stationsAdded,
                                    Model model, SessionStatus sessionStatus) {
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/search_line_detail";
+        }
 
         String lineName = lineDetailDto.getLineName();
         String stationName = lineDetailDto.getStationName();

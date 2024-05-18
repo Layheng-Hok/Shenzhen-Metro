@@ -9,8 +9,7 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
 
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -29,14 +28,14 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
-        <a href="index.html" class="logo d-flex align-items-center  me-auto me-lg-0">
-            <img th:src="@{assets/img/logo.png}" alt="">
+        <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
+            <img th:src="@{/assets/img/logo.png}" alt="">
             <h1>SZMC</h1>
         </a>
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
                         class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
@@ -76,13 +75,6 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-        <script th:if="${errorMessage}">
-            window.onload = function() {
-                alert("Line cannot be removed due to foreign key constraint.");
-                window.location.href = "/lines";
-            };
-        </script>
-
         <div th:if="${successMessage != null}" class="alert alert-success" role="alert">
             <p th:text="${successMessage}"></p>
         </div>
@@ -133,7 +125,7 @@
             </tbody>
         </table>
     </div>
-</main><!-- End #main -->
+</main><!-- End Main -->
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
@@ -146,9 +138,12 @@
 
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<div id="preloader">
-    <div class="line"></div>
-</div>
+<script th:if="${errorMessage}">
+    window.onload = function() {
+        alert("Line cannot be removed due to foreign key constraint.");
+        window.location.href = "/lines";
+    };
+</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
