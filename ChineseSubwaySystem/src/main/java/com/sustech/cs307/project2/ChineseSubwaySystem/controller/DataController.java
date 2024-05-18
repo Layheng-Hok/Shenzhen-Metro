@@ -521,7 +521,11 @@ public class DataController {
             Ride ride = rideRepository.findById(id).get();
             model.addAttribute("ride", ride);
 
+            String userNum = rideDto.getUserNum();
             String endStation = rideDto.getEndStation();
+            String rideClass = ride.getRideClass();
+            float economyPrice = routePricingRepository.findByStartStationAndEndStation(ride.getStartStation(), rideDto.getEndStation()).getPrice();
+            float businessPrice = (float) (economyPrice + 0.5 * economyPrice);
 
             if (rideDto.getEndStation().isEmpty()) {
                 bindingResult.addError(new FieldError("rideDto", "endStation", "End station is required."));
@@ -534,17 +538,30 @@ public class DataController {
                 bindingResult.addError(new FieldError("rideDto", "endStation", "Station is currently not operational."));
             }
 
+            if (userNum.length() == 9) {
+                if (rideClass.equals("Economy") && cardRepository.findById(userNum).get().getMoney() < economyPrice) {
+                    bindingResult.addError(new FieldError("rideDto", "userNum", "Insufficient balance in card."));
+                } else if (rideClass.equals("Business") && cardRepository.findById(userNum).get().getMoney() < businessPrice) {
+                    bindingResult.addError(new FieldError("rideDto", "userNum", "Insufficient balance in card."));
+                }
+            }
+
             if (bindingResult.hasErrors()) {
                 return "rides/update_ride";
             }
 
-            float defaultPrice = routePricingRepository.findByStartStationAndEndStation(ride.getStartStation(), rideDto.getEndStation()).getPrice();
-
+            float fee = rideClass.equals("Economy") ? economyPrice : businessPrice;
             ride.setEndTime(new Timestamp(System.currentTimeMillis()));
             ride.setEndStation(endStation);
-            ride.setPrice(ride.getRideClass().equals("Economy") ? defaultPrice : (float) (defaultPrice + 0.5 * defaultPrice));
+            ride.setPrice(fee);
 
             rideRepository.save(ride);
+
+            if (userNum.length() == 9) {
+                Card card = cardRepository.findById(userNum).get();
+                card.setMoney(card.getMoney() - fee);
+                cardRepository.save(card);
+            }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
