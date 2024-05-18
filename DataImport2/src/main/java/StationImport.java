@@ -9,11 +9,7 @@ import java.util.*;
 
 public class StationImport implements DataImport {
     private static List<Station> stations = new ArrayList<>();
-    private static List<BusInfo> busInfos = new ArrayList<>();
-    private static HashMap<String, Long> busInfosMap = new HashMap<>();
     private static Util.UniqueOrderedSet<BusExitInfo> busExitInfos = new Util.UniqueOrderedSet<>();
-    private static List<LandmarkInfo> landmarkInfos = new ArrayList<>();
-    private static HashMap<String, Long> landmarkInfosMap = new HashMap<>();
     private static Util.UniqueOrderedSet<LandmarkExitInfo> landmarkExitInfos = new Util.UniqueOrderedSet<>();
 
     public static class Station {
@@ -83,49 +79,17 @@ public class StationImport implements DataImport {
         }
     }
 
-    public static class BusInfo {
-        private String busLine;
-        private String busName;
-
-        public BusInfo(String busLine, String busName) {
-            this.busLine = busLine;
-            this.busName = busName;
-        }
-
-        public String getBusName() {
-            return busName;
-        }
-
-        public void setBusName(String busName) {
-            this.busName = busName;
-        }
-
-        public String getBusLine() {
-            return busLine;
-        }
-
-        public void setBusLine(String busLine) {
-            this.busLine = busLine;
-        }
-
-        @Override
-        public String toString() {
-            return "BusInfo{" +
-                    "busLine='" + busLine + '\'' +
-                    ", busName='" + busName + '\'' +
-                    '}';
-        }
-    }
-
     public static class BusExitInfo {
         private String stationName;
         private String exit;
-        private long busInfoId;
+        private String busLine;
+        private String busName;
 
-        public BusExitInfo(String stationName, String exit, long busInfoId) {
+        public BusExitInfo(String stationName, String exit, String busLine, String busName) {
             this.stationName = stationName;
             this.exit = exit;
-            this.busInfoId = busInfoId;
+            this.busLine = busLine;
+            this.busName = busName;
         }
 
         public String getStationName() {
@@ -144,12 +108,20 @@ public class StationImport implements DataImport {
             this.exit = exit;
         }
 
-        public long getBusInfoId() {
-            return busInfoId;
+        public String getBusLine() {
+            return busLine;
         }
 
-        public void setBusInfoId(long busInfoId) {
-            this.busInfoId = busInfoId;
+        public void setBusLine(String busLine) {
+            this.busLine = busLine;
+        }
+
+        public String getBusName() {
+            return busName;
+        }
+
+        public void setBusName(String busName) {
+            this.busName = busName;
         }
 
         @Override
@@ -157,7 +129,8 @@ public class StationImport implements DataImport {
             return "BusExitInfo{" +
                     "stationName='" + stationName + '\'' +
                     ", exit='" + exit + '\'' +
-                    ", busInfoId=" + busInfoId +
+                    ", busLine='" + busLine + '\'' +
+                    ", busName='" + busName + '\'' +
                     '}';
         }
 
@@ -166,20 +139,40 @@ public class StationImport implements DataImport {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             BusExitInfo that = (BusExitInfo) o;
-            return busInfoId == that.busInfoId && Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit);
+            return Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit) && Objects.equals(busLine, that.busLine) && Objects.equals(busName, that.busName);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(stationName, exit, busInfoId);
+            return Objects.hash(stationName, exit, busLine, busName);
         }
     }
 
-    public static class LandmarkInfo {
+    public static class LandmarkExitInfo {
+        private String stationName;
+        private String exit;
         private String landmark;
 
-        public LandmarkInfo(String landmark) {
+        public LandmarkExitInfo(String stationName, String exit, String landmark) {
+            this.stationName = stationName;
+            this.exit = exit;
             this.landmark = landmark;
+        }
+
+        public String getStationName() {
+            return stationName;
+        }
+
+        public void setStationName(String stationName) {
+            this.stationName = stationName;
+        }
+
+        public String getExit() {
+            return exit;
+        }
+
+        public void setExit(String exit) {
+            this.exit = exit;
         }
 
         public String getLandmark() {
@@ -192,53 +185,10 @@ public class StationImport implements DataImport {
 
         @Override
         public String toString() {
-            return "LandmarkInfo{" +
-                    "landmark='" + landmark + '\'' +
-                    '}';
-        }
-    }
-
-    public static class LandmarkExitInfo {
-        private String stationName;
-        private String exit;
-        private long landmarkId;
-
-        public LandmarkExitInfo(String stationName, String exit, long landmarkId) {
-            this.stationName = stationName;
-            this.exit = exit;
-            this.landmarkId = landmarkId;
-        }
-
-        public String getStationName() {
-            return stationName;
-        }
-
-        public void setStationName(String stationName) {
-            this.stationName = stationName;
-        }
-
-        public String getExit() {
-            return exit;
-        }
-
-        public void setExit(String exit) {
-            this.exit = exit;
-        }
-
-        public long getLandmarkId() {
-            return landmarkId;
-        }
-
-        public void setLandmarkId(long landmarkId) {
-            this.landmarkId = landmarkId;
-        }
-
-        @Override
-        public String toString() {
             return "LandmarkExitInfo{" +
                     "stationName='" + stationName + '\'' +
                     ", exit='" + exit + '\'' +
-                    ", landmarkId=" + landmarkId +
+                    ", landmark='" + landmark + '\'' +
                     '}';
         }
 
@@ -247,12 +197,12 @@ public class StationImport implements DataImport {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             LandmarkExitInfo that = (LandmarkExitInfo) o;
-            return landmarkId == that.landmarkId && Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit);
+            return Objects.equals(stationName, that.stationName) && Objects.equals(exit, that.exit) && Objects.equals(landmark, that.landmark);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(stationName, exit, landmarkId);
+            return Objects.hash(stationName, exit, landmark);
         }
     }
 
@@ -261,8 +211,6 @@ public class StationImport implements DataImport {
         try {
             String jsonStrings = Files.readString(Path.of("src/main/resources/stations.json"));
             JSONObject stationsJson = JSONObject.parseObject(jsonStrings, Feature.OrderedField);
-            long busInfoId = 0;
-            long landmarkId = 0;
 
             int i = 0;
             for (String englishName : stationsJson.keySet()) {
@@ -321,13 +269,8 @@ public class StationImport implements DataImport {
                             if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
                                 for (String busLine : busLines) {
                                     String busNameAndLine = busName + " " + busLine;
-                                    if (!busLine.isEmpty() && !Util.containOnlySeparators(exit)) {
-                                        if (!busInfosMap.containsKey(busNameAndLine)) {
-                                            busInfosMap.put(busNameAndLine, ++busInfoId);
-                                            busInfos.add(new BusInfo(busLine, busName));
-                                        }
-                                        busExitInfos.add(new BusExitInfo(englishName, exit, busInfosMap.get(busNameAndLine)));
-                                    }
+                                    if (!busLine.isEmpty() && !Util.containOnlySeparators(exit))
+                                        busExitInfos.add(new BusExitInfo(englishName, exit, busLine, busName));
                                 }
                             }
                         }
@@ -371,15 +314,9 @@ public class StationImport implements DataImport {
                         landmarks = new String[]{landmarksInStr};
                     for (String exit : exits) {
                         if (!exit.isEmpty() && !Util.containOnlySeparators(exit)) {
-                            for (String landmark : landmarks) {
-                                if (!landmark.isEmpty() && !Util.containOnlySeparators(landmark)) {
-                                    if (!landmarkInfosMap.containsKey(landmark)) {
-                                        landmarkInfosMap.put(landmark, ++landmarkId);
-                                        landmarkInfos.add(new LandmarkInfo(landmark));
-                                    }
-                                    landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, landmarkInfosMap.get(landmark)));
-                                }
-                            }
+                            for (String landmark : landmarks)
+                                if (!landmark.isEmpty() && !Util.containOnlySeparators(landmark))
+                                    landmarkExitInfos.add(new LandmarkExitInfo(englishName, exit, landmark));
                         }
                     }
                 }
@@ -393,9 +330,7 @@ public class StationImport implements DataImport {
     public void writeData(DatabaseManipulation dm) {
         try {
             dm.addAllStations(stations);
-            dm.addAllBusInfos(busInfos);
             dm.addAllBusExitInfos(busExitInfos);
-            dm.addAllLandmarkInfos(landmarkInfos);
             dm.addAllLandmarkExitInfos(landmarkExitInfos);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());

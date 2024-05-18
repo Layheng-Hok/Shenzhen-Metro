@@ -62,48 +62,16 @@ public class DatabaseManipulation {
         }
     }
 
-    public void addAllBusInfos(List<StationImport.BusInfo> busInfos) {
-        String sql = "INSERT INTO bus_info (bus_line, bus_name) " +
-                "VALUES (?, ?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            for (StationImport.BusInfo busInfo : busInfos) {
-                preparedStatement.setString(1, busInfo.getBusLine());
-                preparedStatement.setString(2, busInfo.getBusName());
-                preparedStatement.addBatch();
-                statementCounts++;
-            }
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void addAllBusExitInfos(Util.UniqueOrderedSet<StationImport.BusExitInfo> busExitInfos) {
-        String sql = "INSERT INTO bus_exit_info (station_name, exit_gate, bus_info_id) " +
-                "VALUES (?, ?, ?)";
+        String sql = "INSERT INTO bus_exit_info (station_name, exit_gate, bus_name, bus_line) " +
+                "VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             for (StationImport.BusExitInfo busExitInfo : busExitInfos) {
                 preparedStatement.setString(1, busExitInfo.getStationName());
                 preparedStatement.setString(2, busExitInfo.getExit());
-                preparedStatement.setLong(3, busExitInfo.getBusInfoId());
-                preparedStatement.addBatch();
-                statementCounts++;
-            }
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addAllLandmarkInfos(List<StationImport.LandmarkInfo> landmarkInfos) {
-        String sql = "INSERT INTO landmark_info (landmark) " +
-                "VALUES (?)";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            for (StationImport.LandmarkInfo landmarkInfo : landmarkInfos) {
-                preparedStatement.setString(1, landmarkInfo.getLandmark());
+                preparedStatement.setString(3, busExitInfo.getBusName());
+                preparedStatement.setString(4, busExitInfo.getBusLine());
                 preparedStatement.addBatch();
                 statementCounts++;
             }
@@ -114,14 +82,14 @@ public class DatabaseManipulation {
     }
 
     public void addAllLandmarkExitInfos(Util.UniqueOrderedSet<StationImport.LandmarkExitInfo> landmarkExitInfos) {
-        String sql = "INSERT INTO landmark_exit_info (station_name, exit_gate, landmark_id) " +
+        String sql = "INSERT INTO landmark_exit_info (station_name, exit_gate, landmark) " +
                 "VALUES (?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             for (StationImport.LandmarkExitInfo landmarkExitInfo : landmarkExitInfos) {
                 preparedStatement.setString(1, landmarkExitInfo.getStationName());
                 preparedStatement.setString(2, landmarkExitInfo.getExit());
-                preparedStatement.setLong(3, landmarkExitInfo.getLandmarkId());
+                preparedStatement.setString(3, landmarkExitInfo.getLandmark());
                 preparedStatement.addBatch();
                 statementCounts++;
             }
