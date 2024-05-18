@@ -118,4 +118,25 @@ document.addEventListener('DOMContentLoaded', () => {
         aos_init();
     });
 
+    /**
+     * Animation on text bounce
+     */
+    let isShenzhen = true;
+
+    function bounceShenzhen() {
+        const shenzhen = document.getElementById('shenzhen');
+        if (isShenzhen) {
+            shenzhen.textContent = 'China';
+        } else {
+            shenzhen.textContent = 'Shenzhen';
+        }
+        isShenzhen = !isShenzhen;
+        shenzhen.classList.add('animate__animated', 'animate__bounce');
+        setTimeout(() => {
+            shenzhen.classList.remove('animate__animated', 'animate__bounce');
+        }, 1000);
+    }
+
+    setInterval(bounceShenzhen, 3000);
 });
+
