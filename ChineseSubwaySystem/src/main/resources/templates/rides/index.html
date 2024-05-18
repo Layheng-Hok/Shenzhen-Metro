@@ -1,38 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>SZMC Rides</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-
     <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
-
-    <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/lightbox/css/lightbox.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
-
-    <!-- Main CSS File -->
     <link th:href="@{/assets/css/main.css}" rel="stylesheet">
 </head>
-
 <body>
-
-<!-- ======= Header ======= -->
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid d-flex align-items-center justify-content-between">
-
         <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
             <img th:src="@{assets/img/logo.png}" alt="">
             <h1>SZMC</h1>
         </a>
-
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="/">Home</a></li>
@@ -51,17 +39,14 @@
                             </ul>
                         </li>
                     </ul>
+                </li>
             </ul>
-        </nav><!-- .navbar -->
-
-        <div class="header-social-links">
-        </div>
+        </nav>
+        <div class="header-social-links"></div>
         <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
         <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
     </div>
-</header><!-- End Header -->
-
-<!-- ======= Hero Section ======= -->
+</header>
 <section id="hero" class="hero d-flex flex-column justify-content-center align-items-center">
     <div class="container">
         <div class="row justify-content-center">
@@ -70,14 +55,11 @@
             </div>
         </div>
     </div>
-</section><!-- End Hero Section -->
-
-<!-- ======= Main ======= -->
+</section>
 <main id="main">
     <div class="container">
         <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
         <a href="/ongoingRides" class="btn btn-outline-success">View Ongoing Rides</h2></a>
-
         <table class="table">
             <thead>
             <tr>
@@ -85,29 +67,28 @@
                 <th>Auth Type</th>
                 <th>Start Time</th>
                 <th>End Time</th>
+                <th>Duration</th>
                 <th>Start Station</th>
                 <th>End Station</th>
                 <th>Class</th>
                 <th>Price</th>
             </tr>
             </thead>
-
             <tbody>
             <tr th:each="ride : ${ridePage.content}">
-                <td>
-                    <a class="hover-underline-animation"th:href="@{/users/{userNum}(userNum=${ride.userNum})}" th:text="${ride.userNum}"></a>
-                </td>
+                <td><a class="hover-underline-animation" th:href="@{/users/{userNum}(userNum=${ride.userNum})}"
+                       th:text="${ride.userNum}"></a></td>
                 <td th:text="${ride.authType}"></td>
                 <td th:text="${ride.startTime}"></td>
                 <td th:text="${ride.endTime}"></td>
+                <td th:text="${ride.duration}+'s'"></td>
                 <td th:text="${ride.startStation}"></td>
                 <td th:text="${ride.endStation}"></td>
                 <td th:text="${ride.rideClass}"></td>
-                <td th:text="${ride.price}"></td>
+                <td th:text="'¥' + ${ride.price}"></td>
             </tr>
             </tbody>
         </table>
-
         <nav aria-label="Page Nav">
             <div class="text-center mt-3"><span
                     th:text="'Page ' + ${currentPage + 1} + ' of ' + ${ridePage.totalPages}"></span></div>
@@ -120,30 +101,20 @@
                 </li>
             </ul>
         </nav>
-
     </div>
-</main><!-- End Main -->
-
-<!-- ======= Footer ======= -->
+</main>
 <footer id="footer" class="footer">
     <div class="container">
         <div class="copyright">
             &copy; Copyright: <strong><span> Shenzhen Metro Group Co.,Ltd.</span></strong> All Rights Reserved.
         </div>
     </div>
-</footer><!-- End Footer -->
-
+</footer>
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
 <script th:src="@{/assets/vendor/glightbox/js/glightbox.min.js}"></script>
 <script th:src="@{/assets/vendor/aos/aos.js}"></script>
-
-<!-- Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
-
 </body>
-
 </html>

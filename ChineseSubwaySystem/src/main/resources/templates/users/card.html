@@ -36,14 +36,12 @@
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
-                        class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
                         <li><a href="/stations">Stations</a></li>
                         <li><a href="/lines">Lines</a></li>
                         <li><a href="/lineDetails">Line Details</a></li>
-                        <li class="dropdown"><a href="#" class="active"><span>Rides</span> <i
-                                class="bi bi-chevron-down dropdown-indicator"></i></a>
+                        <li class="dropdown"><a href="#" class="active"><span>Rides</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                             <ul>
                                 <li><a href="/rides/create">Board</a></li>
                                 <li><a href="/ongoingRides">Exit</a></li>
@@ -51,11 +49,11 @@
                             </ul>
                         </li>
                     </ul>
+                </li>
             </ul>
         </nav><!-- .navbar -->
 
-        <div class="header-social-links">
-        </div>
+        <div class="header-social-links"></div>
         <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
         <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
     </div>
@@ -83,7 +81,7 @@
             </div>
             <div class="card-body">
                 <p class="card-text"><strong>Code:</strong> <span th:text="${card.code}"></span></p>
-                <p class="card-text"><strong>Balance:</strong> <span th:text="${card.money}"></span></p>
+                <p class="card-text"><strong>Balance:</strong> <span th:text="'¥' + ${card.money}"></span></p>
                 <p class="card-text"><strong>Created Time:</strong> <span th:text="${card.createTime}"></span></p>
             </div>
         </div>

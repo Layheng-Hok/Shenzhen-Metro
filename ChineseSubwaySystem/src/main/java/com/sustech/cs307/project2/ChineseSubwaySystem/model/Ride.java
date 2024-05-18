@@ -30,6 +30,9 @@ public class Ride {
     @Column
     private Timestamp endTime;
 
+    @Column
+    private long duration;
+
     @Column(length = 50, nullable = false)
     private String startStation;
 

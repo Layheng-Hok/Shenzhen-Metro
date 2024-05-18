@@ -18,6 +18,8 @@ public class RideDto {
 
     private Timestamp endTime;
 
+    private long duration;
+
     @NotEmpty(message = "Start station is required.")
     private String startStation;
 

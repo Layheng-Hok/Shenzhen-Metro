@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -559,6 +560,7 @@ public class DataController {
 
             float fee = rideClass.equals("Economy") ? economyPrice : businessPrice;
             ride.setEndTime(new Timestamp(System.currentTimeMillis()));
+            ride.setDuration(Duration.between(ride.getStartTime().toInstant(), ride.getEndTime().toInstant()).getSeconds());
             ride.setEndStation(endStation);
             ride.setPrice(fee);
 
@@ -576,43 +578,44 @@ public class DataController {
         return "redirect:/rides";
     }
 
-    @Transactional
-    @PostMapping("/lineDetails/search")
-    public String searchRide(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "lineDetails/search_line_detail";
-        }
-
-        String lineName = lineDetailSearchDto.getLineName();
-        String stationName = lineDetailSearchDto.getStationName();
-        int offset = lineDetailSearchDto.getOffset();
-
-        boolean lineExists = lineDetailRepository.existsByLineName(lineName);
-        if (!lineExists) {
-            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
-        }
-
-        Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
-        if (currentStation.isEmpty()) {
-            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "lineDetails/search_line_detail";
-        }
-
-        int currentOrder = currentStation.get().getStationOrder();
-        int targetOrder = currentOrder + offset;
-
-        Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
-        if (targetStation.isEmpty()) {
-            bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
-            return "lineDetails/search_line_detail";
-        }
-
-        model.addAttribute("targetStation", targetStation.get());
-        return "lineDetails/search_line_detail";
-    }
+    // * TODO: Implement the following method
+//    @Transactional
+//    @PostMapping("/lineDetails/search")
+//    public String searchRide(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            return "lineDetails/search_line_detail";
+//        }
+//
+//        String lineName = lineDetailSearchDto.getLineName();
+//        String stationName = lineDetailSearchDto.getStationName();
+//        int offset = lineDetailSearchDto.getOffset();
+//
+//        boolean lineExists = lineDetailRepository.existsByLineName(lineName);
+//        if (!lineExists) {
+//            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
+//        }
+//
+//        Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
+//        if (currentStation.isEmpty()) {
+//            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
+//        }
+//
+//        if (bindingResult.hasErrors()) {
+//            return "lineDetails/search_line_detail";
+//        }
+//
+//        int currentOrder = currentStation.get().getStationOrder();
+//        int targetOrder = currentOrder + offset;
+//
+//        Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
+//        if (targetStation.isEmpty()) {
+//            bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
+//            return "lineDetails/search_line_detail";
+//        }
+//
+//        model.addAttribute("targetStation", targetStation.get());
+//        return "lineDetails/search_line_detail";
+//    }
 
     @GetMapping("/ongoingRides")
     public String showOngoingRideListPage(Model model) {
