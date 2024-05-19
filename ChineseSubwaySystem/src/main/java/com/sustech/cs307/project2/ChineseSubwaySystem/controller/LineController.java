@@ -150,7 +150,6 @@ public class LineController {
         return "redirect:/lines";
     }
 
-    @Transactional
     @GetMapping("/remove")
     public String removeLine(@RequestParam int id, Model model) {
         try {
@@ -159,7 +158,7 @@ public class LineController {
                 lineRepository.delete(line);
                 model.addAttribute("successMessage", "Line removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Line not found or cannot be removed due to foreign key constraint.");
+                model.addAttribute("errorMessage", "Line not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());

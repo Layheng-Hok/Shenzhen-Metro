@@ -2,152 +2,153 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>SZMC Line Details</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-  <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
+    <title>SZMC Line Details</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
 
-  <!-- Vendor CSS Files -->
-  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/lightbox/css/lightbox.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/lightbox/css/lightbox.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
 
-  <!-- Main CSS File -->
-  <link th:href="@{/assets/css/main.css}" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link th:href="@{/assets/css/main.css}" rel="stylesheet">
 </head>
 
 <body>
 
 <!-- ======= Header ======= -->
 <header id="header" class="header d-flex align-items-center fixed-top">
-  <div class="container-fluid d-flex align-items-center justify-content-between">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
 
-    <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
-      <img th:src="@{/assets/img/logo.png}" alt="">
-      <h1>SZMC</h1>
-    </a>
+        <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <h1>SZMC</h1>
+        </a>
 
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
-                class="bi bi-chevron-down dropdown-indicator"></i></a>
-          <ul>
-            <li><a href="/stations">Stations</a></li>
-            <li><a href="/lines">Lines</a></li>
-            <li><a href="/lineDetails" class="active">Line Details</a></li>
-            <li class="dropdown"><a href="#"><span>Rides</span> <i
-                    class="bi bi-chevron-down dropdown-indicator"></i></a>
-              <ul>
-                <li><a href="/rides/create">Board</a></li>
-                <li><a href="/ongoingRides">Exit</a></li>
-                <li><a href="/rides">Ride Record</a></li>
-              </ul>
-            </li>
-          </ul>
-      </ul>
-    </nav><!-- .navbar -->
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
+                        class="bi bi-chevron-down dropdown-indicator"></i></a>
+                    <ul>
+                        <li><a href="/stations">Stations</a></li>
+                        <li><a href="/lines">Lines</a></li>
+                        <li><a href="/lineDetails" class="active">Line Details</a></li>
+                        <li class="dropdown"><a href="#"><span>Rides</span> <i
+                                class="bi bi-chevron-down dropdown-indicator"></i></a>
+                            <ul>
+                                <li><a href="/rides/create">Board</a></li>
+                                <li><a href="/ongoingRides">Exit</a></li>
+                                <li><a href="/rides">Ride Record</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+            </ul>
+        </nav><!-- .navbar -->
 
-    <div class="header-social-links">
+        <div class="header-social-links">
+        </div>
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
     </div>
-    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-  </div>
 </header><!-- End Header -->
 
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="hero d-flex flex-column justify-content-center align-items-center">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6 text-center">
-        <h2><span>Line Details</span></h2>
-      </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h2><span>Line Details</span></h2>
+            </div>
+        </div>
     </div>
-  </div>
 </section><!-- End Hero Section -->
 
 <!-- ======= Main ======= -->
 <main id="main">
-  <div class="container">
-    <div th:if="${successMessage != null}" class="alert alert-success" role="alert">
-      <p th:text="${successMessage}"></p>
-    </div>
-
-    <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-    <!-- Trigger Modal -->
-    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#numStationsModal">
-      Add Station(s)
-    </button>
-    <a class="btn btn-outline-success" href="/lineDetails/search">Search</a>
-
-    <!-- Modal -->
-    <div class="modal fade" id="numStationsModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel">Number of Stations</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="numStationsForm">
-              <div class="mb-3">
-                <label for="numStationsInput" class="form-label">Enter the number of stations:</label>
-                <input type="number" class="form-control" id="numStationsInput" name="numStations" min="1" max="10" required>
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-          </div>
+    <div class="container">
+        <div th:if="${successMessage != null}" class="alert alert-success" role="alert" id="successMessage">
+            <p th:text="${successMessage}"></p>
         </div>
-      </div>
-    </div>
 
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Line Name</th>
-        <th>Station Name</th>
-        <th>Station Order</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="lineDetail : ${lineDetails}">
-        <td th:text="${lineDetail.lineName}"></td>
-        <td th:text="${lineDetail.stationName}"></td>
-        <td th:text="${lineDetail.stationOrder}"></td>
-        <td style="white-space: nowrap">
-          <a class="btn btn-outline-danger btn-sm"
-             th:href="@{/lineDetails/remove(id=${lineDetail.lineDetailId})}"
-             onclick="return confirm('Are you sure that you want to remove this station?')">Remove</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+        <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
+        <!-- Trigger Modal -->
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#numStationsModal">
+            Add Station(s)
+        </button>
+        <a class="btn btn-outline-success" href="/lineDetails/search">Search</a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="numStationsModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Number of Stations</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="numStationsForm">
+                            <div class="mb-3">
+                                <label for="numStationsInput" class="form-label">Enter the number of stations:</label>
+                                <input type="number" class="form-control" id="numStationsInput" name="numStations"
+                                       min="1" max="10" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Line Name</th>
+                <th>Station Name</th>
+                <th>Station Order</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lineDetail : ${lineDetails}">
+                <td th:text="${lineDetail.lineName}"></td>
+                <td th:text="${lineDetail.stationName}"></td>
+                <td th:text="${lineDetail.stationOrder}"></td>
+                <td style="white-space: nowrap">
+                    <a class="btn btn-outline-danger btn-sm"
+                       th:href="@{/lineDetails/remove(id=${lineDetail.lineDetailId})}"
+                       onclick="return confirm('Are you sure that you want to remove this station?')">Remove</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main><!-- End Main -->
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
-  <div class="container">
-    <div class="copyright">
-      &copy; Copyright: <strong><span> Shenzhen Metro Group Co.,Ltd.</span></strong> All Rights Reserved.
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright: <strong><span> Shenzhen Metro Group Co.,Ltd.</span></strong> All Rights Reserved.
+        </div>
     </div>
-  </div>
 </footer><!-- End Footer -->
 
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <script>
-  document.getElementById('numStationsForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    var numStations = document.getElementById('numStationsInput').value;
-    window.location.href = '/lineDetails/create?numStations=' + numStations;
-  });
+    document.getElementById('numStationsForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var numStations = document.getElementById('numStationsInput').value;
+        window.location.href = '/lineDetails/create?numStations=' + numStations;
+    });
 </script>
 
 <!-- Vendor JS Files -->

@@ -138,4 +138,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setInterval(bounceShenzhen, 3000);
+
+
+    /**
+     * Error or success message alerts
+     */
+    function hideAlerts() {
+        setTimeout(function() {
+            const successAlert = document.getElementById('successMessage');
+            if (successAlert) {
+                successAlert.style.display = 'none';
+            }
+            const errorAlert = document.getElementById('errorMessage');
+            if (errorAlert) {
+                errorAlert.style.display = 'none';
+            }
+        }, 5000);
+    }
+
+    window.onload = hideAlerts;
 });

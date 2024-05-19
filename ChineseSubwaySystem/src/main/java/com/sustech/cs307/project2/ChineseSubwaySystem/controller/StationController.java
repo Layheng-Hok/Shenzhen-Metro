@@ -91,7 +91,6 @@ public class StationController {
         return "redirect:/stations";
     }
 
-    @Transactional
     @GetMapping("/remove")
     public String removeStation(@RequestParam String englishName, Model model) {
         try {
@@ -100,7 +99,7 @@ public class StationController {
                 stationRepository.delete(station);
                 model.addAttribute("successMessage", "Station removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Station not found or cannot be removed due to foreign key constraint.");
+                model.addAttribute("errorMessage", "Station not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());

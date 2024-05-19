@@ -75,8 +75,12 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-        <div th:if="${successMessage != null}" class="alert alert-success" role="alert">
+        <div th:if="${successMessage != null}" class="alert alert-success" role="alert" id="successMessage">
             <p th:text="${successMessage}"></p>
+        </div>
+
+        <div th:if="${errorMessage != null}" class="alert alert-danger" role="alert" id="errorMessage">
+            <p th:text="${errorMessage}"></p>
         </div>
 
         <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
@@ -137,13 +141,6 @@
 </footer><!-- End Footer -->
 
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<script th:if="${errorMessage}">
-    window.onload = function() {
-        alert("Line cannot be removed due to foreign key constraint.");
-        window.location.href = "/lines";
-    };
-</script>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
