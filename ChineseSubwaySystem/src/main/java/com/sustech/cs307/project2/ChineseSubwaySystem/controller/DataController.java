@@ -3,10 +3,12 @@ package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 import com.sustech.cs307.project2.ChineseSubwaySystem.model.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideService;
+import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,9 @@ public class DataController {
 
     @Autowired
     private RideRepository rideRepository;
+
+    @Autowired
+    private RidePaginationRepository ridePaginationRepository;
 
     @Autowired
     private RideService rideService;
@@ -395,7 +400,7 @@ public class DataController {
         return "redirect:/lineDetails/create";
     }
 
-    @GetMapping("/lineDetails/search")
+    @GetMapping("lineDetails/search")
     public String searchStation(Model model) {
         LineDetailSearchDto lineDetailSearchDto = new LineDetailSearchDto();
         model.addAttribute("lineDetailSearchDto", lineDetailSearchDto);
@@ -403,7 +408,7 @@ public class DataController {
     }
 
     @Transactional
-    @PostMapping("/lineDetails/search")
+    @PostMapping("lineDetails/search")
     public String searchStation(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "lineDetails/search_line_detail";
@@ -597,44 +602,31 @@ public class DataController {
         return "redirect:/rides";
     }
 
-    // * TODO: Implement the following method
-//    @Transactional
-//    @PostMapping("/lineDetails/search")
-//    public String searchRide(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            return "lineDetails/search_line_detail";
-//        }
-//
-//        String lineName = lineDetailSearchDto.getLineName();
-//        String stationName = lineDetailSearchDto.getStationName();
-//        int offset = lineDetailSearchDto.getOffset();
-//
-//        boolean lineExists = lineDetailRepository.existsByLineName(lineName);
-//        if (!lineExists) {
-//            bindingResult.addError(new FieldError("lineDetailDto", "lineName", "Line not found."));
-//        }
-//
-//        Optional<LineDetail> currentStation = lineDetailRepository.findByLineNameAndStationName(lineName, stationName);
-//        if (currentStation.isEmpty()) {
-//            bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found on the specified line."));
-//        }
-//
-//        if (bindingResult.hasErrors()) {
-//            return "lineDetails/search_line_detail";
-//        }
-//
-//        int currentOrder = currentStation.get().getStationOrder();
-//        int targetOrder = currentOrder + offset;
-//
-//        Optional<LineDetail> targetStation = lineDetailRepository.findByLineNameAndStationOrder(lineName, targetOrder);
-//        if (targetStation.isEmpty()) {
-//            bindingResult.addError(new FieldError("lineDetailDto", "offset", "No station found at the specified offset."));
-//            return "lineDetails/search_line_detail";
-//        }
-//
-//        model.addAttribute("targetStation", targetStation.get());
-//        return "lineDetails/search_line_detail";
-//    }
+    @GetMapping("rides/filter")
+    public String filterRide(Model model) {
+        RideFilterDto rideFilterDto = new RideFilterDto();
+        model.addAttribute("rideFilterDto", rideFilterDto);
+        return "rides/filter_ride";
+    }
+
+    @Transactional
+    @PostMapping("rides/filter")
+    public String filterRide(@Valid @ModelAttribute RideFilterDto rideFilterDto, Model model, BindingResult bindingResult,
+                             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size) {
+        if (bindingResult.hasErrors()) {
+            return "rides/filter_ride";
+        }
+
+        Specification<Ride> spec = RideSpecification.filterRides(rideFilterDto);
+        Page<Ride> ridePage = rideService.getFilteredRidesPaginated(spec, page, size);
+
+        model.addAttribute("ridePage", ridePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+
+        return "rides/filter_ride";
+    }
+
 
     @GetMapping("/ongoingRides")
     public String showOngoingRideListPage(Model model) {

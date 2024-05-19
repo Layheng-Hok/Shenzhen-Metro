@@ -75,7 +75,7 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-        <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
+        <a onclick="history.back()" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i></a>
 
         <table class="table">
             <thead>
@@ -91,7 +91,8 @@
 
             <tbody>
             <tr th:each="ongoingRide: ${ongoingRides}">
-                <td th:text="${ongoingRide.userNum}"></td>
+                <td><a class="hover-underline-animation" th:href="@{/users/{userNum}(userNum=${ongoingRide.userNum})}"
+                       th:text="${ongoingRide.userNum}"></a></td>
                 <td th:text="${ongoingRide.authType}"></td>
                 <td th:text="${ongoingRide.startTime}"></td>
                 <td th:text="${ongoingRide.startStation}"></td>

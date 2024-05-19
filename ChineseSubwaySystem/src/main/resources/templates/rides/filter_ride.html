@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>SZMC Rides</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/lightbox/css/lightbox.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link th:href="@{/assets/css/main.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+
+        <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <h1>SZMC</h1>
+        </a>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
+                        class="bi bi-chevron-down dropdown-indicator"></i></a>
+                    <ul>
+                        <li><a href="/stations">Stations</a></li>
+                        <li><a href="/lines">Lines</a></li>
+                        <li><a href="/lineDetails">Line Details</a></li>
+                        <li class="dropdown"><a href="#" class="active"><span>Rides</span> <i
+                                class="bi bi-chevron-down dropdown-indicator"></i></a>
+                            <ul>
+                                <li><a href="/rides/create">Board</a></li>
+                                <li><a href="/ongoingRides">Exit</a></li>
+                                <li><a href="/rides" class="active">Ride Record</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+            </ul>
+        </nav><!-- .navbar -->
+
+        <div class="header-social-links">
+        </div>
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+    </div>
+</header><!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex flex-column justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h2><span>CRUD Rides</span></h2>
+            </div>
+        </div>
+    </div>
+</section><!-- End Hero Section -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <a href="/rides" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
+            </div>
+
+            <div class="col-md-8 mx-auto rounded border p-4 m-4">
+                <h2 class="text-center mb-5">Filter Rides</h2>
+                <form method="post" th:object="${rideFilterDto}">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">User Authentication Number</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" th:field="${rideFilterDto.userNum}"
+                                   placeholder="National ID or Travel Card">
+                            <p th:if="${#fields.hasErrors('userNum')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.userNum}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Duration</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" th:field="${rideFilterDto.duration}"
+                                   placeholder="In seconds">
+                            <p th:if="${#fields.hasErrors('duration')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.duration}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Start Station</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" th:field="${rideFilterDto.startStation}">
+                            <p th:if="${#fields.hasErrors('startStation')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.startStation}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">End Station</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" th:field="${rideFilterDto.endStation}">
+                            <p th:if="${#fields.hasErrors('endStation')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.endStation}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Class</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" th:field="${rideFilterDto.rideClass}">
+                                <option value="Any">Any</option>
+                                <option value="Economy">Economy</option>
+                                <option value="Business">Business</option>
+                            </select>
+                            <p th:if="${#fields.hasErrors('rideClass')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.rideClass}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Price</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" th:field="${rideFilterDto.price}">
+                            <p th:if="${#fields.hasErrors('price')}" th:errorclass="text-danger"
+                               th:errors="${rideFilterDto.price}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 offset-sm-4 d-grid">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                        <div class="col-sm-4 d-grid">
+                            <a class="btn btn-outline-danger" href="/rides" role="button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${ridePage != null and ridePage.content != null}">
+            <h2 class="text-center my-4">Filter Result</h2>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>User Number</th>
+                    <th>Auth Type</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Duration</th>
+                    <th>Start Station</th>
+                    <th>End Station</th>
+                    <th>Class</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ride : ${ridePage.content}">
+                    <td><a class="hover-underline-animation" th:href="@{/users/{userNum}(userNum=${ride.userNum})}"
+                           th:text="${ride.userNum}"></a></td>
+                    <td th:text="${ride.authType}"></td>
+                    <td th:text="${ride.startTime}"></td>
+                    <td th:text="${ride.endTime}"></td>
+                    <td th:text="${ride.duration}+'s'"></td>
+                    <td th:text="${ride.startStation}"></td>
+                    <td th:text="${ride.endStation}"></td>
+                    <td th:text="${ride.rideClass}"></td>
+                    <td th:text="'¥' + ${ride.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page Nav">
+                <div class="text-center mt-3"><span
+                        th:text="'Page ' + ${currentPage + 1} + ' of ' + ${ridePage.totalPages}"></span></div>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${ridePage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/rides/filter(page=${currentPage - 1}, size=${pageSize})}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="${ridePage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/rides/filter(page=${currentPage + 1}, size=${pageSize})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main><!-- End Main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright: <strong><span> Shenzhen Metro Group Co.,Ltd.</span></strong> All Rights Reserved.
+        </div>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/assets/vendor/aos/aos.js}"></script>
+
+<!-- Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
+
+

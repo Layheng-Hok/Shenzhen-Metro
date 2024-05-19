@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    "use strict";
+    // "use strict";
 
     /**
      * Mobile nav toggle
@@ -139,4 +139,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setInterval(bounceShenzhen, 3000);
 });
-
