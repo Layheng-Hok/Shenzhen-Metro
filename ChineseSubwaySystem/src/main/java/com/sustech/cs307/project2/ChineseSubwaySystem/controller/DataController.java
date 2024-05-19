@@ -38,9 +38,6 @@ public class DataController {
     private RideRepository rideRepository;
 
     @Autowired
-    private RidePaginationRepository ridePaginationRepository;
-
-    @Autowired
     private RideService rideService;
 
     @Autowired
