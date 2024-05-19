@@ -116,7 +116,7 @@
                         <div class="col-sm-8">
                             <input type="text" id="busLine" class="form-control" th:field="*{busLine}" required>
                             <p th:if="${#fields.hasErrors('busLine')}" class="text-danger"
-                               th:errors="*{busLine}"></p>/p>
+                               th:errors="${busExitInfoDto.busLine}"></p>/p>
                         </div>
                     </div>
 
@@ -125,7 +125,7 @@
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                         <div class="col-sm-4 d-grid">
-                            <a class="btn btn-outline-danger" th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}"role="button">Cancel</a>
+                            <a class="btn btn-outline-danger" th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}" role="button">Cancel</a>
                         </div>
                     </div>
 

@@ -21,7 +21,7 @@ public class BusController {
     @Autowired
     private BusExitInfoRepository busExitInfoRepository;
 
-    private String currentStationName;
+    private String currentStation;
 
     @GetMapping({"", "/"})
     public String showBusesListPage(@RequestParam("englishName") String stationName, Model model) {
@@ -55,10 +55,9 @@ public class BusController {
                             @SessionAttribute("totalBusesToAdd") Integer totalBusesToAdd,
                             @SessionAttribute("busesAdded") Integer busesAdded) {
 
-        System.out.println(busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent());
         if (busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
             bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
-            return "redirect:/buses/create?englishName=" + busExitInfoDto.getStationName();
+            return "buses/create_bus";
         }
 
         BusExitInfo busExitInfo = new BusExitInfo();
@@ -102,10 +101,15 @@ public class BusController {
 
     @Transactional
     @PostMapping("/update")
-    public String updateBus(Model model, @RequestParam long id, @Valid @ModelAttribute BusExitInfoDto busExitInfoDto) {
+    public String updateBus(Model model, @RequestParam long id, @Valid @ModelAttribute BusExitInfoDto busExitInfoDto, BindingResult bindingResult) {
         try {
             BusExitInfo busExitInfo = busExitInfoRepository.findById(id).get();
             model.addAttribute("busExitInfo", busExitInfo);
+
+            if (busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
+                bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
+                return "buses/create_bus";
+            }
 
             busExitInfo.setStationName(busExitInfoDto.getStationName());
             busExitInfo.setExitGate(busExitInfoDto.getExit());
@@ -126,23 +130,22 @@ public class BusController {
             busExitInfo = busExitInfoRepository.findById(id).orElse(null);
             if (busExitInfo != null) {
                 busExitInfoRepository.delete(busExitInfo);
-                model.addAttribute("successMessage", "Bus removed successfully.");
+                model.addAttribute("successMessage", "Line removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Bus not found.");
+                model.addAttribute("errorMessage", "Line not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Bus cannot be removed due to foreign key constraint.");
+            model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
         }
 
-
         if (busExitInfo != null) {
-            currentStationName = busExitInfo.getStationName();
+            currentStation = busExitInfo.getStationName();
             List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(busExitInfo.getStationName());
             model.addAttribute("busInfoList", busInfoList);
             return "buses/index";
         } else {
-            List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(currentStationName);
+            List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(currentStation);
             model.addAttribute("busInfoList", busInfoList);
             return "buses/index";
         }
