@@ -62,6 +62,10 @@ public class LineController {
             bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
         }
 
+        if (lineRepository.findByLineName(lineDto.getLineName()) != null) {
+            bindingResult.addError(new FieldError("lineDto", "lineName", "Line already exists."));
+        }
+
         if (bindingResult.hasErrors()) {
             return "lines/create_line";
         }

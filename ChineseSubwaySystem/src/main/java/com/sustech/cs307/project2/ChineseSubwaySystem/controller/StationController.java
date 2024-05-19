@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,19 @@ public class StationController {
         if (bindingResult.hasErrors()) {
             return "stations/create_station";
         }
+
+        if (stationRepository.findById(stationDto.getEnglishName()).isPresent()) {
+            bindingResult.addError(new FieldError("stationDto", "englishName", "Station already exists."));
+        }
+
+        if (stationRepository.findByChineseName(stationDto.getChineseName()).isPresent()) {
+            bindingResult.addError(new FieldError("stationDto", "chineseName", "Station already exists."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "stations/create_station";
+        }
+
         Station station = new Station();
         station.setEnglishName(stationDto.getEnglishName());
         station.setChineseName(stationDto.getChineseName());
