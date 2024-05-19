@@ -50,6 +50,12 @@ public class DataController {
     @Autowired
     private PassengerRepository passengerRepository;
 
+    @Autowired
+    private BusExitInfoRepository busExitInfoRepository;
+
+    @Autowired
+    private LandmarkExitInfoRepository landmarkExitInfoRepository;
+
     @GetMapping("/stations")
     public String showStationListPage(Model model) {
         List<Station> stations = stationRepository.findAll();
@@ -142,13 +148,26 @@ public class DataController {
         return "stations/index";
     }
 
+    @GetMapping("/buses")
+    public String showBusesListPage(@RequestParam("englishName") String stationName, Model model) {
+        List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(stationName);
+        model.addAttribute("busInfoList", busInfoList);
+        return "buses/index";
+    }
+
+    @GetMapping("/landmarks")
+    public String showLandmarksListPage(@RequestParam("englishName") String stationName, Model model) {
+        List<LandmarkExitInfo> landmarkInfoList = landmarkExitInfoRepository.findByStationName(stationName);
+        model.addAttribute("landmarkInfoList", landmarkInfoList);
+        return "landmarks/index";
+    }
+
     @GetMapping("/lines")
     public String showLineListPage(Model model) {
         List<Line> lines = lineRepository.findAllOrderedByName();
         model.addAttribute("lines", lines);
         return "lines/index";
     }
-
 
     @GetMapping("lines/create")
     public String showCreateLinePage(Model model) {

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>SZMC Stations</title>
+    <title>Landmark Information</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
@@ -68,7 +68,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
-                <h2><span>Stations</span></h2>
+                <h2><span>Landmark Information</span></h2>
             </div>
         </div>
     </div>
@@ -81,50 +81,22 @@
             <p th:text="${successMessage}"></p>
         </div>
 
-        <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-
-        <a href="/stations/create" class="btn btn-outline-success">Add a Station</h2></a>
+        <a href="/stations" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
 
         <table class="table">
             <thead>
             <tr>
-                <th>English Name</th>
-                <th>Chinese Name</th>
-                <th>District</th>
-                <th>Intro</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th style="width: 30%;">Station Name</th>
+                <th style="width: 30%;">Exit Gate</th>
+                <th style="width: 40%;">Landmark</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr th:each="station: ${stations}">
-                <td th:text="${station.englishName}"></td>
-                <td th:text="${station.chineseName}"></td>
-                <td th:text="${station.district}"></td>
-                <td>
-                    <div style="max-height: 100px; overflow-y: auto;">
-                        <p th:text="${station.intro}"></p>
-                    </div>
-                </td>
-                <td th:text="${station.status}"></td>
-
-                <td style="white-space: nowrap">
-                    <a class="btn btn-outline-warning btn-sm mb-1"
-                       th:href="@{/stations/update(englishName=${station.englishName})}"
-                       onclick="return confirm('Are you sure that you want to continue?')">Update</a>
-                    <a class="btn btn-outline-danger btn-sm mb-1"
-                       th:href="@{/stations/remove(englishName=${station.englishName})}"
-                       onclick="return confirm('Are you sure that you want to continue?')">Remove</a>
-                    <div>
-                        <a class="btn btn-outline-info btn-sm mb-1"
-                           th:href="@{/buses(englishName=${station.englishName})}">View Buses</a>
-                    </div>
-                    <div>
-                        <a class="btn btn-outline-info btn-sm"
-                           th:href="@{/landmarks(englishName=${station.englishName})}">View Landmarks</a>
-                    </div>
-                </td>
+            <tr th:each="landmarkInfo: ${landmarkInfoList}">
+                <td th:text="${landmarkInfo.stationName}"></td>
+                <td th:text="${landmarkInfo.exitGate}"></td>
+                <td th:text="${landmarkInfo.landmark}"></td>
             </tr>
             </tbody>
         </table>
@@ -148,7 +120,7 @@
 
 <script th:if="${errorMessage}">
     window.onload = function () {
-        alert("Station cannot be removed due to foreign key constraint.");
+        alert("Bus info cannot be loaded.");
         window.location.href = "/stations";
     };
 </script>
