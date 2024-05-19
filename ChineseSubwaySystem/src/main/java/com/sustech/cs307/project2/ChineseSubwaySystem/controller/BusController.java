@@ -2,7 +2,6 @@ package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
 import com.sustech.cs307.project2.ChineseSubwaySystem.model.BusExitInfo;
 import com.sustech.cs307.project2.ChineseSubwaySystem.model.BusExitInfoDto;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Line;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.BusExitInfoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -21,6 +20,8 @@ import java.util.List;
 public class BusController {
     @Autowired
     private BusExitInfoRepository busExitInfoRepository;
+
+    private String currentStationName;
 
     @GetMapping({"", "/"})
     public String showBusesListPage(@RequestParam("englishName") String stationName, Model model) {
@@ -54,6 +55,7 @@ public class BusController {
                             @SessionAttribute("totalBusesToAdd") Integer totalBusesToAdd,
                             @SessionAttribute("busesAdded") Integer busesAdded) {
 
+        System.out.println(busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent());
         if (busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
             bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
             return "redirect:/buses/create?englishName=" + busExitInfoDto.getStationName();
@@ -124,18 +126,25 @@ public class BusController {
             busExitInfo = busExitInfoRepository.findById(id).orElse(null);
             if (busExitInfo != null) {
                 busExitInfoRepository.delete(busExitInfo);
-                model.addAttribute("successMessage", "Line removed successfully.");
+                model.addAttribute("successMessage", "Bus removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Line not found.");
+                model.addAttribute("errorMessage", "Bus not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
+            model.addAttribute("errorMessage", "Bus cannot be removed due to foreign key constraint.");
         }
 
-        assert busExitInfo != null;
-        List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(busExitInfo.getStationName());
-        model.addAttribute("busInfoList", busInfoList);
-        return "buses/index";
+
+        if (busExitInfo != null) {
+            currentStationName = busExitInfo.getStationName();
+            List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(busExitInfo.getStationName());
+            model.addAttribute("busInfoList", busInfoList);
+            return "buses/index";
+        } else {
+            List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(currentStationName);
+            model.addAttribute("busInfoList", busInfoList);
+            return "buses/index";
+        }
     }
 }
