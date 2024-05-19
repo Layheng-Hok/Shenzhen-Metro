@@ -8,6 +8,7 @@
     <title>SZMC Rides</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+
     <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
 
     <!-- Vendor CSS Files -->
@@ -27,7 +28,7 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
-        <a href="/" class="logo d-flex align-items-center  me-auto me-lg=0">
+        <a href="/" class="logo d-flex align-items-center  me-auto me-lg-0">
             <img th:src="@{/assets/img/logo.png}" alt="">
             <h1>SZMC</h1>
         </a>
@@ -35,20 +36,21 @@
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <li class="dropdown"><a href="#" class="active"><span>Services</span> <i
+                        class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
                         <li><a href="/stations">Stations</a></li>
                         <li><a href="/lines">Lines</a></li>
                         <li><a href="/lineDetails">Line Details</a></li>
-                        <li class="dropdown"><a href="#" class="active"><span>Rides</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                        <li class="dropdown"><a href="#" class="active"><span>Rides</span> <i
+                                class="bi bi-chevron-down dropdown-indicator"></i></a>
                             <ul>
-                                <li><a href="/rides/create">Board</a></li>
+                                <li><a href="/rides/create" class="active">Board</a></li>
                                 <li><a href="/ongoingRides">Exit</a></li>
-                                <li><a href="/rides" class="active">Ride Record</a></li>
+                                <li><a href="/rides">Ride Record</a></li>
                             </ul>
                         </li>
                     </ul>
-                </li>
             </ul>
         </nav><!-- .navbar -->
 
@@ -220,3 +222,4 @@
 </body>
 
 </html>
+
