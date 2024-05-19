@@ -168,6 +168,7 @@ public class LineController {
             System.out.println("Exception: " + ex.getMessage());
             model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
         }
+
         List<Line> lines = lineRepository.findAll();
         model.addAttribute("lines", lines);
         return "lines/index";

@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +93,6 @@ public class LineDetailController {
             bindingResult.addError(new FieldError("lineDetailDto", "stationName", "Station not found."));
         }
 
-
         if (bindingResult.hasErrors()) {
             return "lineDetails/create_line_detail";
         }
@@ -172,8 +170,9 @@ public class LineDetailController {
             lineDetailRepository.delete(lineDetail);
             lineDetailRepository.updateStationOrderAfterDelete(lineName, stationOrder);
             model.addAttribute("successMessage", "Station removed successfully.");
-        } else
+        } else {
             model.addAttribute("errorMessage", "Station not found.");
+        }
 
         List<LineDetail> lineDetails = lineDetailRepository.findAll();
         model.addAttribute("lineDetails", lineDetails);

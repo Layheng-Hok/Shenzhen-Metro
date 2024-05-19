@@ -92,7 +92,7 @@
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Start Time <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input class="form-control" th:field="${lineDto.startTime}" placeholder="hh:mm:ss">
+                            <input class="form-control" th:field="${lineDto.startTime}" placeholder="hh:mm:ss" required>
                             <p th:if="${#fields.hasErrors('startTime')}" th:errorclass="text-danger"
                                th:errors="${lineDto.startTime}"></p>
                         </div>
@@ -101,7 +101,7 @@
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">End Time <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input class="form-control" th:field="${lineDto.endTime}" placeholder="hh:mm:ss">
+                            <input class="form-control" th:field="${lineDto.endTime}" placeholder="hh:mm:ss" required>
                             <p th:if="${#fields.hasErrors('endTime')}" th:errorclass="text-danger"
                                th:errors="${lineDto.endTime}"></p>
                         </div>
@@ -128,7 +128,7 @@
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">First Opening <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input class="form-control" th:field="${lineDto.firstOpening}" placeholder="yyyy-mm-dd">
+                            <input class="form-control" th:field="${lineDto.firstOpening}" placeholder="yyyy-mm-dd" required>
                             <p th:if="${#fields.hasErrors('firstOpening')}" th:errorclass="text-danger"
                                th:errors="${lineDto.firstOpening}"></p>
                         </div>
