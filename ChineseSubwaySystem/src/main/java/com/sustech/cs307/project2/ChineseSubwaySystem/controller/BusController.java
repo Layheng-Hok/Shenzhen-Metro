@@ -37,8 +37,9 @@ public class BusController {
     public String showBusCreatePage(@RequestParam(required = false) Integer numBuses, @RequestParam("englishName") String stationName, Model model,
                                     @SessionAttribute(name = "totalBusesToAdd", required = false) Integer totalBusesToAdd,
                                     @SessionAttribute(name = "busesAdded", required = false) Integer busesAdded) {
-        if (stationName == null || stationName.isEmpty())
+        if (stationName == null || stationName.isEmpty()) {
             stationName = currentStation;
+        }
 
         if (numBuses != null) {
             model.addAttribute("totalBusesToAdd", numBuses);
@@ -56,9 +57,14 @@ public class BusController {
 
     @Transactional
     @PostMapping("/create")
-    public String createBus(@ModelAttribute BusExitInfoDto busExitInfoDto, Model model, BindingResult bindingResult,
-                            @SessionAttribute("totalBusesToAdd") Integer totalBusesToAdd,
+    public String createBus(@Valid @ModelAttribute BusExitInfoDto busExitInfoDto, BindingResult bindingResult,
+                            Model model, @SessionAttribute("totalBusesToAdd") Integer totalBusesToAdd,
                             @SessionAttribute("busesAdded") Integer busesAdded) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("busExitInfoDto", busExitInfoDto);
+            return "buses/create_bus";
+        }
 
         if (busExitInfoRepository.findByStationNameAndExitGateAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getExitGate(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
             bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
@@ -83,6 +89,7 @@ public class BusController {
             return "redirect:/buses?englishName=" + busExitInfoDto.getStationName();
         }
     }
+
 
     @GetMapping("/update")
     public String showUpdateBusPage(Model model, @RequestParam long id) {
@@ -111,9 +118,13 @@ public class BusController {
             BusExitInfo busExitInfo = busExitInfoRepository.findById(id).get();
             model.addAttribute("busExitInfo", busExitInfo);
 
+            if (bindingResult.hasErrors()) {
+                return "buses/update_bus";
+            }
+
             if (busExitInfoRepository.findByStationNameAndExitGateAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getExitGate(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
                 bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
-                return "buses/create_bus";
+                return "buses/update_bus";
             }
 
             busExitInfo.setStationName(busExitInfoDto.getStationName());

@@ -56,10 +56,21 @@ public class LandmarkController {
 
     @Transactional
     @PostMapping("/create")
-    public String createLandmark(@ModelAttribute LandmarkExitInfoDto landmarkExitInfoDto, Model model, BindingResult bindingResult,
+    public String createLandmark(@Valid @ModelAttribute LandmarkExitInfoDto landmarkExitInfoDto,
+                                 BindingResult bindingResult,
+                                 Model model,
                                  @SessionAttribute("totalLandmarksToAdd") Integer totalLandmarksToAdd,
                                  @SessionAttribute("landmarksAdded") Integer landmarksAdded) {
-        if (landmarkExitInfoRepository.findByStationNameAndExitGateAndLandmark(landmarkExitInfoDto.getStationName(), landmarkExitInfoDto.getExitGate(), landmarkExitInfoDto.getLandmark()).isPresent()) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("landmarkExitInfoDto", landmarkExitInfoDto);
+            return "landmarks/create_landmark";
+        }
+
+        if (landmarkExitInfoRepository.findByStationNameAndExitGateAndLandmark(
+                landmarkExitInfoDto.getStationName(),
+                landmarkExitInfoDto.getExitGate(),
+                landmarkExitInfoDto.getLandmark()).isPresent()) {
             bindingResult.addError(new FieldError("landmarkExitInfoDto", "landmark", "Landmark already exists."));
             return "landmarks/create_landmark";
         }
@@ -81,6 +92,7 @@ public class LandmarkController {
             return "redirect:/landmarks?englishName=" + landmarkExitInfoDto.getStationName();
         }
     }
+
 
     @GetMapping("/update")
     public String showUpdateLandmarkPage(Model model, @RequestParam long id) {
@@ -107,6 +119,10 @@ public class LandmarkController {
         try {
             LandmarkExitInfo landmarkExitInfo = landmarkExitInfoRepository.findById(id).get();
             model.addAttribute("landmarkExitInfo", landmarkExitInfo);
+
+            if (bindingResult.hasErrors()) {
+                return "landmarks/update_landmark";
+            }
 
             if (landmarkExitInfoRepository.findByStationNameAndExitGateAndLandmark(landmarkExitInfoDto.getStationName(), landmarkExitInfoDto.getExitGate(), landmarkExitInfoDto.getLandmark()).isPresent()) {
                 bindingResult.addError(new FieldError("landmarkExitInfoDto", "landmark", "Landmark already exists."));

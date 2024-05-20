@@ -95,8 +95,10 @@
                         <label for="exitGate" class="col-sm-4 col-form-label">Exit Gate <span
                                 class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="exitGate" class="form-control" th:field="*{exitGate}" required>
-                            <p th:if="${#fields.hasErrors('exitGate')}" class="text-danger" th:errors="*{exitGate}"></p>
+                            <input type="text" id="exitGate" class="form-control" th:field="${busExitInfoDto.exitGate}"
+                                   required>
+                            <p th:if="${#fields.hasErrors('exitGate')}" class="text-danger"
+                               th:errors="${busExitInfoDto.exitGate}"></p>
                         </div>
                     </div>
 
@@ -104,9 +106,10 @@
                         <label for="busName" class="col-sm-4 col-form-label">Bus Name <span
                                 class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="busName" class="form-control" th:field="*{busName}" required>
+                            <input type="text" id="busName" class="form-control" th:field="${busExitInfoDto.busName}"
+                                   required>
                             <p th:if="${#fields.hasErrors('busName')}" class="text-danger"
-                               th:errors="*{busName}"></p>
+                               th:errors="${busExitInfoDto.busName}"></p>
                         </div>
                     </div>
 
@@ -114,9 +117,10 @@
                         <label for="busLine" class="col-sm-4 col-form-label">Bus Line <span
                                 class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="busLine" class="form-control" th:field="*{busLine}" required>
+                            <input type="text" id="busLine" class="form-control" th:field="${busExitInfoDto.busLine}"
+                                   required>
                             <p th:if="${#fields.hasErrors('busLine')}" class="text-danger"
-                               th:errors="${busExitInfoDto.busLine}"></p>/p>
+                               th:errors="${busExitInfoDto.busLine}"></p>
                         </div>
                     </div>
 
@@ -125,7 +129,8 @@
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                         <div class="col-sm-4 d-grid">
-                            <a class="btn btn-outline-danger" th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}" role="button">Cancel</a>
+                            <a class="btn btn-outline-danger"
+                               th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}" role="button">Cancel</a>
                         </div>
                     </div>
 

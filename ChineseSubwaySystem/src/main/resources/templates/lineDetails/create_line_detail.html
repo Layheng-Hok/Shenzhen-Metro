@@ -74,7 +74,7 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-      <div class="row">
+        <div class="row">
             <div class="col-md-4 mb-3">
                 <a href="/lineDetails" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
             </div>
@@ -83,26 +83,33 @@
 
                 <form method="post" th:object="${lineDetailDto}">
                     <div class="row mb-3">
-                        <label for="lineName" class="col-sm-4 col-form-label">Line Name <span class="red-asterisk">*</span></label>
+                        <label for="lineName" class="col-sm-4 col-form-label">Line Name <span
+                                class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="lineName" class="form-control" th:field="${lineDetailDto.lineName}" required>
-                            <p th:if="${#fields.hasErrors('lineName')}" class="text-danger" th:errors="${lineDetailDto.lineName}"></p>
+                            <input type="text" id="lineName" class="form-control" th:field="${lineDetailDto.lineName}"
+                                   required>
+                            <p th:if="${#fields.hasErrors('lineName')}" class="text-danger"
+                               th:errors="${lineDetailDto.lineName}"></p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <label for="stationName" class="col-sm-4 col-form-label">Station Name <span class="red-asterisk">*</span></label>
+                        <label for="stationName" class="col-sm-4 col-form-label">Station Name <span
+                                class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="stationName" class="form-control" th:field="${lineDetailDto.stationName}" required>
+                            <input type="text" id="stationName" class="form-control"
+                                   th:field="${lineDetailDto.stationName}" required>
                             <p th:if="${#fields.hasErrors('stationName')}" class="text-danger"
                                th:errors="${lineDetailDto.stationName}"></p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <label for="stationOrder" class="col-sm-4 col-form-label">Station Order <span class="red-asterisk">*</span></label>
+                        <label for="stationOrder" class="col-sm-4 col-form-label">Station Order <span
+                                class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="number" id="stationOrder" class="form-control" th:field="${lineDetailDto.stationOrder}"
+                            <input type="number" id="stationOrder" class="form-control"
+                                   th:field="${lineDetailDto.stationOrder}"
                                    min="1" required>
                             <p th:if="${#fields.hasErrors('stationOrder')}" class="text-danger"
                                th:errors="${lineDetailDto.stationOrder}"></p>
