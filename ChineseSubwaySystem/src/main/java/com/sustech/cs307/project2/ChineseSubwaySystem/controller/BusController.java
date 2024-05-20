@@ -24,7 +24,9 @@ public class BusController {
     private String currentStation;
 
     @GetMapping({"", "/"})
-    public String showBusesListPage(@RequestParam("englishName") String stationName, Model model) {
+    public String showBusListPage(@RequestParam("englishName") String stationName, Model model) {
+        if (stationName == null || stationName.isEmpty())
+            stationName = currentStation;
         List<BusExitInfo> busInfoList = busExitInfoRepository.findByStationName(stationName);
         model.addAttribute("busInfoList", busInfoList);
         model.addAttribute("stationName", stationName);
@@ -32,9 +34,12 @@ public class BusController {
     }
 
     @GetMapping("/create")
-    public String showLineDetailCreatePage(@RequestParam(required = false) Integer numBuses, @RequestParam("englishName") String stationName, Model model,
-                                           @SessionAttribute(name = "totalBusesToAdd", required = false) Integer totalBusesToAdd,
-                                           @SessionAttribute(name = "busesAdded", required = false) Integer busesAdded) {
+    public String showBusCreatePage(@RequestParam(required = false) Integer numBuses, @RequestParam("englishName") String stationName, Model model,
+                                    @SessionAttribute(name = "totalBusesToAdd", required = false) Integer totalBusesToAdd,
+                                    @SessionAttribute(name = "busesAdded", required = false) Integer busesAdded) {
+        if (stationName == null || stationName.isEmpty())
+            stationName = currentStation;
+
         if (numBuses != null) {
             model.addAttribute("totalBusesToAdd", numBuses);
             model.addAttribute("busesAdded", 0);
@@ -130,13 +135,13 @@ public class BusController {
             busExitInfo = busExitInfoRepository.findById(id).orElse(null);
             if (busExitInfo != null) {
                 busExitInfoRepository.delete(busExitInfo);
-                model.addAttribute("successMessage", "Line removed successfully.");
+                model.addAttribute("successMessage", "Bus removed successfully.");
             } else {
-                model.addAttribute("errorMessage", "Line not found.");
+                model.addAttribute("errorMessage", "Bus not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
+            model.addAttribute("errorMessage", "Bus cannot be removed due to foreign key constraint.");
         }
 
         if (busExitInfo != null) {
