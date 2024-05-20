@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>SZMC Buses</title>
+    <title>SZMC Landmarks</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <link rel="icon" type="image/x-icon" th:href="@{/assets/img/logo.png}">
@@ -65,7 +65,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
-                <h2><span>CRUD Buses</span></h2>
+                <h2><span>CRUD Landmarks</span></h2>
             </div>
         </div>
     </div>
@@ -76,18 +76,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3">
-                <a th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}" class="btn btn-outline-secondary"><i
+                <a th:href="'/landmarks/?englishName=' + ${landmarkExitInfoDto.stationName}" class="btn btn-outline-secondary"><i
                         class="bi bi-arrow-left"></i></a>
             </div>
             <div class="col-md-8 mx-auto rounded border p-4 m-4">
-                <h2 class="text-center mb-5">New Bus</h2>
+                <h2 class="text-center mb-5">New Landmark</h2>
 
-                <form method="post" th:object="${busExitInfoDto}">
+                <form method="post" th:object="${landmarkExitInfoDto}">
                     <div class="row mb-3">
                         <label class="col-sm-4 col-form-label">Station Name</label>
                         <div class="col-sm-8">
-                            <input readonly class="form-control-plaintext" th:value="${busExitInfoDto.stationName}"
-                                   th:field="${busExitInfoDto.stationName}">
+                            <input readonly class="form-control-plaintext" th:value="${landmarkExitInfoDto.stationName}"
+                                   th:field="${landmarkExitInfoDto.stationName}">
                         </div>
                     </div>
 
@@ -101,22 +101,12 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="busName" class="col-sm-4 col-form-label">Bus Name <span
+                        <label for="landmark" class="col-sm-4 col-form-label">Landmark <span
                                 class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="busName" class="form-control" th:field="*{busName}" required>
-                            <p th:if="${#fields.hasErrors('busName')}" class="text-danger"
-                               th:errors="*{busName}"></p>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="busLine" class="col-sm-4 col-form-label">Bus Line <span
-                                class="red-asterisk">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" id="busLine" class="form-control" th:field="*{busLine}" required>
-                            <p th:if="${#fields.hasErrors('busLine')}" class="text-danger"
-                               th:errors="${busExitInfoDto.busLine}"></p>/p>
+                            <input type="text" id="landmark" class="form-control" th:field="*{landmark}" required>
+                            <p th:if="${#fields.hasErrors('landmark')}" class="text-danger"
+                               th:errors="${landmarkExitInfoDto.landmark}"></p>/p>
                         </div>
                     </div>
 
@@ -125,7 +115,7 @@
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                         <div class="col-sm-4 d-grid">
-                            <a class="btn btn-outline-danger" th:href="'/buses/?englishName=' + ${busExitInfoDto.stationName}" role="button">Cancel</a>
+                            <a class="btn btn-outline-danger" th:href="'/landmarks/?englishName=' + ${landmarkExitInfoDto.stationName}" role="button">Cancel</a>
                         </div>
                     </div>
 

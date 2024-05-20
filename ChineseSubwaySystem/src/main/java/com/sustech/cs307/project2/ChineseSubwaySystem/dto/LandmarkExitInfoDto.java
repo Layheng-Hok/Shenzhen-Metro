@@ -6,15 +6,12 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class BusExitInfoDto {
+public class LandmarkExitInfoDto {
     private String stationName;
 
     @NotEmpty(message = "The exit gate is required.")
     private String exitGate;
 
-    @NotEmpty(message = "The bus name is required.")
-    private String busName;
-
-    @NotEmpty(message = "The bus line is required.")
-    private String busLine;
+    @NotEmpty(message = "The landmark is required.")
+    private String landmark;
 }

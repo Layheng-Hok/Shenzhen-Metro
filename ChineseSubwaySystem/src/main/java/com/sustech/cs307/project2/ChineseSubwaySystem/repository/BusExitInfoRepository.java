@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface BusExitInfoRepository extends JpaRepository<BusExitInfo, Long> {
     List<BusExitInfo> findByStationName(String stationName);
 
-    Optional<Object> findByStationNameAndBusNameAndBusLine(String stationName, String busName, String busLine);
+    Optional<Object> findByStationNameAndExitGateAndBusNameAndBusLine(String stationName, String exitGate, String busName, String busLine);
 }

@@ -60,14 +60,14 @@ public class BusController {
                             @SessionAttribute("totalBusesToAdd") Integer totalBusesToAdd,
                             @SessionAttribute("busesAdded") Integer busesAdded) {
 
-        if (busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
+        if (busExitInfoRepository.findByStationNameAndExitGateAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getExitGate(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
             bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
             return "buses/create_bus";
         }
 
         BusExitInfo busExitInfo = new BusExitInfo();
         busExitInfo.setStationName(busExitInfoDto.getStationName());
-        busExitInfo.setExitGate(busExitInfoDto.getExit());
+        busExitInfo.setExitGate(busExitInfoDto.getExitGate());
         busExitInfo.setBusName(busExitInfoDto.getBusName());
         busExitInfo.setBusLine(busExitInfoDto.getBusLine());
         busExitInfoRepository.save(busExitInfo);
@@ -85,14 +85,14 @@ public class BusController {
     }
 
     @GetMapping("/update")
-    public String showUpdateLinePage(Model model, @RequestParam long id) {
+    public String showUpdateBusPage(Model model, @RequestParam long id) {
         try {
             BusExitInfo busExitInfo = busExitInfoRepository.findById(id).get();
             model.addAttribute("busExitInfo", busExitInfo);
 
             BusExitInfoDto busExitInfoDto = new BusExitInfoDto();
             busExitInfoDto.setStationName(busExitInfo.getStationName());
-            busExitInfoDto.setExit(busExitInfo.getExitGate());
+            busExitInfoDto.setExitGate(busExitInfo.getExitGate());
             busExitInfoDto.setBusName(busExitInfo.getBusName());
             busExitInfoDto.setBusLine(busExitInfo.getBusLine());
 
@@ -111,13 +111,13 @@ public class BusController {
             BusExitInfo busExitInfo = busExitInfoRepository.findById(id).get();
             model.addAttribute("busExitInfo", busExitInfo);
 
-            if (busExitInfoRepository.findByStationNameAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
+            if (busExitInfoRepository.findByStationNameAndExitGateAndBusNameAndBusLine(busExitInfoDto.getStationName(), busExitInfoDto.getExitGate(), busExitInfoDto.getBusName(), busExitInfoDto.getBusLine()).isPresent()) {
                 bindingResult.addError(new FieldError("busExitInfoDto", "busLine", "Bus already exists."));
                 return "buses/create_bus";
             }
 
             busExitInfo.setStationName(busExitInfoDto.getStationName());
-            busExitInfo.setExitGate(busExitInfoDto.getExit());
+            busExitInfo.setExitGate(busExitInfoDto.getExitGate());
             busExitInfo.setBusName(busExitInfoDto.getBusName());
             busExitInfo.setBusLine(busExitInfoDto.getBusLine());
             busExitInfoRepository.save(busExitInfo);

@@ -77,18 +77,47 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-        <div th:if="${successMessage != null}" class="alert alert-success" role="alert">
+        <div th:if="${successMessage != null}" class="alert alert-success" role="alert" id="successMessage">
             <p th:text="${successMessage}"></p>
         </div>
 
         <a href="/stations" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
 
+        <!-- Trigger Modal -->
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#numLandmarksModal">
+            Add Landmark(s)
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="numLandmarksModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Number of Landmarks</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="numLandmarksForm" method="get" action="" th:action="@{/landmarks/create}">
+                            <input type="hidden" id="stationNameInput" name="englishName" th:value="${param.englishName}">
+                            <div class="mb-3">
+                                <label for="numLandmarksInput" class="form-label">Enter the number of landmarks:</label>
+                                <input type="number" class="form-control" id="numLandmarksInput" name="numLandmarks"
+                                       min="1" max="10" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table class="table">
             <thead>
             <tr>
-                <th style="width: 30%;">Station Name</th>
-                <th style="width: 30%;">Exit Gate</th>
-                <th style="width: 40%;">Landmark</th>
+                <th>Station Name</th>
+                <th>Exit Gate</th>
+                <th>Landmark</th>
+                <th>Actions</th>
             </tr>
             </thead>
 
@@ -97,6 +126,14 @@
                 <td th:text="${landmarkInfo.stationName}"></td>
                 <td th:text="${landmarkInfo.exitGate}"></td>
                 <td th:text="${landmarkInfo.landmark}"></td>
+                <td style="white-space: nowrap">
+                    <a class="btn btn-outline-warning btn-sm"
+                       th:href="@{/landmarks/update(id=${landmarkInfo.landmarkExitInfoId})}"
+                       onclick="return confirm('Are you sure that you want to continue?')">Update</a>
+                    <a class="btn btn-outline-danger btn-sm"
+                       th:href="@{/landmarks/remove(id=${landmarkInfo.landmarkExitInfoId})}"
+                       onclick="return confirm('Are you sure that you want to continue?')">Remove</a>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -120,9 +157,18 @@
 
 <script th:if="${errorMessage}">
     window.onload = function () {
-        alert("Bus info cannot be loaded.");
+        alert("Landmark info cannot be loaded.");
         window.location.href = "/stations";
     };
+</script>
+
+<script>
+    document.getElementById('numLandmarksForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var numLandmarks = document.getElementById('numLandmarksInput').value;
+        var stationName = document.getElementById('stationNameInput').value;
+        window.location.href = '/landmarks/create?numLandmarks=' + numLandmarks + '&englishName=' + stationName;
+    });
 </script>
 
 <!-- Vendor JS Files -->
