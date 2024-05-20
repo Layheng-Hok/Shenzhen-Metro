@@ -4,8 +4,7 @@ import com.sustech.cs307.project2.ChineseSubwaySystem.dto.RideDto;
 import com.sustech.cs307.project2.ChineseSubwaySystem.dto.RideFilterDto;
 import com.sustech.cs307.project2.ChineseSubwaySystem.object.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.*;
-import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideService;
-import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideSpecification;
+import com.sustech.cs307.project2.ChineseSubwaySystem.service.RideService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,7 +195,7 @@ public class RideController {
             return "rides/filter_ride";
         }
 
-        Specification<Ride> spec = RideSpecification.filterRides(rideFilterDto);
+        Specification<Ride> spec = RideService.filterRides(rideFilterDto);
         Page<Ride> ridePage = rideService.getFilteredRidesPaginated(spec, page, size);
 
         model.addAttribute("ridePage", ridePage);
