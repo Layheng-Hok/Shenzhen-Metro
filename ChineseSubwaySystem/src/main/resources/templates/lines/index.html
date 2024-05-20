@@ -46,7 +46,7 @@
                                 class="bi bi-chevron-down dropdown-indicator"></i></a>
                             <ul>
                                 <li><a href="/rides/create">Board</a></li>
-                                <li><a href="/ongoingRides">Exit</a></li>
+                                <li><a href="/rides/ongoingRides">Exit</a></li>
                                 <li><a href="/rides">Ride Record</a></li>
                             </ul>
                         </li>
@@ -107,7 +107,7 @@
                 <td th:text="${line.lineName}"></td>
                 <td th:text="${line.startTime}"></td>
                 <td th:text="${line.endTime}"></td>
-                <td th:text="${line.mileage}"></td>
+                <td th:text="${line.mileage + 'km'}"></td>
                 <td th:text="${line.color}"></td>
                 <td th:text="${line.firstOpening}"></td>
                 <td>

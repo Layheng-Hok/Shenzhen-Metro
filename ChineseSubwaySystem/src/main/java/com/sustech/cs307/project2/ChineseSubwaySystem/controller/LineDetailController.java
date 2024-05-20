@@ -73,7 +73,7 @@ public class LineDetailController {
                                    @ModelAttribute("stationsAdded") Integer stationsAdded,
                                    Model model, SessionStatus sessionStatus) {
         if (bindingResult.hasErrors()) {
-            return "lineDetails/search_line_detail";
+            return "lineDetails/create_line_detail";
         }
 
         String lineName = lineDetailDto.getLineName();

@@ -120,7 +120,6 @@ public class RideController {
             rideDto.setRideClass(ride.getRideClass());
 
             model.addAttribute("rideDto", rideDto);
-
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
             return "redirect:/ongoingRides";
@@ -135,22 +134,20 @@ public class RideController {
             Ride ride = rideRepository.findById(id).get();
             model.addAttribute("ride", ride);
 
-            String userNum = rideDto.getUserNum();
             String endStation = rideDto.getEndStation();
-            String rideClass = ride.getRideClass();
-            float economyPrice = routePricingRepository.findByStartStationAndEndStation(ride.getStartStation(), rideDto.getEndStation()).getPrice();
-            float businessPrice = (float) (economyPrice + 0.5 * economyPrice);
-
-            if (rideDto.getEndStation().isEmpty()) {
-                bindingResult.addError(new FieldError("rideDto", "endStation", "End station is required."));
-                return "rides/update_ride";
-            }
 
             if (stationRepository.findById(endStation).isEmpty()) {
                 bindingResult.addError(new FieldError("rideDto", "endStation", "Station not found."));
+                return "rides/update_ride";
             } else if (!stationRepository.findById(endStation).get().getStatus().equals("Operational")) {
                 bindingResult.addError(new FieldError("rideDto", "endStation", "Station is currently not operational."));
+                return "rides/update_ride";
             }
+
+            String userNum = rideDto.getUserNum();
+            String rideClass = ride.getRideClass();
+            float economyPrice = routePricingRepository.findByStartStationAndEndStation(ride.getStartStation(), rideDto.getEndStation()).getPrice();
+            float businessPrice = (float) (economyPrice + 0.5 * economyPrice);
 
             if (userNum.length() == 9) {
                 if (rideClass.equals("Economy") && cardRepository.findById(userNum).get().getMoney() < economyPrice) {

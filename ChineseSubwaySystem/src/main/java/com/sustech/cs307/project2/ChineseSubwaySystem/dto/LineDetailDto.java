@@ -8,11 +8,11 @@ import lombok.ToString;
 @ToString
 public class LineDetailDto {
     @NotEmpty(message = "Line name is required.")
-    @Size(max = 5, message = "Line name must not exceed 5 characters.")
+    @Size(max = 50, message = "Line name must not exceed 50 characters.")
     private String lineName;
 
     @NotEmpty(message = "Station name is required.")
-    @Size(max = 50, message = "Line name must not exceed 50 characters.")
+    @Size(max = 50, message = "Station name must not exceed 50 characters.")
     private String stationName;
 
     @NotNull(message = "Station order is required.")

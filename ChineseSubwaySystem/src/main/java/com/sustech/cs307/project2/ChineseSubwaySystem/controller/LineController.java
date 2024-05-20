@@ -38,34 +38,6 @@ public class LineController {
     @Transactional
     @PostMapping("/create")
     public String createLine(@Valid @ModelAttribute LineDto lineDto, BindingResult bindingResult) {
-        if (lineDto.getLineName().length() > 5) {
-            bindingResult.addError(new FieldError("lineDto", "lineName", "Name is too long."));
-        }
-
-        if (lineDto.getStartTime() == null) {
-            bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required."));
-        }
-
-        if (lineDto.getEndTime() == null) {
-            bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required."));
-        }
-
-        if (lineDto.getColor().length() > 5) {
-            bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
-        }
-
-        if (lineDto.getFirstOpening() == null) {
-            bindingResult.addError(new FieldError("lineDto", "firstOpening", "The first opening date is required."));
-        }
-
-        if (lineDto.getUrl().length() > 100) {
-            bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
-        }
-
-        if (lineRepository.findByLineName(lineDto.getLineName()) != null) {
-            bindingResult.addError(new FieldError("lineDto", "lineName", "Line already exists."));
-        }
-
         if (bindingResult.hasErrors()) {
             return "lines/create_line";
         }
@@ -114,26 +86,6 @@ public class LineController {
         try {
             Line line = lineRepository.findById(id).get();
             model.addAttribute("line", line);
-
-            if (lineDto.getStartTime() == null) {
-                bindingResult.addError(new FieldError("lineDto", "startTime", "The start time is required."));
-            }
-
-            if (lineDto.getEndTime() == null) {
-                bindingResult.addError(new FieldError("lineDto", "endTime", "The end time is required."));
-            }
-
-            if (lineDto.getColor().length() > 20) {
-                bindingResult.addError(new FieldError("lineDto", "color", "Color is too long."));
-            }
-
-            if (lineDto.getFirstOpening() == null) {
-                bindingResult.addError(new FieldError("lineDto", "firstOpening", "The first opening date is required."));
-            }
-
-            if (lineDto.getUrl().length() > 100) {
-                bindingResult.addError(new FieldError("lineDto", "url", "URL is too long."));
-            }
 
             if (bindingResult.hasErrors()) {
                 return "lines/update_line";

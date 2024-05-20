@@ -45,7 +45,7 @@
                                 class="bi bi-chevron-down dropdown-indicator"></i></a>
                             <ul>
                                 <li><a href="/rides/create">Board</a></li>
-                                <li><a href="/ongoingRides">Exit</a></li>
+                                <li><a href="/rides/ongoingRides">Exit</a></li>
                                 <li><a href="/rides">Ride Record</a></li>
                             </ul>
                         </li>
@@ -85,27 +85,27 @@
                     <div class="row mb-3">
                         <label for="lineName" class="col-sm-4 col-form-label">Line Name <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="lineName" class="form-control" th:field="*{lineName}" required>
-                            <p th:if="${#fields.hasErrors('lineName')}" class="text-danger" th:errors="*{lineName}"></p>
+                            <input type="text" id="lineName" class="form-control" th:field="${lineDetailDto.lineName}" required>
+                            <p th:if="${#fields.hasErrors('lineName')}" class="text-danger" th:errors="${lineDetailDto.lineName}"></p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="stationName" class="col-sm-4 col-form-label">Station Name <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" id="stationName" class="form-control" th:field="*{stationName}" required>
+                            <input type="text" id="stationName" class="form-control" th:field="${lineDetailDto.stationName}" required>
                             <p th:if="${#fields.hasErrors('stationName')}" class="text-danger"
-                               th:errors="*{stationName}"></p>
+                               th:errors="${lineDetailDto.stationName}"></p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="stationOrder" class="col-sm-4 col-form-label">Station Order <span class="red-asterisk">*</span></label>
                         <div class="col-sm-8">
-                            <input type="number" id="stationOrder" class="form-control" th:field="*{stationOrder}"
+                            <input type="number" id="stationOrder" class="form-control" th:field="${lineDetailDto.stationOrder}"
                                    min="1" required>
                             <p th:if="${#fields.hasErrors('stationOrder')}" class="text-danger"
-                               th:errors="*{stationOrder}"></p>
+                               th:errors="${lineDetailDto.stationOrder}"></p>
                         </div>
                     </div>
 
