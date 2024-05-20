@@ -1,6 +1,6 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.repository;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.BusExitInfo;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.BusExitInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

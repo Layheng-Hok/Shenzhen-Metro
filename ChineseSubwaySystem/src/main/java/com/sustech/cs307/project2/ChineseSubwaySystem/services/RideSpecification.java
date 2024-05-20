@@ -1,9 +1,9 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.services;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.RideFilterDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.RideFilterDto;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Ride;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.Ride;
 
 public class RideSpecification {
 

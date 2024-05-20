@@ -1,8 +1,8 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.LineDetail;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.LineDetailDto;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.LineDetailSearchDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.LineDetail;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.LineDetailDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.LineDetailSearchDto;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineDetailRepository;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LineRepository;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.StationRepository;

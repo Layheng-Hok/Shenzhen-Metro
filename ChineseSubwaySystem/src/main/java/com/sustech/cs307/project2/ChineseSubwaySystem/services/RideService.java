@@ -1,6 +1,6 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.services;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Ride;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.Ride;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

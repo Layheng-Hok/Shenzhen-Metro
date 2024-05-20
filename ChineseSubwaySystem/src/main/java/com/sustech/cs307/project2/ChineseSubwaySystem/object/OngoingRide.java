@@ -1,4 +1,4 @@
-package com.sustech.cs307.project2.ChineseSubwaySystem.model;
+package com.sustech.cs307.project2.ChineseSubwaySystem.object;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,9 +13,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Ride {
+public class OngoingRide {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rideId;
 
     @Column(nullable = false)
@@ -27,21 +26,10 @@ public class Ride {
     @Column(nullable = false)
     private Timestamp startTime;
 
-    @Column
-    private Timestamp endTime;
-
-    @Column
-    private long duration;
 
     @Column(length = 50, nullable = false)
     private String startStation;
 
-    @Column(length = 50)
-    private String endStation;
-
     @Column(name = "class", length = 20, nullable = false)
     private String rideClass;
-
-    @Column()
-    private float price;
 }

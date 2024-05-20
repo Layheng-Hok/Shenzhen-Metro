@@ -1,7 +1,7 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Station;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.StationDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.Station;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.StationDto;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.StationRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

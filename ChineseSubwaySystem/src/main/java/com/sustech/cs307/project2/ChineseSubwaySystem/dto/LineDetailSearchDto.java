@@ -1,4 +1,4 @@
-package com.sustech.cs307.project2.ChineseSubwaySystem.model;
+package com.sustech.cs307.project2.ChineseSubwaySystem.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

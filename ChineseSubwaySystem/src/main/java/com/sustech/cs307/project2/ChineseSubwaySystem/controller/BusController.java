@@ -1,7 +1,7 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.BusExitInfo;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.BusExitInfoDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.BusExitInfo;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.BusExitInfoDto;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.BusExitInfoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

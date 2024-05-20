@@ -1,6 +1,6 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.LandmarkExitInfo;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.LandmarkExitInfo;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.LandmarkExitInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,6 +1,8 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.*;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.RideDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.dto.RideFilterDto;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.*;
 import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideService;
 import com.sustech.cs307.project2.ChineseSubwaySystem.services.RideSpecification;

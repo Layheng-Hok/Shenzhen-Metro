@@ -1,7 +1,7 @@
 package com.sustech.cs307.project2.ChineseSubwaySystem.controller;
 
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Card;
-import com.sustech.cs307.project2.ChineseSubwaySystem.model.Passenger;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.Card;
+import com.sustech.cs307.project2.ChineseSubwaySystem.object.Passenger;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.CardRepository;
 import com.sustech.cs307.project2.ChineseSubwaySystem.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;

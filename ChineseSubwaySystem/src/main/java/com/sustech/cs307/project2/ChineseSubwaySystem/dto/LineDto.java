@@ -1,10 +1,8 @@
-package com.sustech.cs307.project2.ChineseSubwaySystem.model;
+package com.sustech.cs307.project2.ChineseSubwaySystem.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.sql.Date;
