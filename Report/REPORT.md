@@ -35,7 +35,7 @@
 **Endpoint**: '/stations'   
 **Method**: 'GET'   
 **Parameters**: None    
-[![station_list]([assets/station_list.png](https://github.com/Layheng-Hok/DBMS/blob/main/Report/assets/station_list.png))](https://github.com/Layheng-Hok/DBMS/blob/main/Report/assets/station_list.png)
+![station_list]([assets/station_list.png](https://github.com/Layheng-Hok/DBMS/blob/main/Report/assets/station_list.png)
 
 
 StationController API Specification
