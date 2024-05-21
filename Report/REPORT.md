@@ -1,25 +1,19 @@
-# CS307 Principles of Database Systems - Spring 2024
-## Project 2 Report 
+# Project 2's Report of CS307 - Principles of Database Systems  (2024 Spring)
 
-### Group Members: 
 - **ZERHOUNI KHAL Jaouhara (12211456)**
 - **HOK Layheng (12210736)**
 - **Lab Session**: Tuesday (5-6)
 - **Instructor**: Dr. MA Yuxin
 
----
 
-## CONTENT
-- Contribution
-- Basic Requirements (65%)
-  - API Specification
-  - Functional Requirements
-- Advanced Requirements (30%) 
-- Conclusion
+## TABLE OF CONTENTS
+- **I. Contribution**
+- **II. Basic Requirements: API Specifications**
+- **III. Advanced Requirements**
+- **IV. Conclusion**
 
----
 
-### CONTRIBUTION
+## I. CONTRIBUTION
 
 | Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                        | Ratio |
 |----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
@@ -28,35 +22,61 @@
 
 ---
 
-### BASIC REQUIREMENTS
 
-#### API Specification
+##  II. BASIC REQUIREMENTS: API SPECIFICATIONS
 
-1. **Add, Modify, Delete a Station**
-   - **Purpose**: Manage individual station records.
-   - **Use**: Create new stations, update existing station details, or remove stations from the database.
+### 1. CRUD ON STATION
 
-2. **Add, Modify, Delete a New Line**
-   - **Purpose**: Manage subway line records.
-   - **Use**: Create new subway lines, update existing line details, or remove lines from the database.
+   - **Purpose**: Manage individual station record.
+   - **Use**: Display all stations, create new stations, update existing station details, or remove stations from the database.
+   - **API**:
+     - **Show Station List Page**: Retrieves a list of all stations and displays them on the station list page.
+  
+**Endpoint**: '/stations'   
+**Method**: 'GET'   
+**Parameters**: None    
+![station_list](assets/station_list.png)
 
-3. **Station and Line Management**
+
+StationController API Specification
+1. Show Station List Page
+Endpoint: /stations
+
+Method: GET
+
+Description: Retrieves a list of all stations and displays them on the station list page.
+
+Parameters: None
+
+Request Example: [GET /stations](http://localhost:8080/stations)
+
+Response Example (HTML Page): 
+
+
+
+
+
+
+
+
+
+1. **Station and Line Management**
    - **Purpose**: Manage the placement and removal of stations on subway lines.
    - **Use**: Place one or more stations at a specified location on a line or remove a station from a line.
 
-4. **Search Stations**
+2. **Search Stations**
    - **Purpose**: Retrieve station names based on their position relative to a specific station.
    - **Use**: Find the names of the stations that are the n-th station ahead or behind a specific station on a line.
 
-5. **Boarding Functionality**
+3. **Boarding Functionality**
    - **Purpose**: Record boarding information for passengers or cards.
    - **Use**: Record the starting station, boarding time, and passenger or card details when they board the subway.
 
-6. **Exit Functionality**
+4. **Exit Functionality**
    - **Purpose**: Record exit information for passengers or cards and calculate trip cost.
    - **Use**: Record the destination station, exit time, and calculate the price based on `Price.xlsx` when passengers or cards exit the subway.
 
-7. **View Current Boarded Passengers/Cards**
+5. **View Current Boarded Passengers/Cards**
    - **Purpose**: Display information about passengers or cards currently on board.
    - **Use**: View all information about passengers or cards who have boarded but have not yet exited at the current time.
 
