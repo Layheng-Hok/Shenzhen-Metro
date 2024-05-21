@@ -1,9 +1,9 @@
 # Project 2's Report of CS307 - Principles of Database Systems  (2024 Spring)
 
-- **ZERHOUNI KHAL Jaouhara (12211456)**
-- **HOK Layheng (12210736)**
-- **Lab Session**: Tuesday (5-6)
-- **Instructor**: Dr. MA Yuxin
+> **Contributors**: **ZERHOUNI KHAL Jaouhara** (12211456) & **HOK Layheng** (12210736)
+> **Instructor**: Dr. MA Yuxin  
+> **Lab Session**: Tuesday (5-6)
+
 
 
 ## TABLE OF CONTENTS
@@ -25,32 +25,180 @@
 
 ##  II. BASIC REQUIREMENTS: API SPECIFICATIONS
 
-### 1. CRUD ON STATION
+### 1. STATION
 
-   - **Purpose**: Manage individual station record.
-   - **Use**: Display all stations, create new stations, update existing station details, or remove stations from the database.
+   - **Purpose**: Manage station record.
+   - **Use**: Display all stations, create new stations, update existing stations' details, or remove stations from the database.
    - **API**:
      - **Show Station List Page**: Retrieves a list of all stations and displays them on the station list page.
-  
-**Endpoint**: '/stations'   
-**Method**: 'GET'   
-**Parameters**: None    
-![station_list](https://github.com/Layheng-Hok/DBMS/blob/main/Report/assets/station_list.png)
 
+        **Endpoint**: `/stations`   
+        **Method**: `GET`   
+        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Request Example**:  [GET /stations](http://localhost:8080/stations)   
+        **Response Example (HTML Page)**:   
 
-StationController API Specification
-1. Show Station List Page
-Endpoint: /stations
+        ![1_station_list](assets/1_station_list.png)
 
-Method: GET
+        **Errors**: None
 
-Description: Retrieves a list of all stations and displays them on the station list page.
+     - **Show Station Create Page**: Displays the form for creating a new station.
 
-Parameters: None
+        **Endpoint**: `/stations/create`   
+        **Method**: `GET`   
+        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Request Example**:  [GET /stations/create](http://localhost:8080/stations/create)   
+        **Response Example (HTML Form)**:   
 
-Request Example: [GET /stations](http://localhost:8080/stations)
+        ![1_new_station_form](assets/1_new_station_form.png)
 
-Response Example (HTML Page): 
+        **Errors**: None
+
+     - **Create Station**: Creates a new station with the provided details.
+
+        **Endpoint**: `/stations/create`   
+        **Method**: `POST`   
+        **Parameters**: 
+        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `englishName` (string, required), `chineseName` (string, required), `district` (string, optional), `intro` (string, optional), and `status` (string, optional)) 
+        - `bindingResult` (BindingResult: interface, used to hold the results of a validation and binding operation for a @ModelAttribute StationDto stationDto, containing errors and validation messages if any occurred during the data binding process) 
+    
+        **Request Example**:    
+        ```
+        {
+          "englishName": "Central Station",
+          "chineseName": "中央车站",
+          "district": "Nanshan",
+          "intro": "中央车站 (Central Station) has been opened to the public for commuting since June 5th, 2023.",
+          "status": "Operational"
+        }
+        ```
+ 
+        **Response Example**:   
+        ```
+        HTTP/1.1 302 Found
+        Location: redirect:/stations
+        ```
+
+        **Errors**:
+        ```
+        - 400 Bad Request: Missing or invalid parameters.
+        - 409 Conflict: Station with the same name already exists.
+        ```
+
+     - **Show Station Update Page**: Displays the form for updating the details of an existing station.
+
+        **Endpoint**: `/stations/update`   
+        **Method**: `GET`   
+        **Parameters**: `englishName` (string, the English name of the station to be updated), `model` (Model)   
+        **Request Example**:  [GET /stations/update?englishName=Ailian](http://localhost:8080/stations/update?englishName=Ailian)   
+        **Response Example (HTML Form)**:   
+
+        ![1_update_station_form](assets/1_update_station_form.png)
+
+        **Errors**:
+        ```
+        - 404 Not Found: Station not found.
+        ```
+
+     - **Update Station**: Updates the details of an existing station.
+
+        **Endpoint**: `/stations/update`   
+        **Method**: `POST`   
+        **Parameters**: 
+        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `district` (string, optional), `intro` (string, optional), and `status` (string, optional)) 
+        - `bindingResult` (BindingResult)   
+          
+        **Request Example**:    
+        ```
+        {
+          "district": "龙岗区",
+          "intro": "This is the updated intro.",
+          "status": "Closed"
+        }
+        ```   
+
+        **Response Example**:   
+        ```
+        HTTP/1.1 302 Found
+        Location: redirect:/stations
+        ```
+
+        **Errors**:
+        ```
+        - 400 Bad Request: Missing or invalid parameters.
+        ```   
+     - **Remove Station**: Removes an existing station.
+
+        **Endpoint**: `/stations/remove`   
+        **Method**: `GET`   
+        **Parameters**: `englishName` (string, required, the English name of the station to be removed), `model` (Model)   
+          
+        **Request Example**:  [GET /stations/remove?englishName=Ailian](http://localhost:8080/stations/remove?englishName=Ailian) 
+
+        **Response Example**:   
+        ```
+        Location: redirect:/stations
+        ```
+
+        **Errors**: None
+
+### 2. LINE
+
+   - **Purpose**: Manage line record.
+   - **Use**: Display all lines, create new lines, update existing lines' details, or remove lines from the database.
+   - **API**:
+     - **Show Station List Page**: Retrieves a list of all stations and displays them on the station list page.
+
+        **Endpoint**: `/stations`   
+        **Method**: `GET`   
+        **Parameters**: None   
+        **Request Example**:  [GET /stations](http://localhost:8080/stations)   
+        **Response Example (HTML Page)**:   
+
+        ![1_station_list](assets/1_station_list.png)
+
+        **Errors**: None
+
+     - **Show Station Create Page**: Displays the form for creating a new station.
+
+        **Endpoint**: `/stations/create`   
+        **Method**: `GET`   
+        **Parameters**: None   
+        **Request Example**:  [GET /stations/create](http://localhost:8080/stations/create)   
+        **Response Example (HTML Form)**:   
+
+        ![1_new_station_form](assets/1_new_station_form.png)
+
+        **Errors**: None
+
+     - **Create Station**: Creates a new station with the provided details.
+
+        **Endpoint**: `/stations/create`   
+        **Method**: `POST`   
+        **Parameters**: `englishName` (string, required), `chineseName` (string, required), `district` (string, optional), `intro` (string, optional), `status` (string, optional)   
+        **Request Example**:    
+        ```
+        {
+          "englishName": "Central Station",
+          "chineseName": "中央车站",
+          "district": "南山区",
+          "intro": "中央车站 (Central Station) has been opened to the public for commuting since June 5th, 2023.",
+          "status": "Operational"
+        }
+        ```
+ 
+        **Response Example (HTML Page)**:   
+        ```
+        HTTP/1.1 302 Found
+        Location: /stations
+        ```
+
+        **Errors**:
+        ```
+        - 400 Bad Request: Missing or invalid parameters.
+        - 409 Conflict: Station with the same name already exists.
+        ``` 
+
 
 
 
