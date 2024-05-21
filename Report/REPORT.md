@@ -1,6 +1,6 @@
 # Project 2's Report of CS307 - Principles of Database Systems  (2024 Spring)
 
-> **Contributors**: **ZERHOUNI KHAL Jaouhara** (12211456) & **HOK Layheng** (12210736)
+> **Contributors**: **ZERHOUNI KHAL Jaouhara** (12211456) & **HOK Layheng** (12210736)  
 > **Instructor**: Dr. MA Yuxin  
 > **Lab Session**: Tuesday (5-6)
 
