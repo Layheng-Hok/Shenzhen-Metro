@@ -19,6 +19,7 @@ public class LineController {
     @Autowired
     private LineRepository lineRepository;
 
+
     @GetMapping({"", "/"})
     public String showLineListPage(Model model) {
         List<Line> lines = lineRepository.findAllOrderedByName();
