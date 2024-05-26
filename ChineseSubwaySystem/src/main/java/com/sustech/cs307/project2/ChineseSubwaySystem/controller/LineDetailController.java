@@ -116,7 +116,7 @@ public class LineDetailController {
     }
 
     @GetMapping("/search")
-    public String searchStation(Model model) {
+    public String showSearchStationPage(Model model) {
         LineDetailSearchDto lineDetailSearchDto = new LineDetailSearchDto();
         model.addAttribute("lineDetailSearchDto", lineDetailSearchDto);
         return "lineDetails/search_line_detail";

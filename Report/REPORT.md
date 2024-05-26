@@ -7,35 +7,35 @@
 
 
 ## TABLE OF CONTENTS
-- [**I. Contribution**](#i-contribution)
-- [**II. Basic Requirements: API Specifications**](#ii-basic-requirements-api-specifications)
-- [**III. Advanced Requirements**](#iii-advanced-requirements)
-- [**IV. Conclusion**](#iv-conclusion)
+[**I. Contribution**](#i-contribution)  
+[**II. API Specifications**](#ii-api-specifications)   
+[**III. Advanced Requirements**](#iii-advanced-requirements)  
+[**IV. Conclusion**](#iv-conclusion)
 
 
 ## I. CONTRIBUTION
 <a name="i-contribution"></a>
 | Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                        | Ratio |
 |----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
-| **ZERHOUNI KHAL Jaouhara** | - Import new data (price)<br>- CRUD on station data<br>- CRUD on the line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations buses and landmarks integration<br>- UI/UX design<br>- Report                                              | 50%   |
-| **HOK Layheng**            | - Set up project and dependencies with Maven<br>- Set up triggers and procedures<br>- Build API with Spring Boot<br>- CRUD on the line data<br>- Boarding and exiting functionalities<br>- View information about ongoing rides passengers and cards<br>- Utilize the status of stations and different ride classes<br>- Filter ride records with multi-parameter inputs and utilize pagination to handle large ride results | 50%   |
+| **ZERHOUNI KHAL Jaouhara** | - Import new data (price)<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                              | 50%   |
+| **HOK Layheng**            | - Set up project and dependencies with Maven<br>- Set up triggers and procedures<br>- Build API with Spring Boot<br>- CRUD on line data<br>- Boarding and exiting functionalities<br>- View information about ongoing rides, passengers, and cards<br>- Utilize the status of stations and different ride classes<br>- Filter ride records with multi-parameter inputs and utilize pagination to handle large ride results | 50%   |
 
 ---
 
 
-##  II. BASIC REQUIREMENTS: API SPECIFICATIONS
-<a name="ii-basic-requirements-api-specifications"></a>
+##  II. API SPECIFICATIONS
+<a name="ii-api-specifications"></a>
 
-### 1. STATION
+### 1. STATIONS
 
-   - **Purpose**: Manage station record.
-   - **Use**: Display all stations, create new stations, update existing stations' details, or remove stations from the database.
+   - **Purpose**: Manages station record.
+   - **Use**: Displays all stations, creates new stations, updates existing stations' details, and removes stations from the database.
    - **API**:
      - **Show Station List Page**: Retrieves a list of all stations and displays them on the Stations list page.
 
         **Endpoint**: `/stations`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model: interface, used to pass data from the controller to the view)   
         **Request Example**:  [GET /stations](http://localhost:8080/stations)   
         **Response Example (HTML Page)**:   
 
@@ -43,11 +43,11 @@
 
         **Errors**: None
 
-     - **Show Station Create Page**: Displays the form for creating a new station.
+     - **Show Create Station Page**: Displays the form for creating a new station.
 
         **Endpoint**: `/stations/create`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model)   
         **Request Example**:  [GET /stations/create](http://localhost:8080/stations/create)   
         **Response Example (HTML Form)**:   
 
@@ -60,7 +60,7 @@
         **Endpoint**: `/stations/create`   
         **Method**: `POST`   
         **Parameters**: 
-        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `englishName` (string, required), `chineseName` (string, required), `district` (string, optional), `intro` (string, optional), and `status` (string, optional)) 
+        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `englishName` (String, required), `chineseName` (String, required), `district` (String, optional), `intro` (String, optional), and `status` (String, optional)) 
         - `bindingResult` (BindingResult: interface, used to hold the results of a validation and binding operation for a @ModelAttribute StationDto stationDto, containing errors and validation messages if any occurred during the data binding process) 
     
         **Request Example**:    
@@ -80,23 +80,23 @@
         Location: redirect:/stations
         ```
 
-        **Errors**:
+        **Errors** (handled):
         ```
         - 400 Bad Request: Missing or invalid parameters.
         - 409 Conflict: Station with the same name already exists.
         ```
 
-     - **Show Station Update Page**: Displays the form for updating the details of an existing station.
+     - **Show Update Station Page**: Displays the form for updating the details of an existing station.
 
         **Endpoint**: `/stations/update`   
         **Method**: `GET`   
-        **Parameters**: `englishName` (string, the English name of the station to be updated), `model` (Model)   
+        **Parameters**: `englishName` (String, the English name of the station to be updated), `model` (Model)   
         **Request Example**:  [GET /stations/update?englishName=Ailian](http://localhost:8080/stations/update?englishName=Ailian)   
         **Response Example (HTML Form)**:   
 
         ![1_update_station_form](assets/1_update_station_form.png)
 
-        **Errors**:
+        **Errors** (handled):
         ```
         - 404 Not Found: Station not found.
         ```
@@ -105,9 +105,11 @@
 
         **Endpoint**: `/stations/update`   
         **Method**: `POST`   
-        **Parameters**: 
-        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `district` (string, optional), `intro` (string, optional), `status` (string, optional)) 
-        - `bindingResult` (BindingResult)   
+        **Parameters**:  
+        - `englishName` (String)         
+        - `stationDto` (StationDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `district` (String, optional), `intro` (String, optional), `status` (String, optional)) 
+        - `bindingResult` (BindingResult)
+        -  `model` (Model) 
           
         **Request Example**:    
         ```json
@@ -124,7 +126,7 @@
         Location: redirect:/stations
         ```
 
-        **Errors**:
+        **Errors** (handled):
         ```
         - 400 Bad Request: Missing or invalid parameters.
         ```   
@@ -132,7 +134,7 @@
 
         **Endpoint**: `/stations/remove`   
         **Method**: `GET`   
-        **Parameters**: `englishName` (string, required, the English name of the station to be removed), `model` (Model)   
+        **Parameters**: `englishName` (String, the English name of the station to be removed), `model` (Model)   
           
         **Request Example**:  [GET /stations/remove?englishName=Ailian](http://localhost:8080/stations/remove?englishName=Ailian) 
 
@@ -143,182 +145,174 @@
 
         **Errors**: None
 
-### 2. LINE
+### 2. LINES
 
-   - **Purpose**: Manage line record.
-   - **Use**: Display all lines, create new lines, update existing lines' details, or remove lines from the database.
+   - **Purpose**: Manages line record.
+   - **Use**: Displays all lines, creates new lines, updates existing lines' details, and removes lines from the database.
    - **API**:
      - **Show Line List Page**: Retrieves a list of all lines and displays them on the Lines list page.
 
         **Endpoint**: `/lines`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model)
        
-     - **Show Line Create Page**: Displays the form for adding a new line.
+     - **Show Create Line Page**: Displays the form for creating a new line.
 
         **Endpoint**: `/lines/create`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model)   
        
      - **Create Line**: Creates a new line with the provided details.
 
         **Endpoint**: `/lines/create`   
         **Method**: `POST`   
         **Parameters**: 
-        - `lineDto` (LineDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (string, required), `startTime` (time, required), `endTime` (time, required), `mileage` (double, optional), `color` (string, optional), `firstOpening` (date, optional), `intro` (string, optional), `url` (string, optional)) 
-        - `bindingResult` (BindingResult)  
-        **Request Example**:    
-        ```json
-        {
-          "lineName": "1号线",
-          "startTime": "06:10:00",
-          "endTime": "16:10:00",
-          "mileage": "50.50",
-          "color": "粉色",
-          "firstOpening": "2010-01-22",
-          "intro": "line 1 is now open!",
-          "url": "https://line1isopen"
-        }
-        ```
+        - `lineDto` (LineDto: object, a Data Transfer Object used to encapsulate the data for a line) 
+        - `bindingResult` (BindingResult)
+
+     - **Show Update Line Page**: Displays the form for updating the details of an existing line.
+
+        **Endpoint**: `/lines/update`   
+        **Method**: `GET`   
+        **Parameters**: `id` (int, the id of the line to be updated), `model` (Model)      
 
      - **Update Line**: Updates the details of an existing line.
 
         **Endpoint**: `/lines/update`   
         **Method**: `POST`   
         **Parameters**: 
-        - `lineDto` (LineDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `startTime` (time, required), `endTime` (time, required), `mileage` (double, optional), `color` (string, optional), `firstOpening` (date, optional), `intro` (string, optional), `url` (string, optional)) 
-        - `bindingResult` (BindingResult)   
-          
-        **Request Example**:    
-        ```json
-        {
-          "startTime": "06:20:00",
-          "endTime": "23:00:00",
-          "mileage": "40,876",
-          "color": "绿色",
-          "firstOpening": "2004-12-28",
-          "intro": "Updated intro.",
-          "url": "[Closed](https://baike.baidu.com/item/深圳地铁1号线/6178769?fromModule=lemma_inlink)"
-        }
-        ```   
+        - `id` (int)        
+        - `lineDto` (LineDto: object, a Data Transfer Object used to encapsulate the data for a line) 
+        - `bindingResult` (BindingResult)
+        - `model` Model   
 
      - **Remove Line**: Removes an existing line.
 
         **Endpoint**: `/lines/remove`   
         **Method**: `GET`   
-        **Parameters**: `lineName` (string, required, the line name to be removed), `model` (Model)  
+        **Parameters**: `lineName` (String, the line name to be removed), `model` (Model)  
  
-### 3. STATION AND LINE MANAGEMENT
-   - **Purpose**: Manage the placement and removal of stations on subway lines.
-   - **Use**: Place one or more stations at a specified location on a line or remove a station from a line.
+### 3. LINE DETAILS: LINES AND STATIONS MANAGEMENT
+   - **Purpose**: Manages the relationship between lines and stations.
+   - **Use**: Displays line details, place one or more station(s) at a specified location on a line, and removes a station from a line.
    - **API**: 
-     - **Show Line/Station List Page**: Retrieves a list of all lines and stations displays them on the Line Details list page.
+     - **Show Line Detail List Page**: Retrieves a list of all lines and stations displays them on the Line Details list page.
 
         **Endpoint**: `/lineDetails`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
-       
-     - **Show Station Create Page**: Displays the form for adding one or more new stations.
+        **Parameters**: `model` (Model)
+
+     - **Show Line Detail Create Page**: Displays the form for adding one or more new stations on any specified lines.
 
         **Endpoint**: `/lineDetails/create`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model), `numStations` (Integer, used to request the total number of stations to be added) `totalStationsToAdd` (Integer, used to keep track of the total number of stations to be added), `stationsAdded` (Integer, used to keep track of the number of stations that have been added so far) 
        
-     - **Create Station**: Creates a new line with the provided details.
+     - **Create Line Detail**: Creates a new station at a specified line.
 
         **Endpoint**: `/lineDetails/create`   
         **Method**: `POST`   
         **Parameters**: 
-        - `lineDetailDto` (LineDetailDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (string, required), `stationName` (string, required), `stationOrder` (integer, required))
-        - `bindingResult` (BindingResult)  
-        **Request Example**:    
-        ```json
-        {
-          "lineName": "1号线",
-          "statioName": "Luohu",
-          "stationorder": "1"
-        }
-        ```
-         - **Remove Station**: Removes an existing station.
+        - `lineDetailDto` (LineDetailDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (String, required), `stationName` (String, required), `stationOrder` (integer, required))
+        - `bindingResult` (BindingResult)
+        - `model` (Model) 
+        - `totalStationsToAdd` (Integer)
+        - `stationsAdded` (Integer)
+        - `sessionStatus` (SessionStatus, utilize 'setComplete' to remove session attributes and end the session when the user is done adding new line details)  
+        
+      - **Remove Station From Line Detail**: Removes a station from a line.
 
         **Endpoint**: `/lineDetails/remove`   
         **Method**: `GET`   
-        **Parameters**: `stationName` (string, required, the station name to be removed), `model` (Model) 
+        **Parameters**: `id` (int, id of the line detail to be removed), `model` (Model)
 
-### 4. SEARCH STATIONS
-   - **Purpose**: Retrieve station names based on their position relative to a specific station.
-   - **Use**: Find the names of the stations that are the n-th station ahead or behind a specific station on a line.
-   - **API**:   
-     - **Show Station Search Page**: Displays the form for searching for a specific station.
+     - **Show Search Station Page**: Displays the form for searching for a specific station.
 
         **Endpoint**: `/lineDetails/search`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
-       
+        **Parameters**: `model` (Model)
+
      - **Search Station**: Finds a station with the provided details.
 
         **Endpoint**: `/lineDetails/search`   
         **Method**: `POST`   
         **Parameters**: 
-        - `lineDetailSearchDto` (LineDetailSearchDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (string, required), `stationName` (string, required), `offset` (integer, required))
-        - `bindingResult` (BindingResult)  
-        **Request Example**:    
-        ```json
-        {
-          "lineName": "1号线",
-          "statioName": "Luohu",
-          "offset": "2"
-        }
-        ```
-### 5. BOARDING FUNCTIONALITY
-   - **Purpose**: Record boarding information for passengers or cards.
-   - **Use**: Record the starting station, boarding time, and passenger or card details when they board the subway.
+        - `lineDetailSearchDto` (LineDetailSearchDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (String, required), `stationName` (String, required), `offset` (integer, required))
+        - `bindingResult` (BindingResult)
+        - `model` (Model)  
+        
+### 4. BUSES AND LANDMARKS
+Due to similarities between the implementations of buses and landmarks, we will mention them together.
+   - **Purpose**: Manages the integration between stations, buses, and landmarks
+   - **Use**: Within a specific station: displays buses or landmarks, creates buses or landmarks, updates buses or landmarks, removes buses or landmarks.
+   - **API**:  
+     - **Show Bus or Landmark List Page**: Retrieves a list of all buses or landmarks of a specific station
+
+        **Endpoint**: `/buses` or `/landmarks`  
+        **Method**: `GET`   
+        **Parameters**: `englishName` (String, a requested parameter for getting the name of a specific station), `model` (Model)   
+     
+     - **Show Bus or Landmark Create Page**: Displays the form for adding one or more new buses or landmarks on a specified station.
+
+        **Endpoint**: `/buses/create` or `/landmarks/create`  
+        **Method**: `GET`   
+        **Parameters**: `model` (Model), `numBuses` or `numLandmarks`(Integer, used to request the total number of buses or landmarks to be added) `totalBusesToAdd` or `totalLandmarksToAdd`(Integer, used to keep track of the total number of buses or landmarks to be added), `busesAdded` or `landmarksAdded` (Integer, used to keep track of the number of buses or landmarks that have been added so far) 
+       
+     - **Create Bus or Landmark**: Creates a new bus or landmark at a specified line.
+
+        **Endpoint**: `/buses/create` or `/landmarks/create` 
+        **Method**: `POST`   
+        **Parameters**: 
+        - `busExitInfoDto` (BusExitInfoDto: object, a Data Transfer Object used to encapsulate the data for a bus) or `landmarkExitInfoDto`(LandmarkExitInfoDto: object, a Data Transfer Object used to encapsulate the data for a landmark)
+        - `bindingResult` (BindingResult)
+        - `model` (Model) 
+        - `totalBusesToAdd` or `totalLandmarksToAdd`(Integer)
+        - `busesAdded` or `landmarksAdded` (Integer) 
+        
+     - **Remove Bus or Landmark**: Removes a bus or a landmark from a station.
+
+        **Endpoint**: `/buses/remove` or `/landmarks/remove`   
+        **Method**: `GET`   
+        **Parameters**: `id` (long, id of the bus or landmark to be removed), `model` (Model)
+
+### 5. RIDES
+   - **Purpose**: Manages ride record. 
+   - **Use**: Displays ride record and ongoing rides, boards a ride, exits a ride, filters rides
    - **API**:
-     - **Show Boarding Info List Page**: Retrieves a list of all lines and stations displays them on the Line Details list page.
+     - **Show Ride Page**: Retrieves a list of all rides or ongoing rides.
+
+        **Endpoint**: `/rides`   
+        **Method**: `GET`   
+        **Parameters**: `model` (Model), `page` (int, default: 0, current page number for pagination), `size` (int, default: 100, number of items per page)
+     - **Show Create Ride Page**: Displays the form for creating a new ride.
 
         **Endpoint**: `/rides/create`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model)   
      
-     - **Create Ride**: Creates a new line with the provided details.
+     - **Create Ride or Boarding Functionality**: Creates a new ride with the provided details.
 
         **Endpoint**: `/rides/create`   
         **Method**: `POST`   
         **Parameters**: 
-        - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `userNum` (string, required), `startStation` (string, required), `rideClass` (string, required))
-        - `bindingResult` (BindingResult)  
-        **Request Example**:    
-        ```json
-        {
-          "userNum": "140121195012160804",
-          "statioName": "Taiziwan",
-          "rideClass": "Economy"
-        }
-        ```
-### 6. EXIT FUNCTIONALITY
-   - **Purpose**: Record exit information for passengers or cards and calculate trip cost.
-   - **Use**: Record the destination station, exit time, and calculate the price based on `Price.xlsx` when passengers or cards exit the subway.
-   - **API**:
-     - **Show Exit Info List Page**: Retrieves a list of all lines and stations displays them on the Line Details list page.
+        - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a ride)
+        - `bindingResult` (BindingResult)
+     - **Show Update Ride Page**: Displays the form for updating exiting station of an ongoing ride.
 
         **Endpoint**: `/rides/update`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `id` (long, id of the ride to be updated), `model` (Model)   
      
-     - **Create Ride**: Creates a new line with the provided details.
+     - **Create Ride or Exiting Functionality**: Adds the exiting station of an ongoing ride.
 
         **Endpoint**: `/rides/update`   
         **Method**: `POST`   
-        **Parameters**: 
-        - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `endStation` (string, required))
-        - `bindingResult` (BindingResult)  
-        **Request Example**:    
-        ```json
-        {
-          "endStation": "Shenwai Senior Campus"
-        }
-        ```
-### 7. VIEW CURRENT BOARDED PASSENGERS/CARDS
+        **Parameters**:
+        - `id` (long) 
+        - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a ride)
+        - `bindingResult` (BindingResult)   
+
+### 6. USERS: PASSENGERS AND CARDS
    - **Purpose**: Display information about passengers or cards currently on board.
    - **Use**: View all information about passengers or cards who have boarded but have not yet exited at the current time.
   - **API**:
@@ -328,7 +322,7 @@
         **Method**: `GET`   
         **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
        
----
+
 ##  III. ADVANCED REQUIREMENTS
 <a name="iii-advanced-requirements"></a>
 - **Database Implementation**: 
@@ -355,20 +349,6 @@
   - **Requirement**: Enable searching ride records based on multiple parameters.
   - **Implementation**: Created a robust search functionality in the API that allows users to search ride records based on various parameters such as subway stations, passengers, periods, and more.
 
-- **View User Details**:
-  - **Using the developed system users can view detailed information about passengers and cards.**
-    - **Passenger Details**:
-      - If a user clicks on a passenger's ID number, they can view detailed passenger information including:
-        - National ID
-        - Name
-        - Gender
-        - Phone Number
-        - Origin
-    - **Card Details**:
-      - If a user clicks on a card number, they can view detailed card information including:
-        - Code
-        - Balance
-        - Created Time
 
 - **Package Management**: 
   - **Tool Used**: Maven
