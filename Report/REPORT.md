@@ -174,7 +174,7 @@
 
         **Endpoint**: `/lines/update`   
         **Method**: `GET`   
-        **Parameters**: `id` (int, the id of the line to be updated), `model` (Model)      
+        **Parameters**: `id` (int, the ID of the line to be updated), `model` (Model)      
 
      - **Update Line**: Updates the details of an existing line.
 
@@ -224,7 +224,7 @@
 
         **Endpoint**: `/lineDetails/remove`   
         **Method**: `GET`   
-        **Parameters**: `id` (int, id of the line detail to be removed), `model` (Model)
+        **Parameters**: `id` (int, the ID of the line detail to be removed), `model` (Model)
 
      - **Show Search Station Page**: Displays the form for searching for a specific station.
 
@@ -242,6 +242,7 @@
         - `model` (Model)  
         
 ### 4. BUSES AND LANDMARKS
+<a name="ii-4-buses-and-landmarks"></a>
 Due to similarities between the implementations of buses and landmarks, we will mention them together.
    - **Purpose**: Manages the integration between stations, buses, and landmarks
    - **Use**: Within a specific station: displays buses or landmarks, creates buses or landmarks, updates buses or landmarks, removes buses or landmarks.
@@ -273,17 +274,18 @@ Due to similarities between the implementations of buses and landmarks, we will 
 
         **Endpoint**: `/buses/remove` or `/landmarks/remove`   
         **Method**: `GET`   
-        **Parameters**: `id` (long, id of the bus or landmark to be removed), `model` (Model)
+        **Parameters**: `id` (long, the ID of the bus or landmark to be removed), `model` (Model)
 
 ### 5. RIDES
    - **Purpose**: Manages ride record. 
    - **Use**: Displays ride record and ongoing rides, boards a ride, exits a ride, filters rides
    - **API**:
-     - **Show Ride Page**: Retrieves a list of all rides or ongoing rides.
+     - **Show Ride Page**: Retrieves a list of all rides
 
         **Endpoint**: `/rides`   
         **Method**: `GET`   
         **Parameters**: `model` (Model), `page` (int, default: 0, current page number for pagination), `size` (int, default: 100, number of items per page)
+     
      - **Show Create Ride Page**: Displays the form for creating a new ride.
 
         **Endpoint**: `/rides/create`   
@@ -301,7 +303,7 @@ Due to similarities between the implementations of buses and landmarks, we will 
 
         **Endpoint**: `/rides/update`   
         **Method**: `GET`   
-        **Parameters**: `id` (long, id of the ride to be updated), `model` (Model)   
+        **Parameters**: `id` (long, the ID of the ride to be updated), `model` (Model)   
      
      - **Create Ride or Exiting Functionality**: Adds the exiting station of an ongoing ride.
 
@@ -310,43 +312,56 @@ Due to similarities between the implementations of buses and landmarks, we will 
         **Parameters**:
         - `id` (long) 
         - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a ride)
-        - `bindingResult` (BindingResult)   
+        - `bindingResult` (BindingResult)
+     
+     - **Filter Rides**: Search ride record based on multiple parameters.
 
-### 6. USERS: PASSENGERS AND CARDS
-   - **Purpose**: Display information about passengers or cards currently on board.
-   - **Use**: View all information about passengers or cards who have boarded but have not yet exited at the current time.
-  - **API**:
-     - **Show Ongoing Rides List Page**: Retrieves a list of information about the ongoing rides displays them on the Ride Record list page.
+        **Endpoint**: `/rides/filter`   
+        **Method**: `POST`   
+        **Parameters**:
+        - `rideFilterDto` (RideFilterDto: object, a Data Transfer Object used to encapsulate the data for a ride with some constraints different from RideDto)
+        - `bindingResult` (BindingResult)
+        - `model` (Model)
+        - `page`  (int)
+        - `size` (int)    
+
+     - **Show Ongoing Ride Page**: Retrieves a list of all ongoing rides.
 
         **Endpoint**: `/rides/ongoingRides`   
         **Method**: `GET`   
-        **Parameters**: `model` (Model :interface, used to pass data from the controller to the view)   
+        **Parameters**: `model` (Model)
+
+### 6. USERS: PASSENGERS AND CARDS
+   - **Purpose**: Display information about passengers or cards.
+   - **Use**: View the detailed information of a passenger or a card.
+  - **API**:
+     - **Get User Details**: Retrieves a detailed information about a user (a passenger or a card).
+
+        **Endpoint**: `/users//{userNum}`   
+        **Method**: `GET`   
+        **Parameters**: `userNum` (String, a requested parameter to get the ID of a specific passenger or card), `model` (Model)   
        
 
 ##  III. ADVANCED REQUIREMENTS
 <a name="iii-advanced-requirements"></a>
 - **Database Implementation**: 
-  - **Requirement**: Complete the project using OpenGauss or MySQL database.
-  - **Implementation**: The project utilizes MySQL database to manage and store all necessary data including stations, lines, passenger details, and pricing information.
+  - **Requirement**: Completes the project using OpenGauss or MySQL database.
+  - **Implementation**: The project utilizes MySQL database to manage and store all necessary data including stations, lines, line details, buses and landmarks, card or passenger details, pricing information, and ride record.
 
 - **Station Status Management**: 
-  - **Requirement**: Add and appropriately utilize the status of stations (e.g., under construction, operational, closed).
-  - **Implementation**: Extended the station management system to include status indicators. Stations can now have statuses like "under construction", "operational", and "closed." These statuses are stored in the database and can be updated via API endpoints.
+  - **Requirement**: Adds and appropriately utilizes the status of stations (e.g., under construction, operational, closed).
+  - **Implementation**: Extended the station management system to include status indicators. Stations can now have statuses like "Operational", "Under construction", and "Closed". These statuses are stored in the database and can be updated via API endpoints. When a station is removed, its status becomes "Closed". When a station is not "Operational", the station cannot be used to create a new ride.
 
-- **Business Carriage in the Subway**: 
-  - **Requirement**: Include functionality for business carriages in the subway.
-  - **Implementation**: Added a new feature that designates certain carriages as business carriages alongside a price adjustment (up to 30%) of the original price. Passengers can book seats in these carriages.
+- **Economy and Business Classes Of Subway Rides**: 
+  - **Requirement**: Utilizes differnt calsses of a subway ride.
+  - **Implementation**: Added a new feature that designates a certain ride as an economy or business class. While exiting a ride with an economy class, the ride price is the default price between two stations given in `Price.xlsx`. While exiting a ride with a business class, the ride price is the standard economy price between two stations with a 50% increase of the original price.
 
-- **Integration of Buses and Subways**: 
-  - **Requirement**: Establish a comprehensive system to integrate buses and subways.
-  - **Implementation**: Developed an integrated transport management system that allows for combined queries and ticketing for both buses and subways. Users can view bus details associated with specific subway stations, manage these associations, and plan routes that include both modes of transport.
+- **Integration of Buses, Landmarks, and Stations**: 
+  - **Requirement**: Establishes a comprehensive system to integrate buses, landmarks, and stations.
+  - **Implementation**: Developed an integrated transport management system that allows queries for buses, landmarks, and stations. Users can view bus or landmark details associated with any specific subway stations. Moreover, users can create, update, or remove multiple buses or landmarks from a specific station. The detailed API implementation is explained in section [**II-4**](#ii-4-buses-and-landmarks).
 
-- **Integration of Landmarks**: 
-  - **Requirement**: Establish a comprehensive system to integrate landmarks and subways.
-  - **Implementation**: Users can view landmark details associated with specific subway stations.
-
-- **Multi-Parameter Search for Ride Records**: 
-  - **Requirement**: Enable searching ride records based on multiple parameters.
+- **Multi-Parameter Search for Ride Record**: 
+  - **Requirement**: Enables searching ride records based on multiple parameters.
   - **Implementation**: Created a robust search functionality in the API that allows users to search ride records based on various parameters such as subway stations, passengers, periods, and more.
 
 
