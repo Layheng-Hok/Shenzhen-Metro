@@ -14,7 +14,6 @@
 
 
 ## I. CONTRIBUTION
-<a name="i-contribution"></a>
 | Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                        | Ratio |
 |----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
 | **ZERHOUNI KHAL Jaouhara** | - Import new data (price)<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                              | 50%   |
@@ -24,7 +23,6 @@
 
 
 ##  II. API SPECIFICATIONS
-<a name="ii-api-specifications"></a>
 
 ### 1. STATIONS
 
@@ -240,9 +238,10 @@
         - `lineDetailSearchDto` (LineDetailSearchDto: object, a Data Transfer Object used to encapsulate the data for a station including the attributes like `lineName` (String, required), `stationName` (String, required), `offset` (integer, required))
         - `bindingResult` (BindingResult)
         - `model` (Model)  
-        
+
+     
 ### 4. BUSES AND LANDMARKS
-<a name="ii-4-buses-and-landmarks"></a>
+
 Due to similarities between the implementations of buses and landmarks, we will mention them together.
    - **Purpose**: Manages the integration between stations, buses, and landmarks
    - **Use**: Within a specific station: displays buses or landmarks, creates buses or landmarks, updates buses or landmarks, removes buses or landmarks.
@@ -337,13 +336,13 @@ Due to similarities between the implementations of buses and landmarks, we will 
   - **API**:
      - **Get User Details**: Retrieves a detailed information about a user (a passenger or a card).
 
-        **Endpoint**: `/users//{userNum}`   
+        **Endpoint**: `/users/{userNum}`   
         **Method**: `GET`   
         **Parameters**: `userNum` (String, a requested parameter to get the ID of a specific passenger or card), `model` (Model)   
        
 
 ##  III. ADVANCED REQUIREMENTS
-<a name="iii-advanced-requirements"></a>
+
 - **Database Implementation**: 
   - **Requirement**: Completes the project using OpenGauss or MySQL database.
   - **Implementation**: The project utilizes MySQL database to manage and store all necessary data including stations, lines, line details, buses and landmarks, card or passenger details, pricing information, and ride record.
@@ -358,35 +357,35 @@ Due to similarities between the implementations of buses and landmarks, we will 
 
 - **Integration of Buses, Landmarks, and Stations**: 
   - **Requirement**: Establishes a comprehensive system to integrate buses, landmarks, and stations.
-  - **Implementation**: Developed an integrated transport management system that allows queries for buses, landmarks, and stations. Users can view bus or landmark details associated with any specific subway stations. Moreover, users can create, update, or remove multiple buses or landmarks from a specific station. The detailed API implementation is explained in section [**II-4**](#ii-4-buses-and-landmarks).
+  - **Implementation**: Developed an integrated transport management system that allows queries for buses, landmarks, and stations. Users can view bus or landmark details associated with any specific subway stations. Moreover, users can create, update, or remove multiple buses or landmarks from a specific station. The detailed API implementation is explained in section [**II-4**](#4-buses-and-landmarks).
 
 - **Multi-Parameter Search for Ride Record**: 
   - **Requirement**: Enables searching ride records based on multiple parameters.
-  - **Implementation**: Created a robust search functionality in the API that allows users to search ride records based on various parameters such as subway stations, passengers, periods, and more.
+  - **Implementation**: Created a robust search functionality in the API that allows users to search ride records based on various parameters such as user's number, ride duration, start and end station, ride class, and price. The detailed API implementation is explained in [**II-5**](#5-rides).
 
 
 - **Package Management**: 
   - **Tool Used**: Maven
   - **Implementation**: Maven was used for managing project dependencies, ensuring all required libraries and tools were included and properly configured in the project.
 
-- **Using Sockets or HTTP/RESTful Web**: 
+- **Using HTTP/RESTful Web**: 
   - **Tool Used**: Spring Boot
-  - **Implementation**: Developed a backend server using Spring Boot to handle HTTP/RESTful requests. This allows the application to support various API endpoints for managing stations, lines, passenger details, and more.
+  - **Implementation**: Developed a backend server using Spring Boot to handle HTTP/RESTful requests. This allows the application to support various API endpoints for managing stations, lines, passenger details, and more. The detailed API implementation is explained in [**II**](#ii-api-specifications).
 
 - **Using Backend Frameworks or ORM Mapping**: 
   - **Tool Used**: JPA (Jakarta Persistence API) with Spring Boot
-  - **Implementation**: Used JPA for Object-Relational Mapping (ORM) to interact with the MySQL database. This simplifies database operations by allowing developers to work with Java objects instead of raw SQL queries.
+  - **Implementation**: Used JPA by Spring Boot for Object-Relational Mapping (ORM) to interact with the MySQL database. This simplifies database operations by allowing developers to work with Java objects instead of raw SQL queries. Annotations used in the project include but not limited to `@Id`, `@Column`, `@Entity`, and so on. 
 
 - **Big Data Management**:
-  - **Requirement**: Implement big data management to efficiently handle large datasets.
+  - **Requirement**: Implements big data management to efficiently handle large datasets.
   - **Implementation**: Utilized pagination to display large data sets in manageable pages. Specifically in the ride table, large datasets are broken into pages with each page fetching 100 rows of data. This approach ensures that the system remains responsive and the data is easily navigable for users.
 
 - **Effective Presentation and Communication**:
-  - **Requirement**: Ensure effective presentation and communication of data and functionalities.
-  - **Implementation**: Developed a simple, interactive, and responsive web page UI. The design is optimized to work seamlessly across all forms of devices, including mobile, tablet, and desktop. The interface features smooth scrolling and animations, providing a user-friendly and engaging experience for users.
+  - **Requirement**: Ensures effective presentation and communication of data and functionalities.
+  - **Implementation**: Developed a simple, interactive, and responsive web page UI. The design is optimized to work seamlessly across all forms of devices, including mobiles, tablets, and desktops. The interface features smooth scrolling and animations, providing a user-friendly and engaging experience for users.
 
-- **Appropriate usage of database functionalities**:
-  - **Requirement**: Appropriately utilize database procedures, triggers and indexes.
+- **Appropriate Usage of Database Functionalities**:
+  - **Requirement**: Appropriately utilizes database procedures, triggers and indexes.
   - **Implementation**:   
      - **Procedures**: Created stored procedures to handle insert, update, and delete operations related to the ride table, ensuring proper synchronization with the ongoing_ride table.   
   
@@ -396,6 +395,5 @@ Due to similarities between the implementations of buses and landmarks, we will 
 
 
   ##  IV. CONCLUSION
-  <a name="iv-conclusion"></a>
 
-     In this project, we successfully designed and implemented a comprehensive subway management system that meets both basic and advanced requirements. We utilized a variety of technologies including Spring Boot, MySQL, and JPA, and effectively integrated multiple functionalities such as station and line management, ride recording, and passenger information handling. Our system also incorporates advanced features like business carriage management, integration with buses and landmarks, and robust search capabilities. The project's efficient handling of large datasets, interactive UI/UX design, and adherence to database best practices demonstrate a solid understanding of database systems principles. This project highlights our ability to work collaboratively and deliver a functional, user-friendly application.
+     In this project, we successfully designed and implemented a comprehensive subway management system that meets both basic and advanced requirements. We utilized a variety of technologies including MySQL and Spring Boot, and effectively integrated multiple functionalities such as station and line management, ride recording, and passenger information handling. Our system also incorporates advanced features like business carriage management, integration with buses and landmarks, and robust search capabilities. The project's efficient handling of large datasets, interactive UI/UX design, and adherence to database best practices demonstrate a solid understanding of database systems principles and associated technologies. This project highlights our ability to work collaboratively and deliver a functional, user-friendly webpage.
