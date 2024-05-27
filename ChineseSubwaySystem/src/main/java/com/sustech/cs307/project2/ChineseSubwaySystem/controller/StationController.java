@@ -110,17 +110,19 @@ public class StationController {
         try {
             Station station = stationRepository.findById(englishName).orElse(null);
             if (station != null) {
-                stationRepository.delete(station);
-                model.addAttribute("successMessage", "Station removed successfully.");
+                station.setStatus("Closed");
+                stationRepository.save(station);
+                model.addAttribute("successMessage", "Station status has been updated to \"Closed\".");
             } else {
                 model.addAttribute("errorMessage", "Station not found.");
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
-            model.addAttribute("errorMessage", "Station cannot be removed due to foreign key constraint.");
+            model.addAttribute("errorMessage", "Station status cannot be updated due to an error.");
         }
         List<Station> stations = stationRepository.findAll();
         model.addAttribute("stations", stations);
         return "stations/index";
     }
+
 }

@@ -14,15 +14,17 @@
 
 
 ## I. CONTRIBUTION
-| Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                        | Ratio |
-|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
-| **ZERHOUNI KHAL Jaouhara** | - Import new data (price)<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                              | 50%   |
+| Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                      | Ratio |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **ZERHOUNI KHAL Jaouhara** | - Import new data (price)<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                                                             | 50%   |
 | **HOK Layheng**            | - Set up project and dependencies with Maven<br>- Set up triggers and procedures<br>- Build API with Spring Boot<br>- CRUD on line data<br>- Boarding and exiting functionalities<br>- View information about ongoing rides, passengers, and cards<br>- Utilize the status of stations and different ride classes<br>- Filter ride records with multi-parameter inputs and utilize pagination to handle large ride results | 50%   |
 
 ---
 
 
 ##  II. API SPECIFICATIONS
+
+Due to the limitation of page number, in the API specifications below, we are going to explore only the `STATIONS` related API into details by explaining the endpoint, the API method, parameters, a request example, a response example, and possible errors (all errors have been handled). For the rest, we can just go through the endpoint, the API method, and parameters, as we can use `STATIONS` as a reference for other points. Moreover, same or similar parameters will not be explained twice.
 
 ### 1. STATIONS
 
@@ -178,11 +180,7 @@
 
         **Endpoint**: `/lines/update`   
         **Method**: `POST`   
-        **Parameters**: 
-        - `id` (int)        
-        - `lineDto` (LineDto: object, a Data Transfer Object used to encapsulate the data for a line) 
-        - `bindingResult` (BindingResult)
-        - `model` Model   
+        **Parameters**: `id` (int), `lineDto` (LineDto), `bindingResult` (BindingResult), `model` Model   
 
      - **Remove Line**: Removes an existing line.
 
@@ -268,7 +266,19 @@ Due to similarities between the implementations of buses and landmarks, we will 
         - `model` (Model) 
         - `totalBusesToAdd` or `totalLandmarksToAdd`(Integer)
         - `busesAdded` or `landmarksAdded` (Integer) 
-        
+
+     - **Show Update Bus or Landmark Page**: Displays the form for updating the details of an existing bus or landmark.
+
+        **Endpoint**: `/buses/update` or `/landmarks/update`
+        **Method**: `GET`   
+        **Parameters**: `id` (long, the ID of the bus or landmark to be updated), `model` (Model)      
+
+     - **Update Bus or Landmark**: Updates the details of an existing bus or landmark.
+
+        **Endpoint**: `/buses/update` or `/landmarks/update`   
+        **Method**: `POST`   
+        **Parameters**: `id` (long), `busExitInfoDto` (BusExitInfoDto) or `landmarkExitInfoDto` (LandmarkExitInfoDto), `bindingResult` (BindingResult), `model` Model 
+
      - **Remove Bus or Landmark**: Removes a bus or a landmark from a station.
 
         **Endpoint**: `/buses/remove` or `/landmarks/remove`   
@@ -304,14 +314,11 @@ Due to similarities between the implementations of buses and landmarks, we will 
         **Method**: `GET`   
         **Parameters**: `id` (long, the ID of the ride to be updated), `model` (Model)   
      
-     - **Create Ride or Exiting Functionality**: Adds the exiting station of an ongoing ride.
+     - **Update Ride or Exiting Functionality**: Adds the exiting station of an ongoing ride.
 
         **Endpoint**: `/rides/update`   
         **Method**: `POST`   
-        **Parameters**:
-        - `id` (long) 
-        - `rideDto` (RideDto: object, a Data Transfer Object used to encapsulate the data for a ride)
-        - `bindingResult` (BindingResult)
+        **Parameters**: `id` (long), `rideDto` (RideDto), `bindingResult` (BindingResult)
      
      - **Filter Rides**: Search ride record based on multiple parameters.
 
@@ -380,9 +387,13 @@ Due to similarities between the implementations of buses and landmarks, we will 
   - **Requirement**: Implements big data management to efficiently handle large datasets.
   - **Implementation**: Utilized pagination to display large data sets in manageable pages. Specifically in the ride table, large datasets are broken into pages with each page fetching 100 rows of data. This approach ensures that the system remains responsive and the data is easily navigable for users.
 
+- **Page Display Design**:
+  - **Requirement**: Ensures the GUI design presents data effectively and aesthetically.
+  - **Implementation**: Data are presented in either tables or cards. The webpage was built with Bootstrap, having a visually appealing and beautiful interface with responsive layout and interactive elements.
+
 - **Effective Presentation and Communication**:
   - **Requirement**: Ensures effective presentation and communication of data and functionalities.
-  - **Implementation**: Developed a simple, interactive, and responsive web page UI. The design is optimized to work seamlessly across all forms of devices, including mobiles, tablets, and desktops. The interface features smooth scrolling and animations, providing a user-friendly and engaging experience for users.
+  - **Implementation**: With the responsive layout, the design is optimized to work seamlessly across all forms of devices, including mobiles, tablets, and desktops. With that and smooth scrolling, the webpage provides a user-friendly, intuitive, and engaging experience for users.
 
 - **Appropriate Usage of Database Functionalities**:
   - **Requirement**: Appropriately utilizes database procedures, triggers and indexes.
@@ -392,6 +403,10 @@ Due to similarities between the implementations of buses and landmarks, we will 
      - **Triggers**: Implemented triggers to automate and enforce rules for insertions, updates, and deletions in the ride table, ensuring consistency with the ongoing_ride table.
 
      - **Indexes**: Utilized primary keys and unique constraints which implicitly create indexes, optimizing query performance for key operations.
+
+- **Transaction**:
+  - **Requirement**: Utilizes transation where necessary.
+  - **Implementation**: To ensure data integrity in the presence of operation failures, JPA's `@Transational` attribute is used on any Java methods that require to modify data in the database, including but not limited to update and delete operations.
 
 
   ##  IV. CONCLUSION
