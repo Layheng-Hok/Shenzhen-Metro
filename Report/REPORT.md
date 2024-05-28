@@ -370,10 +370,13 @@ Due to similarities between the implementations of buses and landmarks, we will 
   - **Requirement**: Enables searching ride records based on multiple parameters.
   - **Implementation**: Created a robust search functionality in the API that allows users to search ride records based on various parameters such as user's number, ride duration, start and end station, ride class, and price. The detailed API implementation is explained in [**II-5**](#5-rides).
 
-
 - **Package Management**: 
   - **Tool Used**: Maven
   - **Implementation**: Maven was used for managing project dependencies, ensuring all required libraries and tools were included and properly configured in the project.
+
+- **Connection Pool**: 
+  - **Tool Used**: HikariCP
+  - **Implementation**: With HikariCP dependency, we configured the connection pool properties in `application.properties`.
 
 - **Using HTTP/RESTful Web**: 
   - **Tool Used**: Spring Boot
