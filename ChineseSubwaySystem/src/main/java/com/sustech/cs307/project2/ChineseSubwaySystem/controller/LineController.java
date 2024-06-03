@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,10 @@ public class LineController {
     @Transactional
     @PostMapping("/create")
     public String createLine(@Valid @ModelAttribute LineDto lineDto, BindingResult bindingResult) {
+        if (lineRepository.findByLineName(lineDto.getLineName()) != null) {
+            bindingResult.addError(new FieldError("lineDto", "lineName", "Line already exists."));
+        }
+
         if (bindingResult.hasErrors()) {
             return "lines/create_line";
         }
@@ -119,7 +124,7 @@ public class LineController {
             model.addAttribute("errorMessage", "Line cannot be removed due to foreign key constraint.");
         }
 
-        List<Line> lines = lineRepository.findAll();
+        List<Line> lines = lineRepository.findAllOrderedByName();
         model.addAttribute("lines", lines);
         return "lines/index";
     }

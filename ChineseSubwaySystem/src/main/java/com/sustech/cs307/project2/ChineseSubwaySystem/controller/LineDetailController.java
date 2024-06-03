@@ -176,6 +176,6 @@ public class LineDetailController {
 
         List<LineDetail> lineDetails = lineDetailRepository.findAll();
         model.addAttribute("lineDetails", lineDetails);
-        return "lineDetails/index";
+        return "redirect:/lineDetails";
     }
 }

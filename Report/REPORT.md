@@ -1,4 +1,4 @@
-# Project 2's Report of CS307 - Principles of Database Systems  (2024 Spring)
+# Project 2 of CS307 - Principles of Database Systems (2024 Spring) : Report
 
 > **Contributors**: ZERHOUNI KHAL Jaouhara (12211456) & HOK Layheng (12210736)  
 > **Instructor**: Dr. MA Yuxin  
@@ -16,7 +16,7 @@
 ## I. CONTRIBUTION
 | Members                    | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                      | Ratio |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **ZERHOUNI KHAL Jaouhara** | - Import new data (price) and build connection pool<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                                                             | 50%   |
+| **ZERHOUNI KHAL Jaouhara** | - Import new data (price) and build connection pool<br>- CRUD on station data<br>- CRUD on line detail data (relationship between stations and lines)<br>- Search for the n-th station’s details that come before or after a specified station on a line<br>- Design a comprehensive system for stations, buses, and landmarks integration<br>- UI/UX design<br>- Report                                                   | 50%   |
 | **HOK Layheng**            | - Set up project and dependencies with Maven<br>- Set up triggers and procedures<br>- Build API with Spring Boot<br>- CRUD on line data<br>- Boarding and exiting functionalities<br>- View information about ongoing rides, passengers, and cards<br>- Utilize the status of stations and different ride classes<br>- Filter ride records with multi-parameter inputs and utilize pagination to handle large ride results | 50%   |
 
 ---
@@ -409,7 +409,7 @@ Due to similarities between the implementations of buses and landmarks, we will 
 
 - **Transaction**:
   - **Requirement**: Utilizes transation where necessary.
-  - **Implementation**: To ensure data integrity in the presence of operation failures, JPA's `@Transational` attribute is used on any Java methods that require to modify data in the database, including but not limited to update and delete operations.
+  - **Implementation**: To ensure data integrity in the presence of operation failures, JPA's `@Transactional` attribute is used on any Java methods that require to modify data in the database, including but not limited to update and delete operations.
 
 
   ##  IV. CONCLUSION
