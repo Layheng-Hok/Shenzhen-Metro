@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // "use strict";
 
     /**
      * Mobile nav toggle
@@ -10,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.mobile-nav-toggle').forEach(el => {
         el.addEventListener('click', function (event) {
             event.preventDefault();
-            mobileNavToogle();
+            mobileNavToggle();
         })
     });
 
-    function mobileNavToogle() {
+    function mobileNavToggle() {
         document.querySelector('body').classList.toggle('mobile-nav-active');
         mobileNavShow.classList.toggle('d-none');
         mobileNavHide.classList.toggle('d-none');
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         navbarlink.addEventListener('click', () => {
             if (document.querySelector('.mobile-nav-active')) {
-                mobileNavToogle();
+                mobileNavToggle();
             }
         });
 
