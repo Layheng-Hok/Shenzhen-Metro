@@ -48,7 +48,7 @@ public class RideController {
     public String showRideListPage(@RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "100") int size,
                                    Model model) {
-        Page<Ride> ridePage = rideService.getRidesPaginated(page, size);
+        Page<Ride> ridePage = rideService.getAllRidesPaginated(page, size);
         model.addAttribute("ridePage", ridePage);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);

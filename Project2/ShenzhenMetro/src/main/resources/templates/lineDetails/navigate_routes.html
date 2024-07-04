@@ -65,7 +65,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
-                <h2><span>Line Details</span></h2>
+                <h2><span>CRUD Line Details</span></h2>
             </div>
         </div>
     </div>
@@ -74,65 +74,83 @@
 <!-- ======= Main ======= -->
 <main id="main">
     <div class="container">
-        <div th:if="${successMessage != null}" class="alert alert-success" role="alert" id="successMessage">
-            <p th:text="${successMessage}"></p>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <a href="/lineDetails" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
+            </div>
+            <div class="col-md-8 mx-auto rounded border p-4 m-4">
+                <h2 class="text-center mb-5">Navigate Routes</h2>
+
+                <form method="post" th:action="@{/lineDetails/navigate}" th:object="${lineDetailNavigateDto}">
+                    <div class="row mb-3">
+                        <label for="startStation" class="col-sm-4 col-form-label">Start Station <span
+                                class="red-asterisk">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" id="startStation" class="form-control"
+                                   th:field="${lineDetailNavigateDto.startStation}"
+                                   required>
+                            <p th:if="${#fields.hasErrors('startStation')}" class="text-danger"
+                               th:errors="${lineDetailNavigateDto.startStation}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="endStation" class="col-sm-4 col-form-label">End Station <span
+                                class="red-asterisk">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" id="endStation" class="form-control"
+                                   th:field="${lineDetailNavigateDto.endStation}" required>
+                            <p th:if="${#fields.hasErrors('endStation')}" class="text-danger"
+                               th:errors="${lineDetailNavigateDto.endStation}"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 offset-sm-4 d-grid">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                        <div class="col-sm-4 d-grid">
+                            <a class="btn btn-outline-danger" href="/lineDetails" role="button">Cancel</a>
+                        </div>
+                    </div>
+
+                    <!-- Display global errors -->
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                                <ul>
+                                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
         </div>
 
-        <a href="/" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-
-        <!-- Trigger Modal -->
-        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#numStationsModal">
-            Add Station(s)
-        </button>
-
-        <a class="btn btn-outline-success" href="/lineDetails/search">Search</a>
-
-        <a class="btn btn-outline-success" href="/lineDetails/navigate">Navigate Routes</a>
-
-        <!-- Modal -->
-        <div class="modal fade" id="numStationsModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Number of Stations</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="numStationsForm">
-                            <div class="mb-3">
-                                <label for="numStationsInput" class="form-label">Enter the number of stations:</label>
-                                <input type="number" class="form-control" id="numStationsInput" name="numStations"
-                                       min="1" max="10" required>
+        <!-- Display navigation results outside the form -->
+        <div class="row mt-5">
+            <div class="col-md-8 mx-auto">
+                <div th:if="${paths != null}">
+                    <h3 style="color: black;">Shortest Possible Routes</h3>
+                    <div class="card-columns" th:if="${paths.size() > 0}">
+                        <div class="card mb-3" th:each="path, iterStat : ${paths}">
+                            <div class="card-body">
+                                <h5 class="card-title">Route <span th:text="${iterStat.index + 1}">1</span></h5>
+                                <ul class="card-text">
+                                    <li th:each="station : ${path}" th:text="${station}"></li>
+                                </ul>
                             </div>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </form>
+                        </div>
+                    </div>
+                    <div th:if="${paths.size() == 0}">
+                        <p style="color: black;">No possible routes found.</p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Line Name</th>
-                <th>Station Name</th>
-                <th>Station Order</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="lineDetail : ${lineDetails}">
-                <td th:text="${lineDetail.lineName}"></td>
-                <td th:text="${lineDetail.stationName}"></td>
-                <td th:text="${lineDetail.stationOrder}"></td>
-                <td style="white-space: nowrap">
-                    <a class="btn btn-outline-danger btn-sm"
-                       th:href="@{/lineDetails/remove(id=${lineDetail.lineDetailId})}"
-                       onclick="return confirm('Are you sure that you want to remove this station?')">Remove</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
     </div>
 </main><!-- End Main -->
 
@@ -147,14 +165,6 @@
 
 <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<script>
-    document.getElementById('numStationsForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        var numStations = document.getElementById('numStationsInput').value;
-        window.location.href = '/lineDetails/create?numStations=' + numStations;
-    });
-</script>
-
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
@@ -167,4 +177,3 @@
 </body>
 
 </html>
-

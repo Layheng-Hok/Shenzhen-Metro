@@ -1,11 +1,13 @@
 package com.sustech.cs307.project2.shenzhenmetro.controller;
 
+import com.sustech.cs307.project2.shenzhenmetro.dto.LineDetailNavigateDto;
 import com.sustech.cs307.project2.shenzhenmetro.object.LineDetail;
 import com.sustech.cs307.project2.shenzhenmetro.dto.LineDetailDto;
 import com.sustech.cs307.project2.shenzhenmetro.dto.LineDetailSearchDto;
 import com.sustech.cs307.project2.shenzhenmetro.repository.LineDetailRepository;
 import com.sustech.cs307.project2.shenzhenmetro.repository.LineRepository;
 import com.sustech.cs307.project2.shenzhenmetro.repository.StationRepository;
+import com.sustech.cs307.project2.shenzhenmetro.service.LineDetailService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class LineDetailController {
 
     @Autowired
     private StationRepository stationRepository;
+
+    @Autowired
+    private LineDetailService lineDetailService;
 
     @GetMapping({"", "/"})
     public String showLineDetailListPage(Model model) {
@@ -141,7 +146,6 @@ public class LineDetailController {
         return "lineDetails/search_line_detail";
     }
 
-    @Transactional
     @PostMapping("/search")
     public String searchStation(@Valid @ModelAttribute LineDetailSearchDto lineDetailSearchDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -177,5 +181,44 @@ public class LineDetailController {
 
         model.addAttribute("targetStation", targetStation.get());
         return "lineDetails/search_line_detail";
+    }
+
+    @GetMapping("/navigate")
+    public String showNavigateRoutesPage(Model model) {
+        LineDetailNavigateDto lineDetailNavigateDto = new LineDetailNavigateDto();
+        model.addAttribute("lineDetailNavigateDto", lineDetailNavigateDto);
+        return "lineDetails/navigate_routes";
+    }
+
+    @PostMapping("/navigate")
+    public String navigateRoutes(@Valid @ModelAttribute LineDetailNavigateDto lineDetailNavigateDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/navigate_routes";
+        }
+
+        String startStation = lineDetailNavigateDto.getStartStation();
+        String endStation = lineDetailNavigateDto.getEndStation();
+
+        if (stationRepository.findById(startStation).isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailNavigateDto", "startStation", "Station not found."));
+        }
+
+        if (stationRepository.findById(endStation).isEmpty()) {
+            bindingResult.addError(new FieldError("lineDetailNavigateDto", "endStation", "Station not found."));
+        }
+
+        if (startStation.equals(endStation)) {
+            bindingResult.addError(new FieldError("lineDetailNavigateDto", "endStation", "End station should be different from the start station."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "lineDetails/navigate_routes";
+        }
+
+        List<LineDetail> lineDetails = lineDetailRepository.findAll();
+        List<List<String>> paths = lineDetailService.findAllPaths(lineDetails, startStation, endStation);
+
+        model.addAttribute("paths", paths);
+        return "lineDetails/navigate_routes";
     }
 }

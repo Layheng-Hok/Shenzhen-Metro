@@ -16,7 +16,7 @@ public class RideService {
     @Autowired
     private RideRepository rideRepository;
 
-    public Page<Ride> getRidesPaginated(int page, int size) {
+    public Page<Ride> getAllRidesPaginated(int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "rideId");
         return rideRepository.findAll(PageRequest.of(page, size, sort));
     }
