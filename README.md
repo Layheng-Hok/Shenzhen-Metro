@@ -137,3 +137,37 @@ The first part of the project is mainly about designing a database schema that s
 <div align="center">
     <img src="./ProjectInfo/img/er-diagram-dark.png" alt="er-diagram">
 </div>
+
+We believe that no database design is perfect. In fact, there are flaws with the design proposed by us in the ER diagram above. We hope you can try to spot them on your own! :)
+
+### Experiments
+Table 1: Testing environments
+| ID  | OS                          | Chip                          | Memory | SSD   | IDE Tool                                      |
+|-----|-----------------------------|-------------------------------|--------|-------|-----------------------------------------------|
+| 1   | macOS Sonoma 14.4.1         | Apple M3 Pro                  | 18GB   | 1TB   | IDEA 2024.1 (CE), PyCharm 2023.3.4 (CE), Datagrip 2024.1     |
+| 2   | Windows 11 Home 23H2        | 12th Gen Intel(R) Core(TM) i9-12900H | 32GB   | 1TB   | IDEA 2024.1 (CE), Datagrip 2024.1                               |
+| 3   | Ubuntu 22.04.4 (VM)         | Apple M1 Pro                  | 16GB   | 512GB | IDEA 2024.1 (CE), Datagrip 2024.1                               |
+
+#### Experiment 1: Different Import Methods
+
+## Method 1 (original script)
+This method utilizes the `java.sql` library. Firstly, we established a connection to our PostgreSQL server. Then we read all data from JSON files. Next, we iterated through each datum and created `PreparedStatement` for each insert statement. Lastly, we called the `executeUpdate()` method to execute each statement individually.
+
+## Method 2 (optimized script)
+This method also utilizes the `java.sql` library and employs the same data reading algorithm as Method 1. The difference is now we make use of the `executeBatch()` method. So we iterated through the whole data, created each insert statement with `PreparedStatement`, and added each `PreparedStatement` to a batch for a batch execution.
+
+## Method 3 (running a .sql file)
+We used a Java program to generate SQL insert statements and wrote them into a `.sql` file by employing the same data reading algorithm mentioned above. Then we run the file in DataGrip.
+
+Since we are using the same data reading algorithm across all three methods, we will use an average runtime for our subsequent tests. We initially gathered three different runtimes—504 ms, 546 ms, and 552 ms—and calculated an average runtime of 534 ms.
+
+## Table 2: Importing methods
+
+| Testing Environment | Method | Average Read Time (ms) | Write Time (ms) | Total Time (ms) | Throughput (statements/s) |
+|----------------------|--------|------------------------|-----------------|----------------|---------------------------|
+| 1                    | 1      | 534                    | 206396          | 206930         | 8636.91                   |
+| 1                    | 2      | 534                    | 2114            | 2648           | 97632.92                  |
+| 1                    | 3      | 534                    | 13581           | 14115          | 15197.41                  |
+
+Table 2 illustrates varying performance metrics across different methods, with Method 2 showing the highest throughput and Method 1 having the slowest total time. This makes Method 2 the standard testing method in the upcoming experiments.
+
