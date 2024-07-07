@@ -2,7 +2,7 @@
 
 # Shenzhen Metro
 
-SUSTech 2024 Spring's Projects of course `CS307 - Principles of Database System`
+SUSTech 2024 Spring's Projects of Course `CS307 - Principles of Database System`
 
 Divided into two parts as shown below</a>
 </div>
@@ -126,3 +126,5 @@ Shenzhen-Metro
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/>
     </a>
 </p>
+
+## Part 1: Database Design and Data Import
