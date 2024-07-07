@@ -105,7 +105,7 @@ Shenzhen-Metro
 </p>
 
 
-#### Part2
+#### Part 2
 <p align="left">
     <a href="https://en.wikipedia.org/wiki/HTML" target="_blank" rel="noreferrer">
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/>
