@@ -128,3 +128,7 @@ Shenzhen-Metro
 </p>
 
 ## Part 1: Database Design and Data Import
+### Requirements
+The first part of the project is mainly about designing a database schema that satisfies the principles of relation databases based on the background of the provided data. Once the design phase is complete, we wrote scripts to import those large datasets. Then we ran some experiments with data to gain some insights, as shown later.
+
+[*[Read the detailed requirements]*]()
