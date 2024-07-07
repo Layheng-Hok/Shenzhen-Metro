@@ -163,7 +163,7 @@ This method also utilizes the `java.sql` library and employs the same data readi
 - Method 3 (running a .sql file):
 We used a Java program to generate SQL insert statements and wrote them into a `.sql` file by employing the same data reading algorithm mentioned above. Then we run the file in DataGrip.
 
-Since we are using the same data reading algorithm across all three methods, we will use an average runtime for our subsequent tests. We initially gathered three different runtimes—504 ms, 546 ms, and 552 ms—and calculated an average runtime of 534 ms.
+Since we are using the same data reading algorithm across all three methods, we will use an average runtime for our subsequent tests. We initially gathered three different runtimes — 504 ms, 546 ms, and 552 ms — and calculated an average runtime of 534 ms.
 
 <div align=center>
 <h4> Table 2: Importing methods </h4>
