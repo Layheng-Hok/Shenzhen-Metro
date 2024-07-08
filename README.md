@@ -87,7 +87,7 @@ Shenzhen-Metro
 └── README.md
 ```
 
-### Tool Used
+### Tech Stack
 #### Part 1
 <p align="left">
     <a href="https://www.java.com" target="_blank" rel="noreferrer">
@@ -177,4 +177,26 @@ Since we are using the same data reading algorithm across all three methods, we 
 </div>
 
 Table 2 illustrates varying performance metrics across different methods, with Method 2 showing the highest throughput and Method 1 having the slowest total time. This makes Method 2 the standard testing method in the upcoming experiments.
+
+#### `Experiment 2: Data Import with Different Data Volumes`
+
+Managing and importing data of varying volumes is a crucial aspect of ensuring the performance, scalability, and reliability of a database system.
+
+Before the import process, we noticed that the ‘ride’ data was notably larger in volume compared to the others. Based on this idea, we decided to test data import with different volumes on the `ride.json` only. Since the weight of data is not consistent, importing less volume for the other tables might result in a serious issue due to the connectivity between the tables.
+
+Initially, we started by importing the full data (100% volume) for all the other tables except the `rides_by_id_num` and `rides_by_card_num` tables to ensure the consistency of our design. To manage this effectively, we adopted a phased import strategy for the `ride` data, beginning with a 20% subset of the data, which equated to 20,000 records. This initial phase allowed us to assess the impact on system performance and make necessary adjustments to the import process without compromising the database's stability. After successful validation and performance tuning, we proceeded with importing 50% of the data, and finally, the remaining portion to complete the 100% data import. Note that we used Method 2 for all imports as it is the fastest.
+
+<div align=center>
+<h4> Table 5: Import Volumes </h4>
+
+
+| Testing Environment | Method | Volume | Read Time (ms) | Write Time (ms) | Total Time (ms) | Statement Count | Throughput (statements/s) |
+|---------------------|--------|--------|----------------|-----------------|----------------|-----------------|--------------------------|
+| 1                   | 2      | 20%    | 507            | 808             | 1315           | 80165           | 99214.11                 |
+| 1                   | 2      | 50%    | 521            | 1338            | 1859           | 130849          | 97794.47                 |
+| 1                   | 2      | 100%   | 534            | 2114            | 2648           | 203502          | 96263.95                 |
+
+</div>
+
+From Table 5, as the volume of data increases (from 20% to 50% and to 100%), both read and write times tend to increase, resulting in longer total times for the operations. However, these numbers do not give any insightful meaning as we had different import volumes. If we look at the number of throughputs instead, the throughput (statements/s) gradually decreases with increasing data volume, indicating that the system becomes less efficient at processing statements as the workload increases.
 
