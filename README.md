@@ -135,7 +135,7 @@ The first part of the project is mainly about designing a database schema that s
 
 ### ER Diagram
 <div align="center">
-    <img src="./ProjectInfo/img/er-diagram-dark.png" alt="er-diagram">
+    <img src="./ProjectInfo/resources/er-diagram-dark.png" alt="er-diagram">
     <h4> Figure 1: ER diagram </h4>
 </div>
 
@@ -214,12 +214,12 @@ In testing the process of importing data on different OSs, we employed the faste
 Note that when running the Java import script on Linux through a virtual machine, it is essential to consider the unfair disadvantage on performance and resource allocation, as virtualization can introduce overhead and affect the efficiency of the system.
 
 <div align="center">
-    <img src="./ProjectInfo/img/figure2.png" alt="figure2">
+    <img src="./ProjectInfo/resources/figure2.png" alt="figure2">
     <h4> Figure 2: Runtime comparison between different OSs </h4>
 </div>
 
 <div align="center">
-    <img src="./ProjectInfo/img/figure3.png" alt="figure3">
+    <img src="./ProjectInfo/resources/figure3.png" alt="figure3">
     <h4> Figure 3: Throughput comparison between different OSs </h4>
 </div>
 
@@ -257,3 +257,27 @@ We developed three different import methods for both PostgreSQL and MySQL, but w
 
 Despite both being SQL-based databases, PostgreSQL is approximately 16 times faster when it comes to write time. This might be due to differences in database engine architecture and driver implementation (`postgresql-42.2.5.jar` for PostgreSQL and `mysql-connector-j-8.3.0.jar` for MySQL).
 
+## Part 2: API Design
+### Requirements
+Part 2 of the project focuses on providing the basic functionality of accessing the database system by building a backend library which exposes a set of application programming interfaces (APIs). Note that there is also an additional dataset needed to be imported, hence requires an updated database implementation (can be found at ./Project2/DataImport).
+
+[*[Read the detailed requirements]*](https://github.com/Layheng-Hok/Shenzhen-Metro/blob/main/ProjectInfo/CS307-Spring24-Project2-Requirements.pdf)
+
+### API Features
+
+- Add, modify, delete a station
+- Add, modify, delete a line
+- Place one or more stations at a specified order on a line
+- Remove a station from a line
+- Search the name of the stations that are the n-th station ahead or behind a specific station on a line
+- Add, modify, delete a bus at a station's exit gate
+- Add, modify, delete a landmark at a station's exit gate
+- Board and exit functionality for a user with a national ID or a travel card
+- View ongoing rides
+- Multi-parameter filter for ride records
+- View each passenger's personal information
+- Query shortest routes between two stations
+- Add and appropriately utilize the status of stations, such as operational, under construction, and closed
+- Add and appropriately utilize different classes of a ride (economy and business)
+
+### Preview
