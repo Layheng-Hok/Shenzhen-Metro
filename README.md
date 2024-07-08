@@ -136,9 +136,16 @@ The first part of the project is mainly about designing a database schema that s
 ### ER Diagram
 <div align="center">
     <img src="./ProjectInfo/img/er-diagram-dark.png" alt="er-diagram">
+    <h4> Figure 1: ER diagram </h4>
 </div>
 
-We believe that no database design is perfect. In fact, there are flaws with the design proposed by us in the ER diagram above. We hope you can try to spot them on your own! :)
+We believe that no database design is perfect. In fact, there are flaws with the design proposed by us in the ER diagram above. After looking at the datasets and the background of each dataset, we hope you can try to spot design flaws on your own! :)
+
+*Note*: For figure interpretation,
+- left-side 0 signifies partial participation
+- left-side 1 signifies total participation
+- right-side * signifies the many side of a mapping cardinality 
+- right-side 1 signifies the one side of a mapping cardinality
 
 ### Experiments
 <div align=center>
@@ -187,7 +194,7 @@ Before the import process, we noticed that the ‘ride’ data was notably large
 Initially, we started by importing the full data (100% volume) for all the other tables except the `rides_by_id_num` and `rides_by_card_num` tables to ensure the consistency of our design. To manage this effectively, we adopted a phased import strategy for the `ride` data, beginning with a 20% subset of the data, which equated to 20,000 records. This initial phase allowed us to assess the impact on system performance and make necessary adjustments to the import process without compromising the database's stability. After successful validation and performance tuning, we proceeded with importing 50% of the data, and finally, the remaining portion to complete the 100% data import. Note that we used Method 2 for all imports as it is the fastest.
 
 <div align=center>
-<h4> Table 5: Import Volumes </h4>
+<h4> Table 3: Import Volumes </h4>
 
 
 | Testing Environment | Method | Volume | Read Time (ms) | Write Time (ms) | Total Time (ms) | Statement Count | Throughput (statements/s) |
@@ -198,5 +205,55 @@ Initially, we started by importing the full data (100% volume) for all the other
 
 </div>
 
-From Table 5, as the volume of data increases (from 20% to 50% and to 100%), both read and write times tend to increase, resulting in longer total times for the operations. However, these numbers do not give any insightful meaning as we had different import volumes. If we look at the number of throughputs instead, the throughput (statements/s) gradually decreases with increasing data volume, indicating that the system becomes less efficient at processing statements as the workload increases.
+From Table 3, as the volume of data increases (from 20% to 50% and to 100%), both read and write times tend to increase, resulting in longer total times for the operations. However, these numbers do not give any insightful meaning as we had different import volumes. If we look at the number of throughputs instead, the throughput (statements/s) gradually decreases with increasing data volume, indicating that the system becomes less efficient at processing statements as the workload increases.
+
+#### `Experiment 3: Data Import on Different Operating Systems`
+
+In testing the process of importing data on different OSs, we employed the fastest import method, which is Method 2, with 100% import volume.
+
+Note that when running the Java import script on Linux through a virtual machine, it is essential to consider the unfair disadvantage on performance and resource allocation, as virtualization can introduce overhead and affect the efficiency of the system.
+
+<div align="center">
+    <img src="./ProjectInfo/img/figure2.png" alt="figure2">
+    <h4> Figure 2: Runtime comparison between different OSs </h4>
+</div>
+
+<div align="center">
+    <img src="./ProjectInfo/img/figure3.png" alt="figure3">
+    <h4> Figure 3: Throughput comparison between different OSs </h4>
+</div>
+
+Based on the analysis above, it is clear that Environment 1 (macOS) shows the best performance with the shortest total time of 2648 ms and the highest throughput at 97,632.92 statements/s. In contrast, Environment 2 (Windows) is the slowest with a total time of 4117 ms and the lowest throughput at 60,669.02 statements/s. It is worth-noting that Linux Ubuntu, while running as a VM, still outperformed bare-metal Windows.
+
+#### `Experiment 4: Data Import with Various Programming Languages`
+
+In this experiment, we used Method 2 mentioned above for Java code since it is the fastest. Meanwhile, for Python, we wrote an import method that made use of Psycopg2 to communicate with the PostgreSQL database server.
+
+<div align="center">
+    <h4> Table 4: Java V.S. Python  </h4>
+
+| Testing Environment | Programming Language | Read Time (ms) | Write Time (ms) | Total Time (ms) | Throughput (statements/s) |
+|---------------------|----------------------|----------------|-----------------|----------------|--------------------------|
+| 1                   | Java                 | 534            | 2114            | 2648           | 96263.95                 |
+| 1                   | Python               | 390            | 7237            | 7627           | 28119.66                 |
+
+</div>
+
+The data from Table 4 show that Java outperformed Python in both speed and throughput, indicating its superior efficiency for read-write operations.
+
+#### `Experiment 5: Data Import on Different Databases`
+
+We developed three different import methods for both PostgreSQL and MySQL, but we only ran an experiment on Method 2 as it is a developer’s choice for importing data. Both PostgreSQL and MySQL have a similar database implementation design (DDL wise) and a similar import code design.
+
+<div align="center">
+    <h4> Table 5: PostgreSQL V.S. MySQL  </h4>
+
+| Testing Environment | Method | Database   | Read Time (ms) | Write Time (ms) | Total Time (ms) | Throughput (statements/s) |
+|---------------------|--------|------------|----------------|-----------------|----------------|--------------------------|
+| 1                   | 2      | PostgreSQL | 534            | 2114            | 2648           | 96263.95                 |
+| 1                   | 2      | MySQL      | 534            | 42315           | 42849          | 4809.22                  |
+
+</div>
+
+Despite both being SQL-based databases, PostgreSQL is approximately 16 times faster when it comes to write time. This might be due to differences in database engine architecture and driver implementation (`postgresql-42.2.5.jar` for PostgreSQL and `mysql-connector-j-8.3.0.jar` for MySQL).
 
