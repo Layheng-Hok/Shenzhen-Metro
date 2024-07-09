@@ -2,6 +2,8 @@
 
 # Shenzhen Metro
 
+Metro Management System
+
 SUSTech 2024 Spring's Projects of Course `CS307 - Principles of Database System`
 
 Divided into two parts as shown below</a>
