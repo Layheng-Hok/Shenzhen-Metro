@@ -259,7 +259,7 @@ Despite both being SQL-based databases, PostgreSQL is approximately 16 times fas
 
 ## Part 2: API Design
 ### Requirements
-Part 2 of the project focuses on providing the basic functionality of accessing the database system by building a backend library which exposes a set of application programming interfaces (APIs). Note that there is also an additional dataset needed to be imported, hence requires an updated database implementation (can be found at `./Project2/DataImport`).
+Part 2 of the project focuses on providing the basic functionality of accessing the database system by building a backend library which exposes a set of application programming interfaces (APIs). Note that there is also an additional dataset needed to be imported, hence requires an updated database implementation (can be found in `./Project2/DataImport`).
 
 [*[Read the detailed requirements]*](https://github.com/Layheng-Hok/Shenzhen-Metro/blob/main/ProjectInfo/CS307-Spring24-Project2-Requirements.pdf)
 
