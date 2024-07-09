@@ -281,4 +281,6 @@ Part 2 of the project focuses on providing the basic functionality of accessing 
 - Add and appropriately utilize different classes of a ride (economy and business)
 
 ### Preview
-https://github.com/Layheng-Hok/Shenzhen-Metro/blob/main/ProjectInfo/resources/ShenzhenMetro-Demo.mov
+
+https://github.com/Layheng-Hok/Shenzhen-Metro/assets/100819203/3c09e3f1-f1fa-442c-8716-7f23b8947545
+
