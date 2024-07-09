@@ -289,4 +289,4 @@ https://github.com/Layheng-Hok/Shenzhen-Metro/assets/100819203/3c09e3f1-f1fa-442
 - Clone the project
 - Set up a MySQL database with the DDL provided in `./Project2/DataImport/src/main/sql/ddl.sql`
 - Import data with the script provided in `./Project2/DataImport/src/main/java/ImportScript.java`
-- Build the Spring Boot project (in `./Project2/ShenzhenMetro`) with Maven (Intellij IDEA IDE is recommended)
+- Build the Spring Boot project (in `./Project2/ShenzhenMetro`) with Maven (IntelliJ IDEA IDE is recommended)
