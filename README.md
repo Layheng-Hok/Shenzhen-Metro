@@ -2,11 +2,10 @@
 
 # Shenzhen Metro
 
-Metro Management System
+Metro Management System Built with MySQL and Spring Boot
 
 SUSTech 2024 Spring's Projects of Course `CS307 - Principles of Database System`
 
-Divided into two parts as shown below</a>
 </div>
 
 ### Simplified Directory Path Diagram
