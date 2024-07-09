@@ -27,7 +27,7 @@ Shenzhen-Metro
 │   │   │   │   ├── java                                                # updated import script in java  
 │   │   │   │   ├── resources                                           # updated data
 │   │   │   │   └── sql                                                 # updated ddl
-│   └── ShenzhenMetro                                                   # api built with spring boot
+│   └── ShenzhenMetro                                                   # spring boot project
 │       ├── src
 │       │   ├── main
 │       │   │   ├── java                                                # backend logic
@@ -259,7 +259,7 @@ Despite both being SQL-based databases, PostgreSQL is approximately 16 times fas
 
 ## Part 2: API Design
 ### Requirements
-Part 2 of the project focuses on providing the basic functionality of accessing the database system by building a backend library which exposes a set of application programming interfaces (APIs). Note that there is also an additional dataset needed to be imported, hence requires an updated database implementation (can be found at ./Project2/DataImport).
+Part 2 of the project focuses on providing the basic functionality of accessing the database system by building a backend library which exposes a set of application programming interfaces (APIs). Note that there is also an additional dataset needed to be imported, hence requires an updated database implementation (can be found at `./Project2/DataImport`).
 
 [*[Read the detailed requirements]*](https://github.com/Layheng-Hok/Shenzhen-Metro/blob/main/ProjectInfo/CS307-Spring24-Project2-Requirements.pdf)
 
@@ -284,3 +284,9 @@ Part 2 of the project focuses on providing the basic functionality of accessing 
 
 https://github.com/Layheng-Hok/Shenzhen-Metro/assets/100819203/3c09e3f1-f1fa-442c-8716-7f23b8947545
 
+### Setup
+
+- Clone the project
+- Set up a MySQL database with the DDL provided in `./Project2/DataImport/src/main/sql/ddl.sql`
+- Import data with the script provided in `./Project2/DataImport/src/main/java/ImportScript.java`
+- Build the Spring Boot project (in `./Project2/ShenzhenMetro`) with Maven (Intellij IDEA IDE is recommended)
