@@ -152,7 +152,7 @@ We believe that no database design is perfect. In fact, there are flaws with the
 <div align=center>
 <h4> Table 1: Testing environments </h4>
 
-| ID  | OS                          | Chip                          | Memory | SSD   | IDE Tool                                      |
+| ID  | OS                          | Chip                          | Memory | SSD   | Tools                                         |
 |-----|-----------------------------|-------------------------------|--------|-------|-----------------------------------------------|
 | 1   | macOS Sonoma 14.4.1         | Apple M3 Pro                  | 18GB   | 1TB   | IDEA 2024.1 (CE), PyCharm 2023.3.4 (CE), Datagrip 2024.1     |
 | 2   | Windows 11 Home 23H2        | 12th Gen Intel(R) Core(TM) i9-12900H | 32GB   | 1TB   | IDEA 2024.1 (CE), Datagrip 2024.1                               |
