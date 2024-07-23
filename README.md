@@ -108,14 +108,17 @@ Shenzhen-Metro
 
 #### Part 2
 <p align="left">
-    <a href="https://en.wikipedia.org/wiki/HTML" target="_blank" rel="noreferrer">
+    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noreferrer">
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/HTML5_Badge.svg" alt="html5" width="40" height="40"/>
     </a>
-    <a href="https://en.wikipedia.org/wiki/CSS" target="_blank" rel="noreferrer">
+    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/CSS3_logo.svg" alt="css3" width="40" height="40"/>
     </a>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> 
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/>
+    </a>
+    <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> 
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg" alt="bootstrap" height="40"/> 
     </a>
     <a href="https://www.java.com" target="_blank" rel="noreferrer">
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/>
@@ -130,7 +133,7 @@ Shenzhen-Metro
 
 ## Part 1: Database Design and Data Import
 ### Requirements
-The first part of the project is mainly about designing a database schema that satisfies the principles of relation databases based on the background of the provided data. Once the design phase is complete, we wrote scripts to import those large datasets. To ensure accuracy of the imported data, we had to perform some query statements and checked the query results on the defense day. Besides that, we also ran some experiments with the data to gain some wonderful insights, as shown later.
+The first part of the project is mainly about designing a database schema that satisfies the principles of relational databases based on the background of the provided data. Once the design phase is complete, we wrote scripts to import those large datasets. To ensure accuracy of the imported data, we had to perform some query statements and checked the query results on the defense day. Besides that, we also ran some experiments with the data to gain some wonderful insights, as shown later.
 
 [*[Read the detailed requirements]*](https://github.com/Layheng-Hok/Shenzhen-Metro/blob/main/ProjectInfo/CS307-Spring24-Project1-Requirements.pdf)
 
