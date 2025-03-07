@@ -4,7 +4,7 @@
 
 Metro Management System
 
-SUSTech 2024 Spring's Projects of Course `CS307 - Principles of Database System` Led by [Yuxin MA](https://mayuxin.me/)
+SUSTech 2024 Spring Projects of Course `CS307 - Principles of Database System` Led by Professor [Yuxin MA](https://mayuxin.me/)
 
 </div>
 
